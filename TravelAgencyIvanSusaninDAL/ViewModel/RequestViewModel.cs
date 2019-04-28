@@ -3,7 +3,7 @@ using System;
 
 namespace TravelAgencyIvanSusaninDAL.ViewModel
 {
-    class RequestViewModel
+    public class RequestViewModel
     {
         public int Id { get; set; }
 
