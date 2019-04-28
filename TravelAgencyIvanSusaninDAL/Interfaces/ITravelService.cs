@@ -12,8 +12,8 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
     {
         List<TravelViewModel> GetList();
 
-        void CreateTravel(TravelBindingModel);
+        void CreateTravel(TravelBindingModel model);
 
-        void Reservation(TravelBindingModel);
+        void Reservation(TravelBindingModel model);
     }
 }
