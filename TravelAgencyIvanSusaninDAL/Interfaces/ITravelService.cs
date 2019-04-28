@@ -8,12 +8,12 @@ using TravelAgencyIvanSusaninDAL.ViewModel;
 
 namespace TravelAgencyIvanSusaninDAL.Interfaces
 {
-    public class ITravelService
+    public interface ITravelService
     {
         List<TravelViewModel> GetList();
 
-        void CreateTravel(TravelBindingModel);
+        void CreateTravel(TravelBindingModel model);
 
-        void Reservation(TravelBindingModel);
+        void Reservation(TravelBindingModel model);
     }
 }
