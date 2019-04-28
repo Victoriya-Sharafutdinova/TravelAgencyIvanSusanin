@@ -8,7 +8,7 @@ using TravelAgencyIvanSusaninDAL.ViewModel;
 
 namespace TravelAgencyIvanSusaninDAL.Interfaces
 {
-    public class ITravelService
+    public interface ITravelService
     {
         List<TravelViewModel> GetList();
 
