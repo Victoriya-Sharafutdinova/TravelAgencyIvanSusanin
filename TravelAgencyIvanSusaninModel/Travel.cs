@@ -12,7 +12,7 @@ namespace TravelAgencyIvanSusaninModel
         public int ClientId { get; set; }
 
         [Required]
-        public DateTime TimeCreate { get; set; }
+        public DateTime DateCreate { get; set; }
 
         [Required]
         public int TotalCost { get; set; }

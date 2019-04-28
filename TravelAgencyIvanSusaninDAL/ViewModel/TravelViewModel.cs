@@ -13,10 +13,27 @@ namespace TravelAgencyIvanSusaninDAL.ViewModel
 
         public int ClientId { get; set; }
 
+        [DisplayName("ФИО Клиента")]
+        public string ClientFIO { get; set; }
+
+        public int TourId { get; set; }
+
+        [DisplayName("Название тура")]
+        public string TourName { get; set; }
+
         [DisplayName("Дата создания")]
-        public DateTime TimeCreate { get; set; }
+        public string DateCreate { get; set; }
 
         [DisplayName("Расчетная стоимость")]
         public int TotalCost { get; set; }
+
+        //[DisplayName("Дата резерва")]
+        //public string DateReservation { get; set; }
+
+        //[DisplayName("Дата начала")]
+        //public DateTime DateBegin { get; set; }
+
+        //[DisplayName("Дата конца")]
+        //public DateTime DateEnd { get; set; }
     }
 }

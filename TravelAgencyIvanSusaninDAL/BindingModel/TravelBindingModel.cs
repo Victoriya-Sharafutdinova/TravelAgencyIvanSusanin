@@ -18,7 +18,7 @@ namespace TravelAgencyIvanSusaninDAL.BindingModel
         public int ClientId { get; set; }
 
         [DataMember]
-        public DateTime TimeCreate { get; set; }
+        public string TimeCreate { get; set; }
 
         [DataMember]
         public int TotalCost { get; set; }
