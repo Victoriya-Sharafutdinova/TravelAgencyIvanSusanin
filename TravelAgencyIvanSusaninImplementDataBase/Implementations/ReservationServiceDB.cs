@@ -6,7 +6,7 @@ using TravelAgencyIvanSusaninDAL.ViewModel;
 
 namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 {
-    class ReservationServiceDB : IReservationService
+    public class ReservationServiceDB : IReservationService
     {
         public void AddElement(ReservationBindingModel model)
         {

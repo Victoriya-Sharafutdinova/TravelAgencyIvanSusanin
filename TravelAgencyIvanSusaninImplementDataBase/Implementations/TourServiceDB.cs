@@ -8,7 +8,7 @@ using TravelAgencyIvanSusaninModel;
 
 namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 {
-    class TourServiceDB : ITourService
+    public class TourServiceDB : ITourService
     {
         private AbstractDbContext context;
 

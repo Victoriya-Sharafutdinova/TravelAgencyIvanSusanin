@@ -23,7 +23,7 @@ namespace TravelAgencyIvanSusaninView
         {
             if (textBox.Text == password)
             {
-                var formTours = new FormTours();
+                //var formTours = new FormTours();
             }
         }
     }
