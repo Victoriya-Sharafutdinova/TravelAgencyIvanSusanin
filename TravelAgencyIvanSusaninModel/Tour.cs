@@ -20,6 +20,6 @@ namespace TravelAgencyIvanSusaninModel
         public virtual List<TourTravel> TourTravels { get; set; }
 
         [ForeignKey("TourId")]
-        public virtual List<TourReservation> TourReservation { get; set; }
+        public virtual List<TourReservation> TourReservations { get; set; }
     }
 }

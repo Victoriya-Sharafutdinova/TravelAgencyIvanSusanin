@@ -50,6 +50,9 @@
   <ItemGroup>
     <Compile Include="AbstractDbContext.cs" />
     <Compile Include="Implementations\ClientServiceDB.cs" />
+    <Compile Include="Implementations\RequestServiceDB.cs" />
+    <Compile Include="Implementations\ReservationServiceDB.cs" />
+    <Compile Include="Implementations\TourServiceDB.cs" />
     <Compile Include="Implementations\TravelServiceDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

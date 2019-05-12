@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace TravelAgencyIvanSusaninDAL.ViewModel
 {
@@ -14,5 +15,7 @@ namespace TravelAgencyIvanSusaninDAL.ViewModel
 
         [DisplayName("Стоимость")]
         public int Cost { get; set; }
+
+        public List<TourReservationViewModel> TourReservations { get; set; }
     }
 }
