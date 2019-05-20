@@ -11,116 +11,145 @@ using TravelAgencyIvanSusaninModel;
 
 namespace TravelAgencyIvanSusaninMVC.Controllers
 {
-    public class TravelsController : Controller
+    public class TourTravelsController : Controller
     {
         private Context db = new Context();
 
-        // GET: Travels
+        // GET: TourTravels
         public ActionResult Index()
         {
-            var travels = db.Travels.Include(t => t.Client);
-            return View(travels.ToList());
+            var tourTravels = db.TourTravels.Include(t => t.Tour).Include(t => t.Travel);
+            return View(tourTravels.ToList());
         }
 
-        // GET: Travels/Details/5
+        // GET: TourTravels/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Travel travel = db.Travels.Find(id);
-            if (travel == null)
+            TourTravel tourTravel = db.TourTravels.Find(id);
+            if (tourTravel == null)
             {
                 return HttpNotFound();
             }
-            return View(travel);
+            return View(tourTravel);
         }
 
-        // GET: Travels/Create
+        // GET: TourTravels/Create
         public ActionResult Create()
         {
-            ViewBag.ClientId = new SelectList(db.Clients, "Id", "FIO");
+            ViewBag.TourId = new SelectList(db.Tours, "Id", "Name");
+            ViewBag.TravelId = new SelectList(db.Travels, "Id", "Id");
             return View();
         }
 
-        // POST: Travels/Create
+        // POST: TourTravels/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,ClientId,DateCreate,TotalCost")] Travel travel)
+        public ActionResult Create([Bind(Include = "Id,TravelId,TourId,DateReservation,DateBegin,DateEnd")] TourTravel tourTravel)
         {
             if (ModelState.IsValid)
             {
-                db.Travels.Add(travel);
+                db.TourTravels.Add(tourTravel);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ClientId = new SelectList(db.Clients, "Id", "FIO", travel.ClientId);
-            return View(travel);
+            ViewBag.TourId = new SelectList(db.Tours, "Id", "Name", tourTravel.TourId);
+            ViewBag.TravelId = new SelectList(db.Travels, "Id", "Id", tourTravel.TravelId);
+            return View(tourTravel);
         }
 
-        // GET: Travels/Edit/5
+        // GET: TourTravels/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Travel travel = db.Travels.Find(id);
-            if (travel == null)
+            TourTravel tourTravel = db.TourTravels.Find(id);
+            if (tourTravel == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ClientId = new SelectList(db.Clients, "Id", "FIO", travel.ClientId);
-            return View(travel);
+            ViewBag.TourId = new SelectList(db.Tours, "Id", "Name", tourTravel.TourId);
+            ViewBag.TravelId = new SelectList(db.Travels, "Id", "Id", tourTravel.TravelId);
+            return View(tourTravel);
         }
 
-        // POST: Travels/Edit/5
+        // POST: TourTravels/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ClientId,DateCreate,TotalCost")] Travel travel)
+        public ActionResult Edit([Bind(Include = "Id,TravelId,TourId,DateReservation,DateBegin,DateEnd")] TourTravel tourTravel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(travel).State = EntityState.Modified;
+                db.Entry(tourTravel).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ClientId = new SelectList(db.Clients, "Id", "FIO", travel.ClientId);
-            return View(travel);
+            ViewBag.TourId = new SelectList(db.Tours, "Id", "Name", tourTravel.TourId);
+            ViewBag.TravelId = new SelectList(db.Travels, "Id", "Id", tourTravel.TravelId);
+            return View(tourTravel);
         }
 
-        // GET: Travels/Delete/5
+        // GET: TourTravels/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Travel travel = db.Travels.Find(id);
-            if (travel == null)
+            TourTravel tourTravel = db.TourTravels.Find(id);
+            if (tourTravel == null)
             {
                 return HttpNotFound();
             }
-            return View(travel);
+            return View(tourTravel);
         }
 
-        // POST: Travels/Delete/5
+        // POST: TourTravels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Travel travel = db.Travels.Find(id);
-            db.Travels.Remove(travel);
+            TourTravel tourTravel = db.TourTravels.Find(id);
+            db.TourTravels.Remove(tourTravel);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
+        // GET: TourTravels/Reservation/5
+        public ActionResult Reservation(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            TourTravel tourTravel = db.TourTravels.Find(id);
+            if (tourTravel == null)
+            {
+                return HttpNotFound();
+            }
+            return View(tourTravel);
+        }
+
+        // POST: TourTravels/Reservation/5
+        [HttpPost, ActionName("Reservation")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Reservation(int id)
+        {
+            db.TourTravels.Find(id).DateReservation = DateTime.Today;
+            
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
         protected override void Dispose(bool disposing)
         {

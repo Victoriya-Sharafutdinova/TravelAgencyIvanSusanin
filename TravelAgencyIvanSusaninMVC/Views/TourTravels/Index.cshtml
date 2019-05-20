@@ -1,0 +1,64 @@
+﻿@model IEnumerable<TravelAgencyIvanSusaninModel.TourTravel>
+
+@{
+    ViewBag.Title = "Путешествия";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Создать", "Index", "Tour")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Travel.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Travel.DateCreate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateReservation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateBegin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateEnd)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Travel.TotalCost)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Travel.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Travel.DateCreate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateReservation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateBegin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateEnd)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Travel.TotalCost)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Index", "Tour", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+            @Html.ActionLink("Reservation", "Reservation", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

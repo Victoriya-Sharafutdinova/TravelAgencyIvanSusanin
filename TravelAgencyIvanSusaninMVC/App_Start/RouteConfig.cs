@@ -16,7 +16,7 @@ namespace TravelAgencyIvanSusaninMVC
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Travels", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Clients", action = "Authorization", id = UrlParameter.Optional }
             );
         }
     }

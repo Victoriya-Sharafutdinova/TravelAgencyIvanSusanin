@@ -133,8 +133,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ClientsController.cs" />
+    <Compile Include="Controllers\ExceptionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ToursController.cs" />
+    <Compile Include="Controllers\TourTravelsController.cs" />
     <Compile Include="Controllers\TravelsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -183,7 +185,6 @@
     <Content Include="Views\Clients\Details.cshtml" />
     <Content Include="Views\Clients\Edit.cshtml" />
     <Content Include="Views\Clients\Index.cshtml" />
-    <Content Include="Views\Clients\Registration.cshtml" />
     <Content Include="Views\Travels\Create.cshtml" />
     <Content Include="Views\Travels\Delete.cshtml" />
     <Content Include="Views\Travels\Details.cshtml" />
@@ -194,6 +195,13 @@
     <Content Include="Views\Tours\Details.cshtml" />
     <Content Include="Views\Tours\Edit.cshtml" />
     <Content Include="Views\Tours\Index.cshtml" />
+    <Content Include="Views\Clients\Authorization.cshtml" />
+    <Content Include="Views\Exception\Index.cshtml" />
+    <Content Include="Views\TourTravels\Create.cshtml" />
+    <Content Include="Views\TourTravels\Delete.cshtml" />
+    <Content Include="Views\TourTravels\Details.cshtml" />
+    <Content Include="Views\TourTravels\Edit.cshtml" />
+    <Content Include="Views\TourTravels\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

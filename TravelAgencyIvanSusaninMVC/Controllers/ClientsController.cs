@@ -51,6 +51,17 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         {
             if (ModelState.IsValid)
             {
+                for (int i =1; i< db.Clients.ToList().Count + 1; i++)
+                {
+                    if (client.FIO.Equals(db.Clients.Find(i).FIO))
+                    {
+                        return Redirect("/Exception/Index/0");
+                    }
+                    if (client.Login.Equals(db.Clients.ElementAt(i).Login))
+                    {
+                        return Redirect("/Exception/Index/3");
+                    }
+                }
                 db.Clients.Add(client);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -114,6 +125,41 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             db.Clients.Remove(client);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // GET: Clients/Authorization
+        public ActionResult Authorization()
+        {
+            return View();
+        }
+
+        // POST: Clients/Authorization
+        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
+        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Authorization([Bind(Include = "Login,Password")] Client client)
+        {
+            
+                for (int i = 1; i < db.Clients.ToList().Count+1; i++)
+                {
+                    if (client.Login.Equals(db.Clients.Find(i).Login))
+                    {
+                        if (client.Password.Equals(db.Clients.Find(i).Password))
+                        {
+                         return  RedirectToAction("Index", "Travels");
+                        }
+                        else
+                        {
+                            return Redirect("/Exception/Index/2");
+                        }
+                    }
+                    
+                }
+                return Redirect("/Exception/Index/1");
+            
+
+           
         }
 
         protected override void Dispose(bool disposing)

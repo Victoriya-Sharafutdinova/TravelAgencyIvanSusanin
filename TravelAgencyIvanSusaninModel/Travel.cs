@@ -9,6 +9,7 @@ namespace TravelAgencyIvanSusaninModel
     {
         public int Id { get; set; }
 
+        [Required]
         public int ClientId { get; set; }
 
         [Required]
