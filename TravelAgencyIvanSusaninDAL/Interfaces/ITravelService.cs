@@ -14,6 +14,12 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
 
         void CreateTravel(TravelBindingModel model);
 
+        void TakeTravelInWork(TravelBindingModel model);
+
+        void FinishTravel(TravelBindingModel model);
+
+        void PayTravel(TravelBindingModel model);
+
         void Reservation(TourTravelBindingModel model);
     }
 }

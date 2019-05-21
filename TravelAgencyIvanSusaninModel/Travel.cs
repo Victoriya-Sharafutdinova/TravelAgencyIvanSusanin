@@ -13,10 +13,14 @@ namespace TravelAgencyIvanSusaninModel
         public int ClientId { get; set; }
 
         [Required]
-        public DateTime DateCreate { get; set; }
+        public int TotalCost { get; set; }
+
+        public TravelStatus TravelStatus { get; set; }
 
         [Required]
-        public int TotalCost { get; set; }
+        public DateTime DateCreate { get; set; }
+
+        public DateTime? DateImplement { get; set; }
 
         public virtual Client Client { get; set; }
 

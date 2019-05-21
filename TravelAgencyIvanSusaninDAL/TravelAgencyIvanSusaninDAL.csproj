@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingModel\ClientBindingModel.cs" />
+    <Compile Include="BindingModel\ReportBindingModel.cs" />
     <Compile Include="BindingModel\RequestBindingModel.cs" />
     <Compile Include="BindingModel\ReservationBindingModel.cs" />
     <Compile Include="BindingModel\ReservationRequestBindingModel.cs" />
@@ -54,11 +55,13 @@
     <Compile Include="BindingModel\TourTravelBindingModel.cs" />
     <Compile Include="BindingModel\TravelBindingModel.cs" />
     <Compile Include="Interfaces\IClientService.cs" />
+    <Compile Include="Interfaces\IReportService.cs" />
     <Compile Include="Interfaces\IRequestService.cs" />
     <Compile Include="Interfaces\IReservationService.cs" />
     <Compile Include="Interfaces\ITourService.cs" />
     <Compile Include="Interfaces\ITravelService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\ClientTravelsViewModel.cs" />
     <Compile Include="ViewModel\ClientViewModel.cs" />
     <Compile Include="ViewModel\RequestViewModel.cs" />
     <Compile Include="ViewModel\ReservationRequestViewModel.cs" />

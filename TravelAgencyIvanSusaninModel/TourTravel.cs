@@ -14,6 +14,9 @@ namespace TravelAgencyIvanSusaninModel
         public DateTime DateReservation { get; set; }
 
         [Required]
+        public int Count { get; set; }
+
+        [Required]
         public DateTime DateBegin { get; set; }
 
         [Required]

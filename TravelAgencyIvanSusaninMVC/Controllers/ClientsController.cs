@@ -11,6 +11,7 @@ using TravelAgencyIvanSusaninModel;
 
 namespace TravelAgencyIvanSusaninMVC.Controllers
 {
+    
     public class ClientsController : Controller
     {
         private Context db = new Context();
@@ -51,23 +52,30 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                for (int i =1; i< db.Clients.ToList().Count + 1; i++)
+                if (!client.FIO.Equals(null) && !client.Email.Equals(null) && !client.Login.Equals(null) && !client.Password.Equals(null))
                 {
-                    if (client.FIO.Equals(db.Clients.Find(i).FIO))
+                    for (int i = 1; i < db.Clients.ToList().Count + 1; i++)
                     {
-                        return Redirect("/Exception/Index/0");
+                        if (client.FIO.Equals(db.Clients.Find(i).FIO))
+                        {
+                            return Redirect("/Exception/Index/0");
+                        }
+                        if (client.Login.Equals(db.Clients.Find(i).Login))
+                        {
+                            return Redirect("/Exception/Index/3");
+                        }
                     }
-                    if (client.Login.Equals(db.Clients.ElementAt(i).Login))
-                    {
-                        return Redirect("/Exception/Index/3");
-                    }
+                    db.Clients.Add(client);
+                    db.SaveChanges();
+                    return RedirectToAction("Authorization");
+                   
                 }
-                db.Clients.Add(client);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                else
+                {
+                    return Redirect("/Exception/Index/3");
+                }
             }
-
-            return View(client);
+            return Redirect("/Exception/Index/3");
         }
 
         // GET: Clients/Edit/5

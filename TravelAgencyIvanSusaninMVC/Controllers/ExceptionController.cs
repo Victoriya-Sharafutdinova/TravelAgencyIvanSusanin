@@ -29,6 +29,10 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             {
                 message = "Уже есть пользователь с таким логином";
             }
+            if (id == 4)
+            {
+                message = "Не все поля заполнены";
+            }
             ViewBag.Message = message;
             return View();
         }

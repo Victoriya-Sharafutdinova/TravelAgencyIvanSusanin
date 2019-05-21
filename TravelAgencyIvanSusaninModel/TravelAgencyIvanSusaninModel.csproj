@@ -57,6 +57,7 @@
     <Compile Include="TourReservation.cs" />
     <Compile Include="TourTravel.cs" />
     <Compile Include="Travel.cs" />
+    <Compile Include="TravelStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -28,5 +28,8 @@ namespace TravelAgencyIvanSusaninDAL.BindingModel
 
         [DataMember]
         public DateTime DateEnd { get; set; }
+
+        public int Count { get; set; }
+
     }
 }
