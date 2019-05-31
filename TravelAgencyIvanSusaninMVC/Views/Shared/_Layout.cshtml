@@ -38,6 +38,27 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/jqueryui")
     @RenderSection("scripts", required: false)
+
+    <script src="~/Scripts/jquery-2.1.3.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
+
+    @Styles.Render("~/Content/Jcss")
+    <script type="text/javascript">
+             $(document).ready(function () {
+                 $("#datetimepicker2").datetimepicker();
+             });
+         </script>
+        <script type="text/javascript">
+                 $(document).ready(function () {
+                     $("#datetimepicker1").datetimepicker();
+                 });
+             </script>
+    @*<script type="text/javascript">
+        $('#sandbox-container .input-group.date').datepicker({
+        });
+    </script>*@
 </body>
 </html>

@@ -1,6 +1,8 @@
 ﻿@model TravelAgencyIvanSusaninDAL.ViewModel.TourTravelViewModel
 
 @{
+    /**/
+
     ViewBag.Title = "Create";
 }
 
@@ -11,50 +13,66 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>TourTravelViewModel</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.TourName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownList("Id", ViewBag.Tours as SelectList)
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Count, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Count, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Count, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    @*
+    <div class="form-horizontal">
+        <h4>TourTravelViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            <div class="input-group" id="datetimepicker1">
-                <input type="text" class="form-control" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
+            @Html.LabelFor(model => model.TourName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Id", ViewBag.Tours as SelectList)
             </div>
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Count, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Count, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Count, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.DateBegin, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="editor-field">
+                <input type="text" name="DateBegin" id="datetimepicker1" />
+                @Html.ValidationMessageFor(model => model.DateBegin)
+            </div>*@
+
+        <div class="input-group" id="datetimepicker1">
+            <input type="text" class="form-control" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="input-group" id="datetimepicker2">
-                <input type="text" class="form-control" />
+                <input type="text" name="DateEnd" class="form-control" />
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
             </div>
         </div>
-    *@
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+        @*<div class="editor-label">
+                @Html.LabelFor(model => model.DateBegin)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.DateBegin)
+                @Html.ValidationMessageFor(model => model.DateBegin)
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
         </div>
     </div>
-</div>
 
 
 }
@@ -67,18 +85,37 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/themes/base/css")
+
+    <script src="~/Scripts/jquery-2.1.3.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
+    @Styles.Render("~/Content/Jcss")
     <script type="text/javascript">
-        $(function () {
-            $("#datetimepicker1").datetimepicker();
-            $("#datetimepicker2").datetimepicker({
-                useCurrent: false
-            });
-            $("#datetimepicker1").on("dp.change", function (e) {
-                $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
-            });
-            $("#datetimepicker2").on("dp.change", function (e) {
-                $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
-            });
+        $('#sandbox-container .input-group.date').datepicker({
         });
     </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#datetimepicker2").datetimepicker();
+        });
+    </script>
+
+    @* <script type="text/javascript">
+            $(function () {
+                $("#datetimepicker1").datetimepicker();
+                $("#datetimepicker2").datetimepicker({
+                    useCurrent: false
+                });
+                $("#datetimepicker1").on("dp.change", function (e) {
+                    $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+                });
+                $("#datetimepicker2").on("dp.change", function (e) {
+                    $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+                });
+            });
+        </script>*@
 }
