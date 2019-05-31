@@ -17,6 +17,46 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             this.context = context;
         }
 
+        public List<TourViewModel> GetFilteredList()
+        {
+            var result = new List<TourViewModel>();
+
+            List<TourViewModel> tours = context.Tours.Select(rec => new TourViewModel
+            {
+                Id = rec.Id,
+                Name = rec.Name,
+                Description = rec.Description,
+                Cost = rec.Cost,
+                TourReservations = context.TourReservations
+                .Where(recCD => recCD.TourId == rec.Id)
+                .Select(recCD => new TourReservationViewModel
+                {
+                    Id = recCD.Id,
+                    TourId = recCD.TourId,
+                    ReservationId = recCD.ReservationId,
+                    ReservationName = recCD.Reservation.Name,
+                    ReservationDescription = recCD.Reservation.Description,
+                    NumberReservations = recCD.NumberReservations
+                }).ToList()
+            }).ToList();
+
+            foreach (var tour in tours)
+            {
+                var reservations = tour.TourReservations.Select(rec => new ReservationViewModel
+                {
+                    Id = rec.ReservationId,
+                    Number = context.Reservations.FirstOrDefault(recD => recD.Id == rec.ReservationId).Number
+                }).ToList();
+
+                if (reservations.All(rec => rec.Number >= tour.TourReservations.FirstOrDefault(recCD => recCD.ReservationId == rec.Id).NumberReservations))
+                {
+                    result.Add(tour);
+                }
+            }
+
+            return result;
+        }
+
         public List<TourViewModel> GetList()
         {
             List<TourViewModel> result = context.Tours.Select(rec => new TourViewModel
