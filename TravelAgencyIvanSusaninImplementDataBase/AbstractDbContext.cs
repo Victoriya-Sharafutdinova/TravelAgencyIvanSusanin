@@ -10,7 +10,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase
 {
     public class AbstractDbContext : DbContext
     {
-        public AbstractDbContext() : base("AbstractDatabase")
+        public AbstractDbContext() : base("AbstractDatabase2")
         {
             //настройки конфигурации для entity            
             Configuration.ProxyCreationEnabled = false;

@@ -8,175 +8,213 @@ using System.Web;
 using System.Web.Mvc;
 using TravelAgencyIvanSusaninMVC.Models;
 using TravelAgencyIvanSusaninModel;
+using TravelAgencyIvanSusaninDAL.Interfaces;
+using TravelAgencyIvanSusaninDAL.BindingModel;
 
 namespace TravelAgencyIvanSusaninMVC.Controllers
 {
     
     public class ClientsController : Controller
     {
-        private Context db = new Context();
+        public IClientService service = Globals.ClientService;
 
-        // GET: Clients
         public ActionResult Index()
         {
-            return View(db.Clients.ToList());
+            return View(service.GetList());
         }
 
-        // GET: Clients/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Client client = db.Clients.Find(id);
-            if (client == null)
-            {
-                return HttpNotFound();
-            }
-            return View(client);
-        }
-
-        // GET: Clients/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Clients/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FIO,Email,Login,Password")] Client client)
+        public ActionResult CreatePost()
         {
-            if (ModelState.IsValid)
+            var FIO = Request["FIO"];
+            var Email = Request["Email"];
+            var Login = Request["Login"];
+            var Password = Request["Password"];
+            var viewModel = service.GetList();
+            if (!FIO.Equals(null) && !Email.Equals(null) && !Login.Equals(null) && !Password.Equals(null))
             {
-                if (!client.FIO.Equals(null) && !client.Email.Equals(null) && !client.Login.Equals(null) && !client.Password.Equals(null))
+                for (int i = 0; i < viewModel.Count; i++)
                 {
-                    for (int i = 1; i < db.Clients.ToList().Count + 1; i++)
+                    if (FIO.Equals(viewModel[i].FIO))
                     {
-                        if (client.FIO.Equals(db.Clients.Find(i).FIO))
-                        {
-                            return Redirect("/Exception/Index/0");
-                        }
-                        if (client.Login.Equals(db.Clients.Find(i).Login))
-                        {
-                            return Redirect("/Exception/Index/3");
-                        }
+                        return Redirect("/Exception/Index/0");
                     }
-                    db.Clients.Add(client);
-                    db.SaveChanges();
-                    return RedirectToAction("Authorization");
-                   
+                    if (Login.Equals(viewModel[i].Login))
+                    {
+                        return Redirect("/Exception/Index/3");
+                    }
                 }
-                else
+                service.AddElement(new ClientBindingModel
                 {
-                    return Redirect("/Exception/Index/3");
-                }
+                    FIO = Request["FIO"],
+                    Email = Request["Email"],
+                    Login = Request["Login"],
+                    Password = Request["Password"]
+                });
+                return RedirectToAction("Authorization");
+
             }
             return Redirect("/Exception/Index/3");
+
+            /*if (!client.FIO.Equals(null) && !client.Email.Equals(null) && !client.Login.Equals(null) && !client.Password.Equals(null))
+            {
+                for (int i = 1; i < service.Clients.ToList().Count + 1; i++)
+                {
+                    if (client.FIO.Equals(service.Clients.Find(i).FIO))
+                    {
+                        return Redirect("/Exception/Index/0");
+                    }
+                    if (client.Login.Equals(service.Clients.Find(i).Login))
+                    {
+                        return Redirect("/Exception/Index/3");
+                    }
+                }
+                service.Add(client);
+                service.SaveChanges();
+                return RedirectToAction("Authorization");
+                   
+            }
+            else
+            {
+                return Redirect("/Exception/Index/3");
+            }         */
         }
 
-        // GET: Clients/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            var viewModel = service.GetElement(id);
+            var bindingModel = new ClientBindingModel
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Client client = db.Clients.Find(id);
-            if (client == null)
-            {
-                return HttpNotFound();
-            }
-            return View(client);
+                Id = id,
+                FIO = viewModel.FIO,
+                Login = viewModel.Login,
+                Password = viewModel.Password
+            };
+            return View(bindingModel);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //Client client = service.Clients.Find(id);
+            //if (client == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(client);
         }
 
-        // POST: Clients/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FIO,Email,Login,Password")] Client client)
+        public ActionResult EditPost()
         {
-            if (ModelState.IsValid)
+            service.UpdElement(new ClientBindingModel
             {
-                db.Entry(client).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(client);
-        }
-
-        // GET: Clients/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Client client = db.Clients.Find(id);
-            if (client == null)
-            {
-                return HttpNotFound();
-            }
-            return View(client);
-        }
-
-        // POST: Clients/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Client client = db.Clients.Find(id);
-            db.Clients.Remove(client);
-            db.SaveChanges();
+                Id = int.Parse(Request["Id"]),
+                FIO = Request["FIO"],
+                Login = Request["Login"],
+                Password = Request["Password"]
+            });
             return RedirectToAction("Index");
+
+            //if (ModelState.IsValid)
+            //{
+            //    service.Entry(client).State = EntityState.Modified;
+            //    service.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+            //return View(client);
         }
 
-        // GET: Clients/Authorization
+        public ActionResult Delete(int id)
+        {
+            service.DelElement(id);
+            return RedirectToAction("Index");
+
+
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //Client client = service.Clients.Find(id);
+            //if (client == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(client);
+        }
+
+        //[HttpPost, ActionName("Delete")]
+        //public ActionResult DeleteConfirmed(int id)
+        //{
+        //    Client client = service.Clients.Find(id);
+        //    service.Clients.Remove(client);
+        //    service.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
+
         public ActionResult Authorization()
         {
             return View();
         }
 
-        // POST: Clients/Authorization
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Authorization([Bind(Include = "Login,Password")] Client client)
+        public ActionResult AuthorizationPost()
         {
-            
-                for (int i = 1; i < db.Clients.ToList().Count+1; i++)
-                {
-                    if (client.Login.Equals(db.Clients.Find(i).Login))
-                    {
-                        if (client.Password.Equals(db.Clients.Find(i).Password))
-                        {
-                         return  RedirectToAction("Index", "Travels");
-                        }
-                        else
-                        {
-                            return Redirect("/Exception/Index/2");
-                        }
-                    }
-                    
-                }
-                return Redirect("/Exception/Index/1");
-            
-
-           
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            var Login = Request["Login"];
+            var Password = Request["Password"];
+            var viewModel = service.GetList();
+            for (int i = 0; i < viewModel.Count; i++)
             {
-                db.Dispose();
+                if (viewModel[i].Login.Equals(Login))
+                {
+                    if (viewModel[i].Password.Equals(Password))
+                    {
+                        return RedirectToAction("Index", "Travels");
+                    }
+                    else
+                    {
+                        return Redirect("/Exception/Index/2");
+                    }
+                }
             }
-            base.Dispose(disposing);
+            return Redirect("/Exception/Index/1");
+
+
+            //for (int i = 1; i < service.Clients.ToList().Count+1; i++)
+            //    {
+            //        if (client.Login.Equals(service.Clients.Find(i).Login))
+            //        {
+            //            if (client.Password.Equals(service.Clients.Find(i).Password))
+            //            {
+            //             return  RedirectToAction("Index", "Travels");
+            //            }
+            //            else
+            //            {
+            //                return Redirect("/Exception/Index/2");
+            //            }
+            //        }
+
+            //    }
+            //    return Redirect("/Exception/Index/1");
+
+
+
         }
+
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        service.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

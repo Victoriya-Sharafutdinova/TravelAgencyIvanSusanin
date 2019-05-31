@@ -50,7 +50,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,TravelId,TourId,DateReservation,DateBegin,DateEnd,Count")] TourTravel tourTravel)
+        public ActionResult Create([Bind(Include = "Id,TravelId,TourId,DateReservation,Count,DateBegin,DateEnd")] TourTravel tourTravel)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,TravelId,TourId,DateReservation,DateBegin,DateEnd,Count")] TourTravel tourTravel)
+        public ActionResult Edit([Bind(Include = "Id,TravelId,TourId,DateReservation,Count,DateBegin,DateEnd")] TourTravel tourTravel)
         {
             if (ModelState.IsValid)
             {
@@ -121,32 +121,6 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         {
             TourTravel tourTravel = db.TourTravels.Find(id);
             db.TourTravels.Remove(tourTravel);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        // GET: TourTravels/Reservation/5
-        public ActionResult Reservation(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            TourTravel tourTravel = db.TourTravels.Find(id);
-            if (tourTravel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tourTravel);
-        }
-
-        // POST: TourTravels/Reservation/5
-        [HttpPost, ActionName("Reservation")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Reservation(int id)
-        {
-            db.TourTravels.Find(id).DateReservation = DateTime.Today;
-            
             db.SaveChanges();
             return RedirectToAction("Index");
         }

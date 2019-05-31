@@ -141,6 +141,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Globals.cs" />
+    <Compile Include="Migrations\201905121653316_InitialCreate.cs" />
+    <Compile Include="Migrations\201905121653316_InitialCreate.Designer.cs">
+      <DependentUpon>201905121653316_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905260945214_FirstMigration.cs" />
+    <Compile Include="Migrations\201905260945214_FirstMigration.Designer.cs">
+      <DependentUpon>201905260945214_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -185,6 +195,13 @@
     <Content Include="Views\Clients\Details.cshtml" />
     <Content Include="Views\Clients\Edit.cshtml" />
     <Content Include="Views\Clients\Index.cshtml" />
+    <Content Include="Views\Clients\Authorization.cshtml" />
+    <Content Include="Views\Exception\Index.cshtml" />
+    <Content Include="Views\TourTravels\Create.cshtml" />
+    <Content Include="Views\TourTravels\Delete.cshtml" />
+    <Content Include="Views\TourTravels\Details.cshtml" />
+    <Content Include="Views\TourTravels\Edit.cshtml" />
+    <Content Include="Views\TourTravels\Index.cshtml" />
     <Content Include="Views\Travels\Create.cshtml" />
     <Content Include="Views\Travels\Delete.cshtml" />
     <Content Include="Views\Travels\Details.cshtml" />
@@ -195,13 +212,8 @@
     <Content Include="Views\Tours\Details.cshtml" />
     <Content Include="Views\Tours\Edit.cshtml" />
     <Content Include="Views\Tours\Index.cshtml" />
-    <Content Include="Views\Clients\Authorization.cshtml" />
-    <Content Include="Views\Exception\Index.cshtml" />
-    <Content Include="Views\TourTravels\Create.cshtml" />
-    <Content Include="Views\TourTravels\Delete.cshtml" />
-    <Content Include="Views\TourTravels\Details.cshtml" />
-    <Content Include="Views\TourTravels\Edit.cshtml" />
-    <Content Include="Views\TourTravels\Index.cshtml" />
+    <Content Include="Views\Tours\Add.cshtml" />
+    <Content Include="Views\Travels\AddTour.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -220,10 +232,26 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TravelAgencyIvanSusaninDAL\TravelAgencyIvanSusaninDAL.csproj">
+      <Project>{1e2e1ab7-b7e6-4d70-9383-fd12ed0903e3}</Project>
+      <Name>TravelAgencyIvanSusaninDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TravelAgencyIvanSusaninImplementDataBase\TravelAgencyIvanSusaninImplementDataBase.csproj">
+      <Project>{02a4723a-df51-40cc-9c9a-f1c7ea36c90e}</Project>
+      <Name>TravelAgencyIvanSusaninImplementDataBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TravelAgencyIvanSusaninModel\TravelAgencyIvanSusaninModel.csproj">
       <Project>{74cdfd80-bd0e-4cff-bd2f-d6d21c0ef026}</Project>
       <Name>TravelAgencyIvanSusaninModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201905121653316_InitialCreate.resx">
+      <DependentUpon>201905121653316_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905260945214_FirstMigration.resx">
+      <DependentUpon>201905260945214_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

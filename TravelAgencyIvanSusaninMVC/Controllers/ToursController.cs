@@ -116,6 +116,22 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Tours/Details/5
+        public ActionResult Add(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Tour tour = db.Tours.Find(id);
+            if (tour == null)
+            {
+                return HttpNotFound();
+            }
+            return RedirectToAction("Create", "TourTravel");
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

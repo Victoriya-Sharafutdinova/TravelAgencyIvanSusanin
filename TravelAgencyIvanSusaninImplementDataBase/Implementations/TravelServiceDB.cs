@@ -200,5 +200,30 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             }
             context.SaveChanges();
         }
+
+        public TravelViewModel GetElement(int id)
+        {
+            Travel element = context.Travels.FirstOrDefault(rec => rec.Id == id);
+            if (element != null)
+            {
+                return new TravelViewModel
+                {
+                    Id = element.Id,
+                    TotalCost = element.TotalCost,
+                    TourTravels = context.TourTravels.Where(recPC => recPC.TravelId == element.Id).Select(recPC => new TourTravelViewModel
+                    {
+                        Id = recPC.Id,
+                        TravelId = recPC.TravelId,
+                        TourId = recPC.TourId,
+                        DateReservation = DateTime.Now,
+                        DateBegin = recPC.DateBegin,
+                        DateEnd = recPC.DateEnd, 
+                        Count = recPC.Count
+                    }).ToList()
+                };
+            }
+            throw new Exception("Элемент не найден");
+        }
+
     }
 }
