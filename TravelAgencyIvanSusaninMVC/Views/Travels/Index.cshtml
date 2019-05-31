@@ -2,14 +2,13 @@
 @model IEnumerable<TravelAgencyIvanSusaninDAL.ViewModel.TravelViewModel>
 
 @{
-    ViewBag.Title = "Список машин";
+    ViewBag.Title = "Список путешествий";
 }
 
-<h2>Список машин</h2>
+<h2>Список путешествий</h2>
 
 <p>
-    <div class="col-md-2">@Html.ActionLink("Фильтровать", "Filter")</div>
-    <div>@Html.ActionLink("Весь список", "Index")</div>
+   
     @Html.ActionLink("Create New", "Create", "Travels")
 </p>
 <table class="table">

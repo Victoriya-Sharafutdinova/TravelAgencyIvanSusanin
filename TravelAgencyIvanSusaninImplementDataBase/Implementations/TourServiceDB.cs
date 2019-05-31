@@ -16,7 +16,6 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         {
             this.context = context;
         }
-
         public List<TourViewModel> GetFilteredList()
         {
             var result = new List<TourViewModel>();
@@ -44,7 +43,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             {
                 var reservations = tour.TourReservations.Select(rec => new ReservationViewModel
                 {
-                    Id = rec.ReservationId,                  
+                    Id = rec.ReservationId,
                     Number = context.Reservations.FirstOrDefault(recD => recD.Id == rec.ReservationId).Number
                 }).ToList();
 
@@ -56,8 +55,6 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
             return result;
         }
-
-
         public List<TourViewModel> GetList()
         {
             List<TourViewModel> result = context.Tours.Select(rec => new TourViewModel

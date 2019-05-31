@@ -15,5 +15,8 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
         void UpdElement(TourBindingModel model);
 
         void DelElement(int id);
+
+        List<TourViewModel> GetFilteredList();
+
     }
 }

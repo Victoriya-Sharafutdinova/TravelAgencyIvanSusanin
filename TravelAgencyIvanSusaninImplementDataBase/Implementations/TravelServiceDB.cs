@@ -21,6 +21,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             this.context = context;
         }
 
+       
 
         public void CreateTravel(TravelBindingModel model)
         {
