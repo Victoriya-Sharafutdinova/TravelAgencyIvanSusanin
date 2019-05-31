@@ -51,7 +51,11 @@ namespace TravelAgencyIvanSusaninView
 
         private void buttonReservation_Click(object sender, EventArgs e)
         {
-
+            var form = Container.Resolve<FormReservations>();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                LoadData();
+            }
         }
 
         private void buttonTour_Click(object sender, EventArgs e)

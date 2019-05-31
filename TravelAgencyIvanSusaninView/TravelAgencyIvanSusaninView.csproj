@@ -62,17 +62,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormAddTour.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormAddTour.Designer.cs">
-      <DependentUpon>FormAddTour.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormAuth.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormAuth.Designer.cs">
       <DependentUpon>FormAuth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormReservation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReservation.Designer.cs">
+      <DependentUpon>FormReservation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormReservations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReservations.Designer.cs">
+      <DependentUpon>FormReservations.cs</DependentUpon>
     </Compile>
     <Compile Include="FormTour.cs">
       <SubType>Form</SubType>
@@ -88,11 +94,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormAddTour.resx">
-      <DependentUpon>FormAddTour.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormAuth.resx">
       <DependentUpon>FormAuth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormReservation.resx">
+      <DependentUpon>FormReservation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormReservations.resx">
+      <DependentUpon>FormReservations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormTour.resx">
       <DependentUpon>FormTour.cs</DependentUpon>
