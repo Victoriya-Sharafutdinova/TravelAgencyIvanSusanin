@@ -28,23 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonTour = new System.Windows.Forms.Button();
+            this.buttonAdd = new System.Windows.Forms.Button();
             this.buttonReservation = new System.Windows.Forms.Button();
             this.buttonRequest = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonUpdate = new System.Windows.Forms.Button();
+            this.buttonDelete = new System.Windows.Forms.Button();
+            this.buttonChange = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // buttonTour
+            // buttonAdd
             // 
-            this.buttonTour.Location = new System.Drawing.Point(673, 12);
-            this.buttonTour.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.buttonTour.Name = "buttonTour";
-            this.buttonTour.Size = new System.Drawing.Size(115, 46);
-            this.buttonTour.TabIndex = 0;
-            this.buttonTour.Text = "Добавить тур";
-            this.buttonTour.UseVisualStyleBackColor = true;
-            this.buttonTour.Click += new System.EventHandler(this.buttonTour_Click);
+            this.buttonAdd.Location = new System.Drawing.Point(661, 20);
+            this.buttonAdd.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonAdd.Name = "buttonAdd";
+            this.buttonAdd.Size = new System.Drawing.Size(109, 29);
+            this.buttonAdd.TabIndex = 0;
+            this.buttonAdd.Text = "Добавить";
+            this.buttonAdd.UseVisualStyleBackColor = true;
+            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
             // 
             // buttonReservation
             // 
@@ -71,36 +76,84 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 63);
+            this.dataGridView1.Location = new System.Drawing.Point(6, 20);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(776, 375);
+            this.dataGridView1.Size = new System.Drawing.Size(649, 350);
             this.dataGridView1.TabIndex = 3;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.buttonUpdate);
+            this.groupBox1.Controls.Add(this.buttonDelete);
+            this.groupBox1.Controls.Add(this.buttonChange);
+            this.groupBox1.Controls.Add(this.dataGridView1);
+            this.groupBox1.Controls.Add(this.buttonAdd);
+            this.groupBox1.Location = new System.Drawing.Point(12, 63);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(776, 375);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Туры";
+            // 
+            // buttonUpdate
+            // 
+            this.buttonUpdate.Location = new System.Drawing.Point(661, 159);
+            this.buttonUpdate.Name = "buttonUpdate";
+            this.buttonUpdate.Size = new System.Drawing.Size(109, 29);
+            this.buttonUpdate.TabIndex = 6;
+            this.buttonUpdate.Text = "Обновить";
+            this.buttonUpdate.UseVisualStyleBackColor = true;
+            this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
+            // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Location = new System.Drawing.Point(661, 113);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(109, 29);
+            this.buttonDelete.TabIndex = 5;
+            this.buttonDelete.Text = "Удалить";
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
+            // buttonChange
+            // 
+            this.buttonChange.Location = new System.Drawing.Point(661, 65);
+            this.buttonChange.Name = "buttonChange";
+            this.buttonChange.Size = new System.Drawing.Size(109, 29);
+            this.buttonChange.TabIndex = 4;
+            this.buttonChange.Text = "Изменить";
+            this.buttonChange.UseVisualStyleBackColor = true;
+            this.buttonChange.Click += new System.EventHandler(this.buttonChange_Click);
             // 
             // FormTours
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonRequest);
             this.Controls.Add(this.buttonReservation);
-            this.Controls.Add(this.buttonTour);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormTours";
             this.Text = "FormTours";
             this.Load += new System.EventHandler(this.FormTours_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button buttonTour;
+        private System.Windows.Forms.Button buttonAdd;
         private System.Windows.Forms.Button buttonReservation;
         private System.Windows.Forms.Button buttonRequest;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button buttonUpdate;
+        private System.Windows.Forms.Button buttonDelete;
+        private System.Windows.Forms.Button buttonChange;
     }
 }
