@@ -20,7 +20,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TourName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("Id", ViewBag.Tours as SelectList)
+                @Html.DropDownList("TourId", ViewBag.TourTravels as SelectList)
             </div>
         </div>
 
