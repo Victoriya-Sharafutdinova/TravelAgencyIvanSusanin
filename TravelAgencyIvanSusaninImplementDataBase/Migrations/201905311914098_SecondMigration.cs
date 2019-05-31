@@ -3,7 +3,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class FirstMigration : DbMigration
+    public partial class SecondMigration : DbMigration
     {
         public override void Up()
         {
