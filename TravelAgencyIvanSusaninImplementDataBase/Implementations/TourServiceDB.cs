@@ -111,52 +111,48 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public void AddElement(TourBindingModel model)
         {
-            using (var transaction = context.Database.BeginTransaction())
+            using(var transaction = context.Database.BeginTransaction())
             {
                 try
                 {
-                    Tour tour = context.Tours.FirstOrDefault(
-                        record => record.Name == model.Name);
-
-                    if (tour != null)
+                    Tour element = context.Tours.FirstOrDefault(rec => rec.Name == model.Name);
+                    if (element != null)
                     {
-                        throw new Exception("Такой тур уже существует.");
+                        throw new Exception("Уже есть тур с таким названием");
                     }
-                    else
+                    element = new Tour
                     {
-                        tour = new Tour
-                        {
-                            Name = model.Name,
-                            Description = model.Description,
-                            Cost = model.Cost
-                        };
-                    }
-
-                    context.Tours.Add(tour);
+                        Name = model.Name,
+                        Description = model.Description,
+                        Cost = model.Cost
+                    };
+                    context.Tours.Add(element);
                     context.SaveChanges();
 
-                    var duplicates = model.TourReservations
-                        .GroupBy(record => record.ReservationId)
-                        .Select(record => new
-                        {
-                            reservationId = record.Key,
-                            numberReservations = record.Sum(rec => rec.NumberReservations)
-                        });
+                    var groupComponents = model.TourReservations
+                                                .GroupBy(rec => rec.ReservationId)
+                                                .Select(rec => new
+                                                {
+                                                    ReservationId = rec.Key,
+                                                    NumberReservations = rec.Sum(r => r.NumberReservations)
+                                                });
 
-                    foreach (var duplicate in duplicates)
+                    foreach (var groupComponent in groupComponents)
                     {
                         context.TourReservations.Add(new TourReservation
                         {
-                            TourId = tour.Id,
-                            ReservationId = duplicate.reservationId,
-                            NumberReservations = duplicate.numberReservations
+                            TourId = element.Id,
+                            ReservationId = groupComponent.ReservationId,
+                            NumberReservations = groupComponent.NumberReservations
                         });
                         context.SaveChanges();
                     }
+                    transaction.Commit();
                 }
                 catch (Exception)
                 {
-                    transaction.Commit();
+                    transaction.Rollback();
+                    throw;
                 }
             }
         }
@@ -167,65 +163,44 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             {
                 try
                 {
-                    Tour tour = context.Tours.FirstOrDefault(
-                        record => record.Name == model.Name && record.Id != model.Id);
-
-                    if (tour != null)
+                    Tour element = context.Tours.FirstOrDefault(rec => rec.Name == model.Name && rec.Id != model.Id);
+                    if (element != null)
                     {
                         throw new Exception("Уже есть тур с таким названием");
                     }
-
-                    tour = context.Tours.FirstOrDefault(
-                        record => record.Id == model.Id);
-
-                    if (tour == null)
+                    element = context.Tours.FirstOrDefault(rec => rec.Id == model.Id);
+                    if (element == null)
                     {
-                        throw new Exception("Тур не найден");
+                        throw new Exception("Элемент не найден");
                     }
-
-                    tour.Name = model.Name;
-                    tour.Description = model.Description;
-                    tour.Cost = model.Cost;
+                    element.Name = model.Name;
+                    element.Description = model.Description;
+                    element.Cost = model.Cost;
                     context.SaveChanges();
 
-                    var IDs = model.TourReservations.Select(
-                        record => record.ReservationId)
-                        .Distinct();
-
-                    var updateReservations = context.TourReservations.Where(
-                        record => record.TourId == model.Id && IDs.Contains(record.ReservationId));
-
-                    foreach (var updateReservation in updateReservations)
+                    var compIds = model.TourReservations.Select(rec => rec.ReservationId).Distinct();
+                    var updateComponents = context.TourReservations.Where(rec => rec.TourId == model.Id && compIds.Contains(rec.ReservationId));
+                    foreach (var updateComponent in updateComponents)
                     {
-                        updateReservation.NumberReservations = model.TourReservations.FirstOrDefault(
-                            record => record.Id == updateReservation.Id)
-                            .NumberReservations;
+                        updateComponent.NumberReservations = model.TourReservations.FirstOrDefault(rec => rec.Id == updateComponent.Id).NumberReservations;
                     }
-
                     context.SaveChanges();
 
-                    context.TourReservations.RemoveRange(context.TourReservations.Where(
-                        record => record.TourId == model.Id && !IDs.Contains(record.ReservationId)));
-
+                    context.TourReservations.RemoveRange(context.TourReservations.Where(rec => rec.TourId == model.Id && !compIds.Contains(rec.ReservationId)));
                     context.SaveChanges();
 
-                    var groupReservations = model.TourReservations.Where(
-                        record => record.Id == 0)
-                        .GroupBy(record => record.ReservationId)
-                        .Select(record => new
+                    var groupComponents = model.TourReservations.Where(rec => rec.Id == 0).GroupBy(rec => rec.ReservationId)
+                        .Select(rec => new
                         {
-                            reservationId = record.Key,
-                            numberReservations = record.Sum(r => r.NumberReservations)
+                            ReservationId = rec.Key,
+                            NumberReservations = rec.Sum(r => r.NumberReservations)
                         });
-
-                    foreach (var groupReservation in groupReservations)
+                    foreach (var groupComponent in groupComponents)
                     {
-                        TourReservation reservation = context.TourReservations.FirstOrDefault(
-                            record => record.TourId == model.Id && record.ReservationId == groupReservation.reservationId);
-
-                        if (reservation != null)
+                        TourReservation elementPC = context.TourReservations.FirstOrDefault(rec => rec.TourId == model.Id && rec.ReservationId == groupComponent.ReservationId);
+                        if (elementPC != null)
                         {
-                            reservation.NumberReservations += groupReservation.numberReservations;
+                            elementPC.NumberReservations += groupComponent.NumberReservations;
                             context.SaveChanges();
                         }
                         else
@@ -233,10 +208,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                             context.TourReservations.Add(new TourReservation
                             {
                                 TourId = model.Id,
-                                ReservationId = groupReservation.reservationId,                 
-                                NumberReservations = groupReservation.numberReservations
+                                ReservationId = groupComponent.ReservationId,
+                                NumberReservations = groupComponent.NumberReservations
                             });
-
                             context.SaveChanges();
                         }
                     }
@@ -256,22 +230,16 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             {
                 try
                 {
-                    Tour tour = context.Tours.FirstOrDefault(
-                        record => record.Id == id);
-
-                    if (tour != null)
+                    Tour element = context.Tours.FirstOrDefault(rec => rec.Id == id);
+                    if (element != null)
                     {
-                        context.TourReservations.RemoveRange(
-                            context.TourReservations.Where(
-                                record => record.TourId == id));
-
-                        context.Tours.Remove(tour);
-
+                        context.TourReservations.RemoveRange(context.TourReservations.Where(rec => rec.TourId == id));
+                        context.Tours.Remove(element);
                         context.SaveChanges();
                     }
                     else
                     {
-                        throw new Exception("Тур не найден");
+                        throw new Exception("Элемент не найден");
                     }
                     transaction.Commit();
                 }

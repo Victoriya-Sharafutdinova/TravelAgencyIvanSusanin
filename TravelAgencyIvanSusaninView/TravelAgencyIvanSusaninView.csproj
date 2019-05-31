@@ -86,6 +86,12 @@
     <Compile Include="FormTour.Designer.cs">
       <DependentUpon>FormTour.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormTourReservation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTourReservation.Designer.cs">
+      <DependentUpon>FormTourReservation.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormTours.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,6 +111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormTour.resx">
       <DependentUpon>FormTour.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTourReservation.resx">
+      <DependentUpon>FormTourReservation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormTours.resx">
       <DependentUpon>FormTours.cs</DependentUpon>
