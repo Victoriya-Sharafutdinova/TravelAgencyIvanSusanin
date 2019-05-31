@@ -27,6 +27,11 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
 
         }
 
+        public ActionResult Filter()
+        {
+            return View(service.GetFilteredList());
+        }
+
         public ActionResult Create()
         {
             if (Session["Travels"] == null)

@@ -42,15 +42,13 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
             foreach (var tour in tours)
             {
-                var tourReservations = tour.TourReservations.Select(rec => new ReservationViewModel
+                var reservations = tour.TourReservations.Select(rec => new ReservationViewModel
                 {
-                    Id = rec.ReservationId,
-                    Name = context.Reservations.FirstOrDefault(recD => recD.Id == rec.ReservationId).Name,
-                    Description = context.Reservations.FirstOrDefault(recD => recD.Id == rec.ReservationId).Description,
+                    Id = rec.ReservationId,                  
                     Number = context.Reservations.FirstOrDefault(recD => recD.Id == rec.ReservationId).Number
                 }).ToList();
 
-                if (tourReservations.All(rec => rec.Number > 0))
+                if (reservations.All(rec => rec.Number >= tour.TourReservations.FirstOrDefault(recCD => recCD.ReservationId == rec.Id).NumberReservations))
                 {
                     result.Add(tour);
                 }

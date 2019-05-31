@@ -12,6 +12,8 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
     {
         List<TravelViewModel> GetList();
 
+        List<TravelViewModel> GetFilteredList();
+
         void CreateTravel(TravelBindingModel model);
 
         void TakeTravelInWork(TravelBindingModel model);
