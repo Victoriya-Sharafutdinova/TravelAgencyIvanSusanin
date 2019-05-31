@@ -42,13 +42,15 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
             foreach (var tour in tours)
             {
-                var reservations = tour.TourReservations.Select(rec => new ReservationViewModel
+                var tourReservations = tour.TourReservations.Select(rec => new ReservationViewModel
                 {
                     Id = rec.ReservationId,
+                    Name = context.Reservations.FirstOrDefault(recD => recD.Id == rec.ReservationId).Name,
+                    Description = context.Reservations.FirstOrDefault(recD => recD.Id == rec.ReservationId).Description,
                     Number = context.Reservations.FirstOrDefault(recD => recD.Id == rec.ReservationId).Number
                 }).ToList();
 
-                if (reservations.All(rec => rec.Number >= tour.TourReservations.FirstOrDefault(recCD => recCD.ReservationId == rec.Id).NumberReservations))
+                if (tourReservations.All(rec => rec.Number > 0))
                 {
                     result.Add(tour);
                 }
@@ -56,6 +58,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
             return result;
         }
+
 
         public List<TourViewModel> GetList()
         {
@@ -72,6 +75,8 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                         Id = recTR.Id,
                         TourId = recTR.TourId,
                         ReservationId = recTR.ReservationId,
+                        ReservationName = recTR.Reservation.Name,
+                        ReservationDescription = recTR.Reservation.Description,
                         NumberReservations = recTR.NumberReservations
                     }).ToList()
             }).ToList();
@@ -97,11 +102,13 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                             Id = recTR.Id,
                             TourId = recTR.TourId,
                             ReservationId = recTR.ReservationId,
+                            ReservationName = recTR.Reservation.Name,
+                            ReservationDescription = recTR.Reservation.Description,
                             NumberReservations = recTR.NumberReservations
                         }).ToList()
                 };
             }
-            throw new Exception("Элемент не найден");
+            throw new Exception("Тур не найден");
         }
 
         public void AddElement(TourBindingModel model)
