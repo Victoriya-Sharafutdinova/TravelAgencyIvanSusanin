@@ -1,10 +1,10 @@
-﻿@model TravelAgencyIvanSusaninModel.Tour
+﻿@model TravelAgencyIvanSusaninDAL.ViewModel.TourViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Просмотр тура";
 }
 
-<h2>Details</h2>
+<h2>Просмотр тура</h2>
 
 <div>
     <h4>Tour</h4>
@@ -35,8 +35,35 @@
         </dd>
 
     </dl>
+    <table class="table">
+        <tr>
+            <th>
+                Бронь
+            </th>
+            <th>
+                Описание
+            </th>
+            <th>
+                Количество
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.TourReservations)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberReservations)
+            </td>
+        </tr>
+        }
+    </table>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Вернуться к списку туров", "Index")
 </p>

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title – приложение ASP.NET</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -17,48 +17,147 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Путешествия", "Index", "TourTravels", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Путешествия", "Index", "Travels", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Создать путешествие", "Create", "TourTravels")</li>
-                    <li>@Html.ActionLink("Туры", "Index", "Tours")</li>
-                    <li>@*Html.ActionLink("Контакт", "Contact", "Home")*@</li>
+                    @if (Globals.AuthClient != null)
+                    {
+                        <li>@Html.ActionLink("Туры", "Index", "Tours")</li>
+                        <li>@Html.ActionLink("Статистика", "Index", "Statistics")</li>
+                        <li>@Html.ActionLink("Личный кабинет", "Index", "User")</li>
+                        <li>@Html.ActionLink("Выйти", "Exit", "Clients")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Авторизация", "Authorization", "Clients")</li>
+                    }
+
                 </ul>
             </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
+        @Scripts.Render("~/bundles/jquery")
+        <!--стили jquery ui-->
+        @Styles.Render("~/Content/themes/base/css")
+        <!--сама библиотека jquey ui-->
+        @Scripts.Render("~/bundles/jqueryui")
+        @RenderSection("scripts", required: false)
+
+
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+
+        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <script>
+            $(function () {
+                $("#DateBegin").datepicker({
+                    dateFormat: "dd.mm.yy",
+                    monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь',
+                        'Октябрь', 'Ноябрь', 'Декабрь'],
+                    dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    firstDay: 1,
+                    
+                });
+
+                var dateBegin = $("#DateBegin").val(); 
+                var DateBegin = $("#DateBegin").datepicker("getDate");
+                $.get("@Url.Action("AddTour", "Travels")", { DateBegin: DateBegin });
+            });
+        </script>
+        <script>
+            $(function () {
+                $("#DateEnd").datepicker("getDate");
+                $("#DateEnd").datepicker({
+                    
+                    dateFormat: "dd.mm.yy",
+                    monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь',
+                        'Октябрь', 'Ноябрь', 'Декабрь'],
+                    dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    firstDay: 1,
+                });
+                var DateEnd = $("#DateEnd").datepicker("getDate");
+                $("#DateEnd").datepicker().val() 
+            });
+        </script>
+        <style>
+            #ui-datepicker-div {
+                width: 200px;
+                background: aliceblue;
+            }
+        </style>
+
+
+        <!--если браузер не создает специального поля для date, то добавляем datepicker-->
+        @*<script type="text/javascript">
+            $(function () {
+                if (!Modernizr.inputtypes.date) {
+                    $(function () {
+                        $("input[type='text']")
+                            .datepicker({ dateFormat: 'dd/mm/yy' })
+                            .get(0).setAttribute("type", "text");
+                    })
+                }
+            });
+        </script>
+        <script type="text/javascript">
+            $(function () {
+                if (!Modernizr.inputtypes.date) {
+                    $(function () {
+                        $("input[type='text']")
+                            .datepicker({ dateFormat: 'dd/mm/yy' })
+                            .get(0).setAttribute("type", "text");
+                    });
+                    $.datepicker.regional['ru'] = {
+                        closeText: 'Закрыть',
+                        prevText: 'Пред',
+                        nextText: 'След',
+                        currentText: 'Сегодня',
+                        monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                            'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                        monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+                            'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                        dayNames: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+                        dayNamesShort: ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'],
+                        dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                        weekHeader: 'Не',
+                        dateFormat: 'dd.mm.yy',
+                        firstDay: 1,
+                        isRTL: false,
+                        showMonthAfterYear: false,
+                        yearSuffix: ''
+                    };
+                    $.datepicker.setDefaults($.datepicker.regional['ru']);
+
+                }
+            });
+        </script>*@
+        @*<script type="text/javascript">
+            $(function () {
+                $("#datepicker").datepicker();
+            });
+        </script>
+        <script type="text/javascript">
+            $(function () {
+                $("#datepicker1").datepicker();
+            });
+        </script>*@
         <hr />
         <footer>
             <p>&copy; @*DateTime.Now.Year – приложение ASP.NET</p>*@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
+    @*@Styles.Render("~/Content/css", "~/Content/themes/base/css")
     @Scripts.Render("~/bundles/bootstrap")
-    @Styles.Render("~/Content/themes/base/css")
-    @Scripts.Render("~/bundles/jqueryui")
-    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryui", "~/bundles/jqueryval", "~/bundles/modernizr")
 
-    <script src="~/Scripts/jquery-2.1.3.js"></script>
-    <script src="~/Scripts/jquery.datetimepicker.js"></script>
 
-    @Styles.Render("~/Content/Jcss")
-    <script type="text/javascript">
-             $(document).ready(function () {
-                 $("#datetimepicker2").datetimepicker();
-             });
-         </script>
-        <script type="text/javascript">
-                 $(document).ready(function () {
-                     $("#datetimepicker1").datetimepicker();
-                 });
-             </script>
-    @*<script type="text/javascript">
-        $('#sandbox-container .input-group.date').datepicker({
-        });
-    </script>*@
+    @RenderSection("scripts", required: false)*@
+
 </body>
 </html>

@@ -18,7 +18,7 @@ namespace TravelAgencyIvanSusaninDAL.BindingModel
         public int ClientId { get; set; }
 
         [DataMember]
-        public int TotalCost { get; set; }
+        public decimal TotalCost { get; set; }
 
         public virtual List<TourTravelBindingModel> TourTravels { get; set; }
     }

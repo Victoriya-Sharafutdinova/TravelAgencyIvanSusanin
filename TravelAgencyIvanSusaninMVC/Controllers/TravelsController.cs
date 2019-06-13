@@ -17,14 +17,50 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
     public class TravelsController : Controller
     {
 
-        private ITravelService service = Globals.TravelService;
-        private ITourService tourService = Globals.TourService;
+        private readonly ITravelService service = Globals.TravelService;
+        private readonly ITourService tourService = Globals.TourService;
+        private readonly IStatisticService statistic = Globals.StatisticService;
 
-        // GET: Travels
         public ActionResult Index()
         {
-            return View(service.GetList());
+            return View(service.GetClientTravels(Globals.AuthClient.Id));
+        }
 
+        public ActionResult Reserve()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ReservePost()
+        {
+            var travel = (TravelViewModel)Session["Travels"];
+            var travelTours = new List<TourTravelBindingModel>();
+            for (int i = 0; i < travel.TourTravels.Count; ++i)
+            {
+                travelTours.Add(new TourTravelBindingModel
+                {
+                    Id = travel.TourTravels[i].Id,
+                    TravelId = travel.TourTravels[i].TravelId,
+                    TourId = travel.TourTravels[i].TourId,
+                    Count = travel.TourTravels[i].Count
+                });
+            }
+
+            service.Reservation(new TravelBindingModel
+            {
+                ClientId = Globals.AuthClient.Id,
+                TotalCost = travelTours.Sum(rec => rec.Count * tourService.GetElement(rec.TourId).Cost),
+                TourTravels = travelTours
+            });
+            Session.Remove("Travels");
+            return RedirectToAction("Index", "Travels");
+        }
+
+        public ActionResult Pay(int id)
+        {
+            service.PayTravel(new TravelBindingModel { ClientId = Globals.AuthClient.Id, Id = id });
+            return View();
         }
 
         public ActionResult Create()
@@ -40,7 +76,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
 
         public ActionResult AddTour()
         {
-            var tours = new SelectList(tourService.GetList(), "Id", "TourName");
+            var tours = new SelectList(tourService.GetList(), "Id", "Name");
             ViewBag.Tours = tours;
             return View();
         }
@@ -48,16 +84,45 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         [HttpPost]
         public ActionResult AddTourPost()
         {
-            var travel = (TravelViewModel)Session["Travel"];
-            var tour = new TourTravelViewModel
+
+            var travel = (TravelViewModel)Session["Travels"];
+            bool date = true;
+            for (int i = 0; i < travel.TourTravels.Count; ++i)
             {
-                TourId = int.Parse(Request["Id"]),
-                TourName = tourService.GetElement(int.Parse(Request["Id"])).Name,
-                Count = int.Parse(Request["Count"]) 
-            };
-            travel.TourTravels.Add(tour);
-            Session["Travel"] = travel;
-            return RedirectToAction("Index");
+                var dateBegin1 = travel.TourTravels[i].DateBegin;
+                var dateEnd1 = travel.TourTravels[i].DateEnd;               
+                var dateBegin2 = DateTime.Parse(Request["DateBegin"]);
+                var dateEnd2 = DateTime.Parse(Request["DateEnd"]);
+                if ((dateBegin2 >= dateBegin1 && dateBegin2 <= dateEnd1) || (dateBegin2 < dateBegin1 && dateBegin1 <= dateEnd2))
+                {
+                    date = false;
+                }
+                else
+                {
+                    date = true;
+                }
+                
+            }
+            if (date)
+            {
+                var tour = new TourTravelViewModel
+                {
+                    TourId = int.Parse(Request["Id"]),
+                    TourName = tourService.GetElement(int.Parse(Request["Id"])).Name,
+                    Count = int.Parse(Request["Count"]),
+                    DateBegin = DateTime.Parse(Request["DateBegin"]),
+                    DateEnd = DateTime.Parse(Request["DateEnd"])
+                };
+                travel.TourTravels.Add(tour);
+                Session["Travel"] = travel;
+                return RedirectToAction("Create");
+            }
+            else
+            {
+                ModelState.AddModelError("DateBegin", "Некорректная дата");
+                ModelState.AddModelError("DateEnd", "Некорректная дата");
+            }
+            return RedirectToAction("AddTour");
         }
 
         public ActionResult CreateTravel()
@@ -72,9 +137,10 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         [HttpPost]
         public ActionResult CreateTravelPost()
         {
-            var travel = (TravelViewModel)Session["Travel"];
+            var travel = (TravelViewModel)Session["Travels"];
             var tourTravels = new List<TourTravelBindingModel>();
             var total = 0;
+
             for (int i = 0; i < travel.TourTravels.Count; ++i)
             {
                 tourTravels.Add(new TourTravelBindingModel
@@ -82,17 +148,22 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                     Id = travel.TourTravels[i].Id,
                     TravelId = travel.TourTravels[i].TravelId,
                     TourId = travel.TourTravels[i].TourId,
-                    Count = travel.TourTravels[i].Count
+                    Count = travel.TourTravels[i].Count,
+                    DateBegin = travel.TourTravels[i].DateBegin,
+                    DateEnd = travel.TourTravels[i].DateEnd
                 });
-                 total += CalcSum(travel.TourTravels[i].TourId, travel.TourTravels[i].Count);
+                total += CalcSum(travel.TourTravels[i].TourId, travel.TourTravels[i].Count);
             }
-            
+
             service.CreateTravel(new TravelBindingModel
             {
-                TotalCost = total,
+                ClientId = Globals.AuthClient.Id,
+                TotalCost = tourTravels.Sum(rec => rec.Count * tourService.GetElement(rec.TourId).Cost),
                 TourTravels = tourTravels
             });
             Session.Remove("Travel");
+           
+            
             return RedirectToAction("Index", "Travels");
         }
 
@@ -118,7 +189,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                         service.PayTravel(new TravelBindingModel { Id = id });
                         break;
                     case "Reservation":
-                        service.Reservation(new TourTravelBindingModel { Id = id });
+                        service.Reservation(new TravelBindingModel { Id = id });
                         break;
                 }
             }
@@ -126,126 +197,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             {
                 ModelState.AddModelError("Error", ex.Message);
             }
-
-
             return RedirectToAction("Index");
         }
-
-        //private Context db = new Context();
-
-        //// GET: Travels
-        //public ActionResult Index()
-        //{
-        //    var travels = db.Travels.Include(t => t.Client);
-        //    return View(travels.ToList());
-        //}
-
-        //// GET: Travels/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Travel travel = db.Travels.Find(id);
-        //    if (travel == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(travel);
-        //}
-
-        //// GET: Travels/Create
-        //public ActionResult Create()
-        //{
-        //    ViewBag.ClientId = new SelectList(db.Clients, "Id", "FIO");
-        //    return View();
-        //}
-
-        //// POST: Travels/Create
-        //// Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        //// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "Id,ClientId,TotalCost,TravelStatus,DateCreate,DateImplement")] Travel travel)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Travels.Add(travel);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    ViewBag.ClientId = new SelectList(db.Clients, "Id", "FIO", travel.ClientId);
-        //    return View(travel);
-        //}
-
-        //// GET: Travels/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Travel travel = db.Travels.Find(id);
-        //    if (travel == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.ClientId = new SelectList(db.Clients, "Id", "FIO", travel.ClientId);
-        //    return View(travel);
-        //}
-
-        //// POST: Travels/Edit/5
-        //// Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        //// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "Id,ClientId,TotalCost,TravelStatus,DateCreate,DateImplement")] Travel travel)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(travel).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.ClientId = new SelectList(db.Clients, "Id", "FIO", travel.ClientId);
-        //    return View(travel);
-        //}
-
-        //// GET: Travels/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Travel travel = db.Travels.Find(id);
-        //    if (travel == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(travel);
-        //}
-
-        //// POST: Travels/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Travel travel = db.Travels.Find(id);
-        //    db.Travels.Remove(travel);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
     }
 }

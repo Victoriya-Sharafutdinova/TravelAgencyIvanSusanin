@@ -52,6 +52,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,TravelId,TourId,DateReservation,Count,DateBegin,DateEnd")] TourTravel tourTravel)
         {
+
             if (ModelState.IsValid)
             {
                 db.TourTravels.Add(tourTravel);

@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = " Статистика";
+}
+<h2>Статистика</h2>
+<div>
+    <div class="form-group">
+        <label>Самый покупаемый тур: </label>
+        <span>@ViewBag.service.GetMostPopularTourName()в количестве @ViewBag.service.GetMostPopularTour()</span>
+    </div>
+    <div class="form-group">
+        <label>Средний чек путешествия: </label>
+        <span>@ViewBag.service.GetAverPrice()</span>
+    </div>
+</div>

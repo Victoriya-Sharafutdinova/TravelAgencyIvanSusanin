@@ -1,12 +1,11 @@
 ﻿@model TravelAgencyIvanSusaninModel.Client
-
 @{
     ViewBag.Title = "Авторизация";
 }
 
 <h2>Authorization</h2>
 
-@using (Html.BeginForm("AuthorizationPost", "Clients", FormMethod.Post))
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
@@ -34,7 +33,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Войти" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Travels")'" />
+                <input type="submit" value="Войти" class="btn btn-default"  />
 
             </div>
         </div>

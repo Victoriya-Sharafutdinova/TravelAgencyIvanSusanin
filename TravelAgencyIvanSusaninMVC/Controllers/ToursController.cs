@@ -26,6 +26,15 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         {
             return View(service.GetFilteredList());
         }
+        public ActionResult Details(int id)
+        {
+            var tour = service.GetElement(id);
 
+            if (tour == null)
+            {
+                return HttpNotFound();
+            }
+            return View(tour);
+        }
     }
 }

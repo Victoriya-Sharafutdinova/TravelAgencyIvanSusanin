@@ -13,7 +13,7 @@ using TravelAgencyIvanSusaninDAL.BindingModel;
 
 namespace TravelAgencyIvanSusaninMVC.Controllers
 {
-    
+
     public class ClientsController : Controller
     {
         public IClientService service = Globals.ClientService;
@@ -29,6 +29,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult CreatePost()
         {
             var FIO = Request["FIO"];
@@ -42,11 +43,11 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                 {
                     if (FIO.Equals(viewModel[i].FIO))
                     {
-                        return Redirect("/Exception/Index/0");
+                        ModelState.AddModelError("FIO", "Уже существует клиент с таким именем");
                     }
                     if (Login.Equals(viewModel[i].Login))
                     {
-                        return Redirect("/Exception/Index/3");
+                        ModelState.AddModelError("Login", "Уже существует клиент с таким логином");
                     }
                 }
                 service.AddElement(new ClientBindingModel
@@ -61,28 +62,6 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             }
             return Redirect("/Exception/Index/3");
 
-            /*if (!client.FIO.Equals(null) && !client.Email.Equals(null) && !client.Login.Equals(null) && !client.Password.Equals(null))
-            {
-                for (int i = 1; i < service.Clients.ToList().Count + 1; i++)
-                {
-                    if (client.FIO.Equals(service.Clients.Find(i).FIO))
-                    {
-                        return Redirect("/Exception/Index/0");
-                    }
-                    if (client.Login.Equals(service.Clients.Find(i).Login))
-                    {
-                        return Redirect("/Exception/Index/3");
-                    }
-                }
-                service.Add(client);
-                service.SaveChanges();
-                return RedirectToAction("Authorization");
-                   
-            }
-            else
-            {
-                return Redirect("/Exception/Index/3");
-            }         */
         }
 
         public ActionResult Edit(int id)
@@ -96,19 +75,10 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                 Password = viewModel.Password
             };
             return View(bindingModel);
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            //Client client = service.Clients.Find(id);
-            //if (client == null)
-            //{
-            //    return HttpNotFound();
-            //}
-            //return View(client);
+
         }
 
-       
+
         [HttpPost]
         public ActionResult EditPost()
         {
@@ -120,101 +90,40 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                 Password = Request["Password"]
             });
             return RedirectToAction("Index");
-
-            //if (ModelState.IsValid)
-            //{
-            //    service.Entry(client).State = EntityState.Modified;
-            //    service.SaveChanges();
-            //    return RedirectToAction("Index");
-            //}
-            //return View(client);
         }
 
         public ActionResult Delete(int id)
         {
             service.DelElement(id);
             return RedirectToAction("Index");
-
-
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            //Client client = service.Clients.Find(id);
-            //if (client == null)
-            //{
-            //    return HttpNotFound();
-            //}
-            //return View(client);
         }
-
-        //[HttpPost, ActionName("Delete")]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Client client = service.Clients.Find(id);
-        //    service.Clients.Remove(client);
-        //    service.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
 
         public ActionResult Authorization()
         {
             return View();
         }
 
-       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AuthorizationPost()
+        public ActionResult Authorization([Bind(Include = "Login, Password")] Client client)
         {
-            var Login = Request["Login"];
-            var Password = Request["Password"];
-            var viewModel = service.GetList();
-            for (int i = 0; i < viewModel.Count; i++)
+            if (service.GetList().Any(rec => rec.Login == client.Login && rec.Password == client.Password))
             {
-                if (viewModel[i].Login.Equals(Login))
-                {
-                    if (viewModel[i].Password.Equals(Password))
-                    {
-                        return RedirectToAction("Index", "Travels");
-                    }
-                    else
-                    {
-                        return Redirect("/Exception/Index/2");
-                    }
-                }
+                var authClient = service.GetList().FirstOrDefault(cl => cl.Login == client.Login);
+                Globals.AuthClient = authClient;
+                return RedirectToAction("Index", "Travels");
             }
-            return Redirect("/Exception/Index/1");
-
-
-            //for (int i = 1; i < service.Clients.ToList().Count+1; i++)
-            //    {
-            //        if (client.Login.Equals(service.Clients.Find(i).Login))
-            //        {
-            //            if (client.Password.Equals(service.Clients.Find(i).Password))
-            //            {
-            //             return  RedirectToAction("Index", "Travels");
-            //            }
-            //            else
-            //            {
-            //                return Redirect("/Exception/Index/2");
-            //            }
-            //        }
-
-            //    }
-            //    return Redirect("/Exception/Index/1");
-
-
-
+            else
+            {
+                ModelState.AddModelError("Password", "Проверьте правильность данных");
+            }
+            return View(client);
         }
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        service.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
+        public ActionResult Exit()
+        {
+            Globals.AuthClient = null;
+            return RedirectToAction("Auth");
+        }
     }
 }

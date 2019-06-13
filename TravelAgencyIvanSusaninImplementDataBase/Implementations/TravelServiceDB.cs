@@ -1,27 +1,61 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.SqlServer;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using TravelAgencyIvanSusaninDAL.BindingModel;
 using TravelAgencyIvanSusaninDAL.Interfaces;
 using TravelAgencyIvanSusaninDAL.ViewModel;
 using TravelAgencyIvanSusaninModel;
+using System.Runtime.Serialization.Json;
+using System.IO;
 
 namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 {
     public class TravelServiceDB : ITravelService
     {
-        private AbstractDbContext context;
+        private readonly AbstractDbContext context;
 
         public TravelServiceDB(AbstractDbContext context)
         {
             this.context = context;
         }
 
-       
+
+        public TravelViewModel GetElement(int id)
+        {
+            var element = context.Travels.FirstOrDefault(rec => rec.Id == id);
+
+            if (element != null)
+            {
+                return new TravelViewModel
+                {
+                    Id = element.Id,
+                    ClientId = element.ClientId,
+                    FIO = context.Clients.FirstOrDefault(client => client.Id == element.ClientId).FIO,
+                    TotalCost = element.TotalCost,
+                    TravelStatus = element.TravelStatus.ToString(),
+                    DateCreate = element.DateCreate.ToString(),
+                    DateImplement = element.DateImplement.ToString(),
+                    TourTravels = context.TourTravels.Where(recOC => recOC.TravelId == element.Id)
+                        .Select(recOC => new TourTravelViewModel
+                        {
+                            Id = recOC.Id,
+                            TravelId = recOC.TravelId,
+                            TourId = recOC.TourId,
+                            TourName = recOC.Tour.Name,
+                            Count = recOC.Count
+                        })
+                        .ToList()
+                };
+            }
+            throw new Exception("Элемент не найден");
+        }
 
         public void CreateTravel(TravelBindingModel model)
         {
@@ -38,22 +72,21 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     };
                     context.Travels.Add(element);
                     context.SaveChanges();
-                    // убираем дубли по машинам
                     var groupTours = model.TourTravels
-                     .GroupBy(rec => rec.TourId)
+                    .GroupBy(rec => rec.TourId)
                     .Select(rec => new
                     {
                         TourId = rec.Key,
-                        Count = rec.Sum(r => r.Count)
+                        Count = rec.Sum(r => r.Count), 
+                        
                     });
-                    // добавляем компоненты
                     foreach (var groupTour in groupTours)
                     {
                         context.TourTravels.Add(new TourTravel
                         {
                             TravelId = element.Id,
                             TourId = groupTour.TourId,
-                            Count = groupTour.Count
+                            Count = groupTour.Count,
                         });
                         context.SaveChanges();
                     }
@@ -78,8 +111,14 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             {
                 throw new Exception("Заказ не в статусе \"Выполняется\"");
             }
+            element.DateImplement = DateTime.Now;
             element.TravelStatus = TravelStatus.Готов;
             context.SaveChanges();
+        }
+
+        public List<TravelViewModel> GetClientTravels(int clientId)
+        {
+            return GetList().Where(travel => travel.ClientId == clientId).ToList();
         }
 
         public List<TravelViewModel> GetList()
@@ -109,7 +148,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     TourId = recPC.TourId,
                     TravelId = recPC.TravelId,
                     TourName= recPC.Tour.Name,
-                    Count = recPC.Count
+                    Count = recPC.Count,
+                    DateBegin = recPC.DateBegin,
+                    DateEnd = recPC.DateEnd
                 }).ToList()
             }).ToList();
 
@@ -147,31 +188,55 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                         throw new Exception("Путешествие не в статусе \"Принят\"");
                     }
 
-                    var travelTours = context.TourTravels.Include(rec => rec.Tour).Where(rec => rec.TravelId == element.Id);
-
-                    foreach (var travelTour in travelTours)
+                    if (element.TravelStatus == TravelStatus.Принят || element.TravelStatus == TravelStatus.Зарезервирован)
                     {
-                        var tourReservations = context.TourReservations.Include(rec => rec.Reservation).Where(rec => rec.TourId == travelTour.TourId);
-                        foreach (var tourReservation in tourReservations)
+                        var travelTours = context.TourTravels.Where(rec => rec.TravelId == element.Id);
+                        foreach (var travelTour in travelTours)
                         {
-                            int countReservations = tourReservation.Reservation.Number;
-                            if (tourReservation.NumberReservations > countReservations)
+                            var tourReservations = context.TourReservations.Where(rec => rec.TourId == travelTour.TourId);
+                            foreach (var tourReservation in tourReservations)
                             {
-                                throw new Exception("Недостаточно деталей");
-                            }
-                            else
-                            {
-                                tourReservation.Reservation.Number -= tourReservation.NumberReservations;
-                                context.SaveChanges();
-                                break;
-                            }
-                        }
-                    }
+                                if (element.TravelStatus == TravelStatus.Принят)
+                                {
+                                    var countReservations = context.Reservations.FirstOrDefault(reservation => reservation.Id == tourReservation.ReservationId).Number;
+                                    if (tourReservation.NumberReservations > countReservations)
+                                    {
+                                        throw new Exception("Недостаточно броней");
+                                    }
+                                    else
+                                    {
+                                        tourReservation.Reservation.Number -= tourReservation.NumberReservations;
+                                        context.SaveChanges();
+                                        break;
+                                    }
+                                }
+                                if (element.TravelStatus != TravelStatus.Зарезервирован) continue;
+                                {
+                                    int countReservations = tourReservation.Reservation.NumberReserve;
 
-                    element.DateImplement = DateTime.Now;
-                    element.TravelStatus = TravelStatus.Выполняется;
-                    context.SaveChanges();
-                    transaction.Commit();
+                                    if (tourReservation.NumberReservations > countReservations)
+                                    {
+                                        throw new Exception("Недостаточно броней");
+                                    }
+                                    else
+                                    {
+                                        tourReservation.Reservation.Number -= tourReservation.NumberReservations;
+                                        context.SaveChanges();
+                                        break;
+                                    }
+                                }
+                            }                         
+                        }
+                        element.DateImplement = DateTime.Now;
+                        element.TravelStatus = TravelStatus.Выполняется;
+                        context.SaveChanges();
+                        transaction.Commit();
+
+                    }                  
+                    else
+                    {
+                        throw new Exception("Заказ не в статусе \"Принят\" или \"Зарезервирован\"");
+                    }
                 }
                 catch (Exception)
                 {
@@ -181,50 +246,112 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             }
         }
 
-        public void Reservation (TourTravelBindingModel model)
+        public void Reservation (TravelBindingModel model)
         {
-            TourTravel element = context.TourTravels.FirstOrDefault(rec => rec.TravelId == model.TravelId && rec.TourId == model.TourId);
-            if (element != null)
+            using (var transaction = context.Database.BeginTransaction())
             {
-                element.DateReservation = model.DateReservation;
-            }
-            else
-            {
-                context.TourTravels.Add(new TourTravel
+                try
                 {
-                    TravelId = model.TravelId,
-                    TourId = model.TourId,
-                    DateReservation = DateTime.Now,
-                    DateBegin = model.DateBegin,
-                    DateEnd = model.DateEnd
-                });
-            }
-            context.SaveChanges();
-        }
-
-        public TravelViewModel GetElement(int id)
-        {
-            Travel element = context.Travels.FirstOrDefault(rec => rec.Id == id);
-            if (element != null)
-            {
-                return new TravelViewModel
-                {
-                    Id = element.Id,
-                    TotalCost = element.TotalCost,
-                    TourTravels = context.TourTravels.Where(recPC => recPC.TravelId == element.Id).Select(recPC => new TourTravelViewModel
+                    var element = new Travel
                     {
-                        Id = recPC.Id,
-                        TravelId = recPC.TravelId,
-                        TourId = recPC.TourId,
-                        DateReservation = DateTime.Now,
-                        DateBegin = recPC.DateBegin,
-                        DateEnd = recPC.DateEnd, 
-                        Count = recPC.Count
-                    }).ToList()
-                };
+                        ClientId = model.ClientId,
+                        DateCreate = DateTime.Now,
+                        TotalCost = model.TotalCost,
+                        TravelStatus = TravelStatus.Зарезервирован,
+                    };
+
+                    context.Travels.Add(element);
+                    context.SaveChanges();
+
+                    var groupTours = model.TourTravels
+                        .GroupBy(rec => rec.TourId)
+                        .Select(rec => new { TourId = rec.Key, Count = rec.Sum(r => r.Count) });
+
+                    foreach (var groupTour in groupTours)
+                    {
+                        var travelTour = new TourTravel
+                        {
+                            TravelId = element.Id,
+                            TourId = groupTour.TourId,
+                            Count = groupTour.Count
+                        };
+
+                        context.TourTravels.Add(travelTour);
+
+                        var tourReservation = context.TourReservations.FirstOrDefault(rec => rec.TourId == travelTour.TourId);
+
+                        var detail = context.Reservations.FirstOrDefault(rec => rec.Id == tourReservation.ReservationId);
+
+                        var reserveReservations = tourReservation.NumberReservations;
+
+                        var check = detail.Number - reserveReservations;
+
+                        if (check >= 0)
+                        {
+                            detail.NumberReserve += reserveReservations;
+                        }
+                        else
+                        {
+                            throw new Exception("Недостаточно броней для резервации");
+                        }
+
+                        context.SaveChanges();
+                    }
+                    transaction.Commit();
+
+                    var client = context.Clients.FirstOrDefault(x => x.Id == model.ClientId);
+
+                    SendEmail(client?.Email, "Оповещение по путешествиям",
+                        $"Путешествие №{element.Id} от {element.DateCreate.ToShortDateString()} зарезервировано успешно");
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                }
+            
             }
-            throw new Exception("Элемент не найден");
+            
         }
 
+        private void SendEmail(string mailAddress, string subject, string text)
+        {
+            MailMessage objMailMessage = new MailMessage();
+            SmtpClient objSmtpClient = null;
+            try
+            {
+                objMailMessage.From = new MailAddress(ConfigurationManager.AppSettings["MailLogin"]);
+                objMailMessage.To.Add(new MailAddress(mailAddress));
+                objMailMessage.Subject = subject;
+                objMailMessage.Body = text;
+                objMailMessage.SubjectEncoding = Encoding.UTF8;
+                objMailMessage.BodyEncoding = Encoding.UTF8;
+                objSmtpClient = new SmtpClient("smtp.gmail.com", 587);
+                objSmtpClient.UseDefaultCredentials = false;
+                objSmtpClient.EnableSsl = true;
+                objSmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                objSmtpClient.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["MailLogin"],
+                    ConfigurationManager.AppSettings["MailPassword"]);
+                objSmtpClient.Send(objMailMessage);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                objMailMessage = null;
+                objSmtpClient = null;
+            }
+        }
+
+        public void SaveDataBase()
+        {
+            var jsonFormatter = new DataContractJsonSerializer(typeof(List<Travel>));
+
+            using (FileStream fs = new FileStream("db.json", FileMode.OpenOrCreate))
+            {
+                jsonFormatter.WriteObject(fs, context.Travels.ToList());
+            }
+        }
     }
 }

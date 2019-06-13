@@ -50,7 +50,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,15 +69,32 @@
     <Compile Include="Implementations\ReportServiceDB.cs" />
     <Compile Include="Implementations\RequestServiceDB.cs" />
     <Compile Include="Implementations\ReservationServiceDB.cs" />
+    <Compile Include="Implementations\StatisticServiceDB.cs" />
     <Compile Include="Implementations\TourServiceDB.cs" />
     <Compile Include="Implementations\TravelServiceDB.cs" />
     <Compile Include="Migrations\201905211721228_FirstMigration.cs" />
     <Compile Include="Migrations\201905211721228_FirstMigration.Designer.cs">
       <DependentUpon>201905211721228_FirstMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201905311754072_SomeMigration.cs" />
-    <Compile Include="Migrations\201905311754072_SomeMigration.Designer.cs">
-      <DependentUpon>201905311754072_SomeMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201906010022564_somemigration.cs" />
+    <Compile Include="Migrations\201906010022564_somemigration.Designer.cs">
+      <DependentUpon>201906010022564_somemigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906020913536_some2migration.cs" />
+    <Compile Include="Migrations\201906020913536_some2migration.Designer.cs">
+      <DependentUpon>201906020913536_some2migration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906020925380_some3migration.cs" />
+    <Compile Include="Migrations\201906020925380_some3migration.Designer.cs">
+      <DependentUpon>201906020925380_some3migration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906020940494_some4migration.cs" />
+    <Compile Include="Migrations\201906020940494_some4migration.Designer.cs">
+      <DependentUpon>201906020940494_some4migration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906131128236_some5migration.cs" />
+    <Compile Include="Migrations\201906131128236_some5migration.Designer.cs">
+      <DependentUpon>201906131128236_some5migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,8 +123,20 @@
     <EmbeddedResource Include="Migrations\201905211721228_FirstMigration.resx">
       <DependentUpon>201905211721228_FirstMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905311754072_SomeMigration.resx">
-      <DependentUpon>201905311754072_SomeMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201906010022564_somemigration.resx">
+      <DependentUpon>201906010022564_somemigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906020913536_some2migration.resx">
+      <DependentUpon>201906020913536_some2migration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906020925380_some3migration.resx">
+      <DependentUpon>201906020925380_some3migration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906020940494_some4migration.resx">
+      <DependentUpon>201906020940494_some4migration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906131128236_some5migration.resx">
+      <DependentUpon>201906131128236_some5migration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

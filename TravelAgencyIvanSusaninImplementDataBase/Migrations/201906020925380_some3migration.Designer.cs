@@ -7,13 +7,13 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class SomeMigration : IMigrationMetadata
+    public sealed partial class some3migration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(SomeMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(some3migration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201905311754072_SomeMigration"; }
+            get { return "201906020925380_some3migration"; }
         }
         
         string IMigrationMetadata.Source

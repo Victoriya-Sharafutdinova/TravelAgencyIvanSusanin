@@ -12,6 +12,8 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
     {
         List<TravelViewModel> GetList();
 
+        List<TravelViewModel> GetClientTravels(int clientId);
+
         void CreateTravel(TravelBindingModel model);
 
         void TakeTravelInWork(TravelBindingModel model);
@@ -20,9 +22,10 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
 
         void PayTravel(TravelBindingModel model);
 
-        void Reservation(TourTravelBindingModel model);
+        void Reservation(TravelBindingModel model);
 
         TravelViewModel GetElement(int id);
 
+        void SaveDataBase();
     }
 }

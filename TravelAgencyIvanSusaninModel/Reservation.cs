@@ -17,6 +17,9 @@ namespace TravelAgencyIvanSusaninModel
         [Required]
         public int Number { get; set; }
 
+        [Required]
+        public int NumberReserve { get; set; }
+
         [ForeignKey("ReservationId")]
         public virtual List<TourReservation> TourReservations { get; set; }
 

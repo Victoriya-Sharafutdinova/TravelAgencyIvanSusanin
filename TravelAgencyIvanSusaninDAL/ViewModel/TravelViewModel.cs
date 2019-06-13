@@ -25,7 +25,7 @@ namespace TravelAgencyIvanSusaninDAL.ViewModel
         public string TravelStatus { get; set; }
 
         [DisplayName("Расчетная стоимость")]
-        public int TotalCost { get; set; }
+        public decimal TotalCost { get; set; }
 
         [DisplayName("Дата завершения заказа")]
         public string DateImplement { get; set; }

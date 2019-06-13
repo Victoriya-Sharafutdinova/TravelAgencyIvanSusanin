@@ -2,98 +2,82 @@
 @model TravelAgencyIvanSusaninDAL.ViewModel.TravelViewModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Создание путешествия";
 }
 
-<h2>Create</h2>
+<h2>Создание путешествия</h2>
 
 @using (Html.BeginForm("CreateTravelPost", "Travels", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>TravelBindingModel</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-    @*<div class="form-group">
-            @Html.LabelFor(model => model.TotalCost, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TotalCost, new { htmlAttributes = new { @class = "form-control", @Value = "1", @min = "1" } })
-                @Html.ValidationMessageFor(model => model.TotalCost, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
+    <div class="form-horizontal">
+        <h4>TravelBindingModel</h4>
+        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.TourTravels[0].DateBegin, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TourTravels[0].DateBegin, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TourTravels[0].DateBegin, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.TourTravels[0].DateEnd, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TourTravels[0].DateEnd, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TourTravels[0].DateBegin, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    *@
-
-    <div class="form-group">
-        <p>
-            @Html.ActionLink("Add", "AddTour")
-        </p>
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.TourTravels[0].TourName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TourTravels[0].Count)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TourTravels[0].DateBegin)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TourTravels[0].DateEnd)
-                </th>
-                <th></th>
-            </tr>
-            @foreach (var item in Model.TourTravels)
+            <p>
+                @Html.ActionLink("Добавить тур", "AddTour")
+            </p>
+            @if (ViewBag.service.GetPopularTourClient(Globals.AuthClient.Id) != null)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TourName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Count)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateBegin)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateEnd)
-                </td>
-                <td></td>
-            </tr>
+                <p>В последнее время Вы чаще всего заказывали @ViewBag.service.PopularTour(Globals.AuthClient.Id).</p>
             }
-        </table>
-    </div>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TourTravels[0].TourName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TourTravels[0].Count)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TourTravels[0].DateBegin)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TourTravels[0].DateEnd)
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.TourTravels)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TourName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Count)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateBegin)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateEnd)
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
+        </div>
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
         </div>
     </div>
-</div>
 }
-
+@using (Html.BeginForm("ReservePost", "Order", FormMethod.Post))
+{
+    <div class="form-group">
+        <div class="col-lg-push-9">
+            <input type="submit" value="Зарезервировать" class="btn btn-default" />
+        </div>
+    </div>
+}
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Вернуться к списку путешествий", "Index")
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
