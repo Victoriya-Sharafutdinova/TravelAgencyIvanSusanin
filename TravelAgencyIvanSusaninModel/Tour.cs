@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
@@ -16,6 +17,9 @@ namespace TravelAgencyIvanSusaninModel
 
         [Required]
         public int Cost { get; set; }
+
+        [Column(TypeName = "datetime2")]
+        public DateTime DateCreate { get; set; }
 
         [ForeignKey("TourId")]
         public virtual List<TourTravel> TourTravels { get; set; }
