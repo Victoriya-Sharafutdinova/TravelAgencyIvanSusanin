@@ -7,6 +7,7 @@ using TravelAgencyIvanSusaninModel;
 using System.Linq;
 using System.IO;
 using Microsoft.Office.Interop.Word;
+using Microsoft.Office.Interop.Excel;
 
 namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 {
@@ -19,7 +20,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             this.context = context;
         }
 
-        public void CreateRequest(RequestBindingModel model)
+        public void CreateRequest(RequestBindingModel model, bool type)
         {
             using (var transaction = context.Database.BeginTransaction())
             {
@@ -54,6 +55,16 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                         reservation.Number += groupComponent.NumberReservation;
                         context.SaveChanges();
                     }
+
+                    if (type)
+                    {
+                        RequestWord(model);
+                    }
+                    else
+                    {
+                        RequestExel(model);
+                    }
+
                     transaction.Commit();
                 }
                 catch (Exception)
@@ -64,18 +75,13 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             }
         }
 
-        public List<RequestViewModel> GetList()
+        private void RequestWord(RequestBindingModel model)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Request(RequestBindingModel model)
-        {
-            /*if (File.Exists("C:\\Users\\aniky\\Desktop\\request\\file.doc"))
+            if (File.Exists("C:\\Users\\aniky\\Desktop\\request\\file.doc"))
             {
                 File.Delete("C:\\Users\\aniky\\Desktop\\request\\file.doc");
             }
-            var winword = new Application();
+            var winword = new Microsoft.Office.Interop.Word.Application();
             try
             {
                 object missing = System.Reflection.Missing.Value;
@@ -99,11 +105,19 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 paragraphFormat.SpaceBefore = 0;
                 //добавляем абзац в документ
                 range.InsertParagraphAfter();
-                var products = context.Engines.ToList();
+
+                var requestReservations = model.RequestReservations;
+                var reservations = context.Reservations.Select(rec => new ReservationViewModel
+                {
+                    Id = rec.Id,
+                    Name = rec.Name,
+                    Description = rec.Description,
+                    Number = rec.Number
+                }).ToList();
                 //создаем таблицу
                 var paragraphTable = document.Paragraphs.Add(Type.Missing);
                 var rangeTable = paragraphTable.Range;
-                var table = document.Tables.Add(rangeTable, products.Count, 2, ref missing, ref missing);
+                var table = document.Tables.Add(rangeTable, requestReservations.Count, 2, ref missing, ref missing);
                 font = table.Range.Font;
                 font.Size = 14;
                 font.Name = "Times New Roman";
@@ -111,17 +125,17 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 paragraphTableFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
                 paragraphTableFormat.SpaceAfter = 0;
                 paragraphTableFormat.SpaceBefore = 0;
-                for (int i = 0; i < products.Count; ++i)
+                for (int i = 0; i < requestReservations.Count; ++i)
                 {
-                    table.Cell(i + 1, 1).Range.Text = products[i].EngineName;
-                    table.Cell(i + 1, 2).Range.Text = products[i].Cost.ToString();
+                    table.Cell(i + 1, 1).Range.Text = reservations.FirstOrDefault(rec => rec.Id == requestReservations[i].ReservationId).Name;
+                    table.Cell(i + 1, 2).Range.Text = requestReservations[i].NumberReservation.ToString();
                 }
                 //задаем границы таблицы
                 table.Borders.InsideLineStyle = WdLineStyle.wdLineStyleInset;
                 table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleSingle;
                 paragraph = document.Paragraphs.Add(missing);
                 range = paragraph.Range;
-                range.Text = "Дата: " + DateTime.Now.ToLongDateString();
+                range.Text = "Дата: " + model.DateCreate.ToLongDateString();
                 font = range.Font;
                 font.Size = 12;
                 font.Name = "Times New Roman";
@@ -147,7 +161,98 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             finally
             {
                 winword.Quit();
-            }*/
+            }
+        }
+
+        private void RequestExel (RequestBindingModel model)
+        {
+            var excel = new Microsoft.Office.Interop.Excel.Application();
+            try
+            {
+                //или создаем excel-файл, или открываем существующий
+                if (File.Exists("C:\\Users\\aniky\\Desktop\\request\\file.xls"))
+                {
+                    excel.Workbooks.Open("C:\\Users\\aniky\\Desktop\\request\\file.xls", Type.Missing, Type.Missing,
+                   Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, 
+                   Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                }
+                else
+                {
+                    excel.SheetsInNewWorkbook = 1;
+                    excel.Workbooks.Add(Type.Missing);
+                    excel.Workbooks[1].SaveAs("C:\\Users\\aniky\\Desktop\\request\\file.xls", XlFileFormat.xlExcel8,
+                    Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing, 
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                }
+                Sheets excelsheets = excel.Workbooks[1].Worksheets;
+                //Получаем ссылку на лист
+                var excelworksheet = (Worksheet)excelsheets.get_Item(1);
+                //очищаем ячейки
+                excelworksheet.Cells.Clear();
+                //настройки страницы
+                excelworksheet.PageSetup.Orientation = XlPageOrientation.xlLandscape;
+                excelworksheet.PageSetup.CenterHorizontally = true;
+                excelworksheet.PageSetup.CenterVertically = true;
+                //получаем ссылку на первые 3 ячейки
+                Microsoft.Office.Interop.Excel.Range excelcells = excelworksheet.get_Range("A1", "B1");
+                //объединяем их
+                excelcells.Merge(Type.Missing);
+                //задаем текст, настройки шрифта и ячейки
+                excelcells.Font.Bold = true;
+                excelcells.Value2 = "Заявка на брони";
+                excelcells.RowHeight = 25;
+                excelcells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                excelcells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                excelcells.Font.Name = "Times New Roman";
+                excelcells.Font.Size = 14;
+                excelcells = excelworksheet.get_Range("A2", "B2");
+                excelcells.Merge(Type.Missing);
+                excelcells.Value2 = "Дата:" + model.DateCreate.ToShortDateString();
+                excelcells.RowHeight = 20;
+                excelcells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                excelcells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                excelcells.Font.Name = "Times New Roman";
+                excelcells.Font.Size = 12;
+
+                var reservations = context.Reservations.Select(rec => new ReservationViewModel
+                {
+                    Id = rec.Id,
+                    Name = rec.Name,
+                    Description = rec.Description,
+                    Number = rec.Number
+                }).ToList();
+                var requestReservations = model.RequestReservations;
+
+                excelcells = excelworksheet.get_Range("A3", "A3");
+                //обводим границы
+                //получаем ячейки для выбеления рамки под таблицу
+                var excelBorder = excelworksheet.get_Range(excelcells, excelcells.get_Offset(requestReservations.Count() - 1, 1));
+                excelBorder.Borders.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
+                excelBorder.Borders.Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThin;
+                excelBorder.HorizontalAlignment = Constants.xlCenter;
+                excelBorder.VerticalAlignment = Constants.xlCenter;
+                excelBorder.BorderAround(Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous,
+                Microsoft.Office.Interop.Excel.XlBorderWeight.xlMedium,
+                Microsoft.Office.Interop.Excel.XlColorIndex.xlColorIndexAutomatic, 1);
+                foreach (var requestReservation in requestReservations)
+                {
+                    excelcells.Value2 = reservations.FirstOrDefault(rec => rec.Id == requestReservation.ReservationId).Name;
+                    excelcells.ColumnWidth = 20;
+                    excelcells.get_Offset(0, 1).Value2 = requestReservation.NumberReservation;
+                    excelcells = excelcells.get_Offset(1, 0);
+                }
+                //сохраняем
+                excel.Workbooks[1].Save();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                //закрываем
+                excel.Quit();
+            }
         }
     }
 }

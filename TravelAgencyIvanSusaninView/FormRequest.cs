@@ -32,6 +32,10 @@ namespace TravelAgencyIvanSusaninView
         private void FormRequest_Load(object sender, EventArgs e)
         {
             requestReservations = new List<ReservationRequestViewModel>();
+            /*comboBox1.DisplayMember = "Name";
+            comboBox1.ValueMember = "type";
+            comboBox1.da
+            comboBox1.SelectedItem = null;*/
         }
 
         private void LoadData()
@@ -67,6 +71,11 @@ namespace TravelAgencyIvanSusaninView
                 MessageBox.Show("Заполните компоненты", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            if (comboBox1.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите формат файла", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             try
             {
                 List<ReservationRequestBindingModel> requestReservationsBM = new List<ReservationRequestBindingModel>();
@@ -84,7 +93,7 @@ namespace TravelAgencyIvanSusaninView
                 {
                     DateCreate = DateTime.Now,
                     RequestReservations = requestReservationsBM
-                });
+                }, comboBox1.SelectedItem.ToString() == "doc");
                 MessageBox.Show("Формирование заявок на брони прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
