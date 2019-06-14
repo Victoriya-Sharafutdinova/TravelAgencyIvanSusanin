@@ -10,6 +10,9 @@ namespace TravelAgencyIvanSusaninDAL.ViewModel
 
         public int RequestId { get; set; }
 
+        [DisplayName("Название брони")]
+        public string ReservationName { get; set; }
+
         [DisplayName("Количество броней")]
         public int NumberReservation { get; set; }
     }

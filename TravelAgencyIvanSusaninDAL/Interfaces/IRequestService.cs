@@ -8,7 +8,7 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
     {
         List<RequestViewModel> GetList();
 
-        void CreateRequest(ReservationRequestBindingModel model);
+        void CreateRequest(RequestBindingModel model);
 
         void Request(RequestBindingModel model);
     }

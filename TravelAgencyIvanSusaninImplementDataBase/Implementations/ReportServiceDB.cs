@@ -42,7 +42,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             .ToList();
         }
 
-        public List<ClientTravelsViewModel> GetDetailReguest(ReportBindingModel model)
+        public List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model)
         {
             throw new NotImplementedException();
         }
@@ -164,7 +164,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             doc.Close();
         }
 
-        public void SaveDetailReguest(ReportBindingModel model)
+        public void SaveReservationReguest(ReportBindingModel model)
         {
             throw new NotImplementedException();
         }

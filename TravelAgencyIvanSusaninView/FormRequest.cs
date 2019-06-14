@@ -1,10 +1,16 @@
-﻿using TravelAgencyIvanSusaninDAL.BindingModel;
-using TravelAgencyIvanSusaninDAL.ViewModel;
-using TravelAgencyIvanSusaninDAL.Interfaces;
-using System.Windows.Forms;
-using Unity;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using TravelAgencyIvanSusaninDAL.BindingModel;
+using TravelAgencyIvanSusaninDAL.Interfaces;
+using TravelAgencyIvanSusaninDAL.ViewModel;
+using Unity;
 
 namespace TravelAgencyIvanSusaninView
 {
@@ -15,28 +21,69 @@ namespace TravelAgencyIvanSusaninView
 
         private readonly IRequestService service;
 
-        private readonly IReservationService reservationService;
+        private List<ReservationRequestViewModel> requestReservations;
 
-        public FormRequest(IRequestService service, IReservationService reservationService)
+        public FormRequest(IRequestService service)
         {
             InitializeComponent();
             this.service = service;
-            this.reservationService = reservationService;
         }
 
-        private void buttonSave_Click(object sender, System.EventArgs e)
+        private void FormRequest_Load(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(textBox1.Text) || comboBox1.SelectedValue == null)
+            requestReservations = new List<ReservationRequestViewModel>();
+        }
+
+        private void LoadData()
+        {
+            try
             {
-                MessageBox.Show("Заполните все поля", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (requestReservations != null)
+                {
+                    dataGridView1.DataSource = null;
+                    dataGridView1.DataSource = requestReservations;
+                    dataGridView1.Columns[0].Visible = false;
+                    dataGridView1.Columns[1].Visible = false;
+                    dataGridView1.Columns[2].Visible = false;
+                    dataGridView1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void buttonCreate_Click(object sender, EventArgs e)
+        {
+            if (requestReservations == null || requestReservations.Count == 0)
+            {
+                MessageBox.Show("Заполните компоненты", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             try
             {
-                service.CreateRequest(new ReservationRequestBindingModel
+                List<ReservationRequestBindingModel> requestReservationsBM = new List<ReservationRequestBindingModel>();
+                for (int i = 0; i < requestReservations.Count; ++i)
                 {
-                    ReservationId = Convert.ToInt32(comboBox1.SelectedValue),
-                    NumberReservation = Convert.ToInt32(textBox1.Text)
+                    requestReservationsBM.Add(new ReservationRequestBindingModel
+                    {
+                        Id = requestReservations[i].Id,
+                        RequestId = requestReservations[i].RequestId,
+                        ReservationId = requestReservations[i].ReservationId,
+                        NumberReservation = requestReservations[i].NumberReservation,
+                    });
+                }
+                service.CreateRequest(new RequestBindingModel
+                {
+                    DateCreate = DateTime.Now,
+                    RequestReservations = requestReservationsBM
                 });
                 MessageBox.Show("Формирование заявок на брони прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
@@ -48,29 +95,55 @@ namespace TravelAgencyIvanSusaninView
             }
         }
 
-        private void buttonCancel_Click(object sender, System.EventArgs e)
+        private void buttonAdd_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
-            Close();
+            var form = Container.Resolve<FormReservationRequest>();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                if (form.Model != null)
+                {
+                    requestReservations.Add(form.Model);
+                }
+                LoadData();
+            }
         }
 
-        private void FormRequest_Load(object sender, System.EventArgs e)
+        private void buttonChange_Click(object sender, EventArgs e)
         {
-            try
+            if (dataGridView1.SelectedRows.Count == 1)
             {
-                List<ReservationViewModel> list = reservationService.GetList();
-                if (list != null)
+                var form = Container.Resolve<FormReservationRequest>();
+                form.Model = requestReservations[dataGridView1.SelectedRows[0].Cells[0].RowIndex];
+                if (form.ShowDialog() == DialogResult.OK)
                 {
-                    comboBox1.DisplayMember = "Name";
-                    comboBox1.ValueMember = "Id";
-                    comboBox1.DataSource = list;
-                    comboBox1.SelectedItem = null;
+                    requestReservations[dataGridView1.SelectedRows[0].Cells[0].RowIndex] = form.Model;
+                    LoadData();
                 }
             }
-            catch (Exception ex)
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 1)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (MessageBox.Show("Удалить запись", "Вопрос", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        requestReservations.RemoveAt(dataGridView1.SelectedRows[0].Cells[0].RowIndex);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    LoadData();
+                }
             }
+        }
+
+        private void buttonUpdate_Click(object sender, EventArgs e)
+        {
+            LoadData();
         }
     }
 }
