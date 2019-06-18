@@ -108,6 +108,7 @@
     <Compile Include="Implementations\StatisticServiceDB.cs" />
     <Compile Include="Implementations\TourServiceDB.cs" />
     <Compile Include="Implementations\TravelServiceDB.cs" />
+    <Compile Include="Mail.cs" />
     <Compile Include="Migrations\201906010022564_somemigration.cs" />
     <Compile Include="Migrations\201906010022564_somemigration.Designer.cs">
       <DependentUpon>201906010022564_somemigration.cs</DependentUpon>

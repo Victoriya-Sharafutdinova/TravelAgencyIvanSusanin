@@ -56,15 +56,21 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                         context.SaveChanges();
                     }
 
+                    string typeMessage = "";
+                    string fName = "";
                     if (type)
                     {
                         RequestWord(model);
+                        typeMessage = "word";
+                        fName = "file.doc";
                     }
                     else
                     {
                         RequestExel(model);
+                        typeMessage = "xls";
+                        fName = "file.xls";
                     }
-
+                    Mail.SendEmail( null, "Заявка на брони", "Заявка на брони в формате" + typeMessage, fName);
                     transaction.Commit();
                 }
                 catch (Exception)
@@ -77,9 +83,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         private void RequestWord(RequestBindingModel model)
         {
-            if (File.Exists("C:\\Users\\aniky\\Desktop\\request\\file.doc"))
+            if (File.Exists("file.doc"))
             {
-                File.Delete("C:\\Users\\aniky\\Desktop\\request\\file.doc");
+                File.Delete("file.doc");
             }
             var winword = new Microsoft.Office.Interop.Word.Application();
             try
@@ -147,7 +153,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 range.InsertParagraphAfter();
                 //сохраняем
                 object fileFormat = WdSaveFormat.wdFormatXMLDocument;
-                document.SaveAs("C:\\Users\\aniky\\Desktop\\request\\file.doc", ref fileFormat, ref missing,
+                document.SaveAs("file.doc", ref fileFormat, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
@@ -170,9 +176,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             try
             {
                 //или создаем excel-файл, или открываем существующий
-                if (File.Exists("C:\\Users\\aniky\\Desktop\\request\\file.xls"))
+                if (File.Exists("file.xls"))
                 {
-                    excel.Workbooks.Open("C:\\Users\\aniky\\Desktop\\request\\file.xls", Type.Missing, Type.Missing,
+                    excel.Workbooks.Open("file.xls", Type.Missing, Type.Missing,
                    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, 
                    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 }
@@ -180,7 +186,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 {
                     excel.SheetsInNewWorkbook = 1;
                     excel.Workbooks.Add(Type.Missing);
-                    excel.Workbooks[1].SaveAs("C:\\Users\\aniky\\Desktop\\request\\file.xls", XlFileFormat.xlExcel8,
+                    excel.Workbooks[1].SaveAs("file.xls", XlFileFormat.xlExcel8,
                     Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing, 
                     Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 }
