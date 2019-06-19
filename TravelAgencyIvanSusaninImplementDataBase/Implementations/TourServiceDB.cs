@@ -123,7 +123,8 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     {
                         Name = model.Name,
                         Description = model.Description,
-                        Cost = model.Cost
+                        Cost = model.Cost,
+                        DateCreate = DateTime.Now
                     };
                     context.Tours.Add(element);
                     context.SaveChanges();
