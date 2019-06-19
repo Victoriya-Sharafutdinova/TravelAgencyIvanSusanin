@@ -251,6 +251,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 }
                 //сохраняем
                 excel.Workbooks[1].Save();
+                excel.Workbooks[1].Close();
             }
             catch (Exception)
             {
