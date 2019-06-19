@@ -116,6 +116,12 @@
     <Compile Include="FormTours.Designer.cs">
       <DependentUpon>FormTours.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormTravels.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTravels.Designer.cs">
+      <DependentUpon>FormTravels.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormAuth.resx">
@@ -144,6 +150,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormTours.resx">
       <DependentUpon>FormTours.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTravels.resx">
+      <DependentUpon>FormTravels.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -33,6 +33,7 @@
             this.buttonChange = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
             this.buttonUpdate = new System.Windows.Forms.Button();
+            this.buttonClose = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -85,11 +86,22 @@
             this.buttonUpdate.UseVisualStyleBackColor = true;
             this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
             // 
+            // buttonClose
+            // 
+            this.buttonClose.Location = new System.Drawing.Point(683, 391);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(104, 46);
+            this.buttonClose.TabIndex = 5;
+            this.buttonClose.Text = "Закрыть";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
             // FormReservations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.buttonUpdate);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.buttonChange);
@@ -110,5 +122,6 @@
         private System.Windows.Forms.Button buttonChange;
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.Button buttonUpdate;
+        private System.Windows.Forms.Button buttonClose;
     }
 }

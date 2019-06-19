@@ -36,6 +36,7 @@
             this.buttonUpdate = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
             this.buttonChange = new System.Windows.Forms.Button();
+            this.buttonTravel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -53,10 +54,10 @@
             // 
             // buttonReservation
             // 
-            this.buttonReservation.Location = new System.Drawing.Point(552, 12);
+            this.buttonReservation.Location = new System.Drawing.Point(482, 13);
             this.buttonReservation.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonReservation.Name = "buttonReservation";
-            this.buttonReservation.Size = new System.Drawing.Size(115, 46);
+            this.buttonReservation.Size = new System.Drawing.Size(150, 45);
             this.buttonReservation.TabIndex = 1;
             this.buttonReservation.Text = "Список броней";
             this.buttonReservation.UseVisualStyleBackColor = true;
@@ -64,10 +65,10 @@
             // 
             // buttonRequest
             // 
-            this.buttonRequest.Location = new System.Drawing.Point(431, 12);
+            this.buttonRequest.Location = new System.Drawing.Point(326, 13);
             this.buttonRequest.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonRequest.Name = "buttonRequest";
-            this.buttonRequest.Size = new System.Drawing.Size(115, 46);
+            this.buttonRequest.Size = new System.Drawing.Size(150, 45);
             this.buttonRequest.TabIndex = 2;
             this.buttonRequest.Text = "Сформировать заявку";
             this.buttonRequest.UseVisualStyleBackColor = true;
@@ -127,11 +128,22 @@
             this.buttonChange.UseVisualStyleBackColor = true;
             this.buttonChange.Click += new System.EventHandler(this.buttonChange_Click);
             // 
+            // buttonTravel
+            // 
+            this.buttonTravel.Location = new System.Drawing.Point(638, 13);
+            this.buttonTravel.Name = "buttonTravel";
+            this.buttonTravel.Size = new System.Drawing.Size(150, 45);
+            this.buttonTravel.TabIndex = 5;
+            this.buttonTravel.Text = "Список путешествий";
+            this.buttonTravel.UseVisualStyleBackColor = true;
+            this.buttonTravel.Click += new System.EventHandler(this.buttonTravel_Click);
+            // 
             // FormTours
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonTravel);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonRequest);
             this.Controls.Add(this.buttonReservation);
@@ -155,5 +167,6 @@
         private System.Windows.Forms.Button buttonUpdate;
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.Button buttonChange;
+        private System.Windows.Forms.Button buttonTravel;
     }
 }
