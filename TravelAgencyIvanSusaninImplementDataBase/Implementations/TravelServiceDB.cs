@@ -283,32 +283,28 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                         };
 
                         context.TourTravels.Add(travelTour);
+                        context.SaveChanges();
 
-                        var tourReservation = context.TourReservations.FirstOrDefault(rec => rec.TourId == travelTour.TourId);
-
-                        var reservations = context.Reservations.Where(rec => rec.Id == tourReservation.ReservationId);
-
-                        foreach(var reserv in reservations)
+                        var tourReservations = context.TourReservations.Where(rec => rec.TourId == travelTour.TourId);
+                       
+                        foreach(var tourReservation in tourReservations)
                         {
+                            var reservation = context.Reservations.FirstOrDefault(rec => rec.Id == tourReservation.ReservationId);
+
                             var reserveReservations = tourReservation.NumberReservations;
 
-                            var check = reserv.Number - reserv.NumberReserve;
+                            var check = reservation.Number - reservation.NumberReserve;
 
                             if (check >= reserveReservations)
                             {
-
-
-                                reserv.NumberReserve += reserveReservations;
+                                reservation.NumberReserve += reserveReservations;
+                                context.SaveChanges();
                             }
                             else
                             {
                                 throw new Exception("Недостаточно броней для резервации");
                             }
                         }
-
-                        
-
-                        context.SaveChanges();
                     }
                     //string typeMessage = "";
                     //string fName = "";
