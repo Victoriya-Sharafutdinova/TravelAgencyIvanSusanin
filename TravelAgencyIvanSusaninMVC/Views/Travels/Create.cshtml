@@ -20,7 +20,7 @@
             <p>
                 @Html.ActionLink("Добавить тур", "AddTour")
             </p>
-            @if (ViewBag.service.GetPopularTourClient(Globals.AuthClient.Id).Item1 != null)
+            @if (ViewBag.Service.GetPopularTourClientName(Globals.AuthClient.Id) != null)
             {
             <p>
                 В последнее время Вы чаще всего заказывали @ViewBag.service.GetPopularTourClientName(Globals.AuthClient.Id)
@@ -66,12 +66,12 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Создать" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
-@using (Html.BeginForm("ReservePost", "Order", FormMethod.Post))
+@using (Html.BeginForm("ReservePost", "Travels", FormMethod.Post))
 {
     <div class="form-group">
         <div class="col-lg-push-9">

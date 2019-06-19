@@ -126,6 +126,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 return  0;
             }
         }
+
         public decimal GetAverPrice()
         {
             return context.Travels.Average(travel => travel.TotalCost);

@@ -71,6 +71,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                 travel.TourTravels = new List<TourTravelViewModel>();
                 Session["Travels"] = travel;
             }
+            ViewBag.Service = statistic;
             return View((TravelViewModel)Session["Travels"]);
         }
 
@@ -114,7 +115,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                     DateEnd = DateTime.Parse(Request["DateEnd"])
                 };
                 travel.TourTravels.Add(tour);
-                Session["Travel"] = travel;
+                Session["Travels"] = travel;
                 return RedirectToAction("Create");
             }
             else
@@ -161,7 +162,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                 TotalCost = tourTravels.Sum(rec => rec.Count * tourService.GetElement(rec.TourId).Cost),
                 TourTravels = tourTravels
             });
-            Session.Remove("Travel");
+            Session.Remove("Travels");
            
             
             return RedirectToAction("Index", "Travels");

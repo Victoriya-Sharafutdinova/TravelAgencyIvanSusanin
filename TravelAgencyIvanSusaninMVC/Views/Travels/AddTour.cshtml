@@ -32,9 +32,10 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DateBegin, htmlAttributes: new { @class = "control-label col-md-2" })
         </div>
-        <input type="text" id="DateBegin" name="DateBegin"/>
 
         <div class="editor-field">
+            <input type="text" id="DateBegin" name="DateBegin" />
+
             @Html.ValidationMessageFor(model => model.DateBegin)
         </div>
 
@@ -55,7 +56,7 @@
 }
 
 <div>
-    @Html.ActionLink("Вернуться к заказу", "Index")
+    @Html.ActionLink("Вернуться к заказу", "Create")
     @Html.ActionLink("Просмотреть туры", "Index", "Tours")
 
 </div>

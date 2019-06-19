@@ -73,6 +73,7 @@
     <Compile Include="ViewModel\TourReservationViewModel.cs" />
     <Compile Include="ViewModel\TourTravelViewModel.cs" />
     <Compile Include="ViewModel\TourViewModel.cs" />
+    <Compile Include="ViewModel\TravelsReservationsViewModel.cs" />
     <Compile Include="ViewModel\TravelViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

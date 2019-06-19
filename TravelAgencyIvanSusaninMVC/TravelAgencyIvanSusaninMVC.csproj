@@ -330,6 +330,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\201905121653316_InitialCreate.resx">
+      <DependentUpon>201905121653316_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905260945214_FirstMigration.resx">
+      <DependentUpon>201905260945214_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\TravelAgencyIvanSusaninDAL\TravelAgencyIvanSusaninDAL.csproj">
       <Project>{1e2e1ab7-b7e6-4d70-9383-fd12ed0903e3}</Project>
       <Name>TravelAgencyIvanSusaninDAL</Name>
@@ -346,20 +360,6 @@
       <Project>{df0cf76e-0847-4f2f-a930-781d5f5fc820}</Project>
       <Name>TravelAgencyIvanSusaninView</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905121653316_InitialCreate.resx">
-      <DependentUpon>201905121653316_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905260945214_FirstMigration.resx">
-      <DependentUpon>201905260945214_FirstMigration.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\index.d.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

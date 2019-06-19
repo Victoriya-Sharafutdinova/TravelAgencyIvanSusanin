@@ -24,22 +24,45 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             this.context = context;
         }
 
-        public List<ClientTravelsViewModel> GetClientTravels(ReportBindingModel model)
+        public List<TravelsReservationsViewModel> GetClientTravels()
         {
-            return context.Travels.Include(rec => rec.Client).Include(rec => rec.TourTravels)
-            .Where(rec => rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo)
-             .Select(rec => new ClientTravelsViewModel
-             {
-                 ClientName = rec.Client.FIO,
-                 DateCreateTravel = SqlFunctions.DateName("dd", rec.DateCreate)
-                    + " " +
-                     SqlFunctions.DateName("mm", rec.DateCreate) +
-                    " " +
-                     SqlFunctions.DateName("yyyy", rec.DateCreate),
-                 TotalSum = rec.TotalCost,
-                 StatusTravel = rec.TravelStatus.ToString()
-             })
-            .ToList();
+            return context.Travels
+                .ToList()
+                .GroupJoin(
+                context.TourTravels
+                    .Include(r => r.Tour)
+                    .ToList()
+                    .Join(
+                    context.TourReservations.ToList(),
+                travel => travel,
+                travelReservations => travelReservations.Reservation,
+                (travel, travelReservList) => new TravelsReservationsViewModel
+                {
+                    TravelId = travel.Id,
+                    Total = travelReservList.Sum (r => r.NumberReservations),
+                    Reservations = travelReservList.Select(r =>
+                    new Tuple<string, int>(r.Reservation.Name, r.NumberReservations))
+                }))
+                    .ToList();
+
+
+
+
+            //    return context.Travels.Include(rec => rec.T).Include(rec => rec.TourTravels)
+            //    .Where(rec => rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo)
+            //     .Select(rec => new ClientTravelsViewModel
+            //     {
+            //         ClientName = rec.Client.FIO,
+            //         DateCreateTravel = SqlFunctions.DateName("dd", rec.DateCreate)
+            //            + " " +
+            //             SqlFunctions.DateName("mm", rec.DateCreate) +
+            //            " " +
+            //             SqlFunctions.DateName("yyyy", rec.DateCreate),
+            //         TotalSum = rec.TotalCost,
+            //         StatusTravel = rec.TravelStatus.ToString(),
+            //         TourTravels = 
+            //     })
+            //    .ToList();
         }
 
         public List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model)
@@ -168,5 +191,8 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         {
             throw new NotImplementedException();
         }
+
+
+
     }
 }
