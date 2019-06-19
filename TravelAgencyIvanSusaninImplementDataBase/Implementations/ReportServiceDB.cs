@@ -80,7 +80,10 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public void SaveClientTravels(int id)
         {
-           
+            if (!File.Exists("B:\\политех\\2 курс 2 семестр\\ТП\\TIMCYR.TTF"))
+            {
+                File.WriteAllBytes("B:\\политех\\2 курс 2 семестр\\ТП\\TIMCYR.TTF", Properties.Resources.TIMCYR);
+            }
             string fileName = "C:\\Users\\Public\\Documents\\file.pdf";
             FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
