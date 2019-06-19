@@ -106,7 +106,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                 var dateEnd1 = travel.TourTravels[i].DateEnd;               
                 var dateBegin2 = DateTime.Parse(Request["DateBegin"]);
                 var dateEnd2 = DateTime.Parse(Request["DateEnd"]);
-                if ((dateBegin2 >= dateBegin1 && dateBegin2 <= dateEnd1) || (dateBegin2 < dateBegin1 && dateBegin1 <= dateEnd2) || (dateBegin2 >= dateBegin1) )
+                if ((dateBegin2 >= dateBegin1 && dateBegin2 <= dateEnd1) || (dateBegin2 < dateBegin1 && dateBegin1 <= dateEnd2) || (dateBegin2 >= dateEnd2 ))
                 {
                     date = false;
                 }
