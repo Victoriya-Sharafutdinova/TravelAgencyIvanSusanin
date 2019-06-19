@@ -14,7 +14,7 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
 
         void SaveReservationReguest(ReportBindingModel model);
 
-        List<ClientTravelsViewModel> GetClientTravels(ReportBindingModel model);
+        List<ClientTravelsViewModel> GetClientTravels();
 
         void SaveClientTravels(ReportBindingModel model);
     }

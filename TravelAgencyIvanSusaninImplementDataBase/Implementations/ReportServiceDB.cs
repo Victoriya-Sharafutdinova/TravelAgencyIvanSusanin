@@ -106,7 +106,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             };
             doc.Add(paragraph);
             //вставляем таблицу, задаем количество столбцов, и ширину колонок
-            PdfPTable table = new PdfPTable(6)
+            PdfPTable table = new PdfPTable(3)
             {
                 TotalWidth = 800F
             };
@@ -114,54 +114,37 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             //вставляем шапку
             PdfPCell cell = new PdfPCell();
             var fontForCellBold = new Font(baseFont, 10, Font.BOLD);
-            table.AddCell(new PdfPCell(new Phrase("ФИО клиента", fontForCellBold))
+            table.AddCell(new PdfPCell(new Phrase("Номер путешествия", fontForCellBold))
             {
                 HorizontalAlignment = Element.ALIGN_CENTER
             });
-            table.AddCell(new PdfPCell(new Phrase("Дата создания", fontForCellBold))
+            table.AddCell(new PdfPCell(new Phrase("Название брони", fontForCellBold))
             {
                 HorizontalAlignment = Element.ALIGN_CENTER
             });
 
-            table.AddCell(new PdfPCell(new Phrase("Изделие", fontForCellBold))
-            {
-                HorizontalAlignment = Element.ALIGN_CENTER
-            });
             table.AddCell(new PdfPCell(new Phrase("Количество", fontForCellBold))
             {
                 HorizontalAlignment = Element.ALIGN_CENTER
             });
-
-            table.AddCell(new PdfPCell(new Phrase("Сумма", fontForCellBold))
-            {
-                HorizontalAlignment = Element.ALIGN_CENTER
-            });
-            table.AddCell(new PdfPCell(new Phrase("Статус", fontForCellBold))
-            {
-                HorizontalAlignment = Element.ALIGN_CENTER
-            });
+            
             //заполняем таблицу
-            var list = GetClientTravels(model);
+            var list = GetClientTravels();
             var fontForCells = new Font(baseFont, 10);
             for (int i = 0; i < list.Count; i++)
             {
-                cell = new PdfPCell(new Phrase(list[i].ClientName, fontForCells));
+                cell = new PdfPCell(new Phrase(list[i].TravelId.ToString(), fontForCells));
                 table.AddCell(cell);
-                cell = new PdfPCell(new Phrase(list[i].DateCreateTravel, fontForCells));
-                table.AddCell(cell);
-                foreach (var car in list[i].TourTravels)
+                foreach (var reserv in list[i].Reservations)
                 {
-                    cell = new PdfPCell(new Phrase(car.TourName.ToString(), fontForCells));
+                    cell = new PdfPCell(new Phrase(reserv.Item1, fontForCells));
+                    table.AddCell(cell);
+                    cell = new PdfPCell(new Phrase(reserv.Item2.ToString(), fontForCells));
+                    table.AddCell(cell);
+                    cell = new PdfPCell(new Phrase(""));
                     table.AddCell(cell);
                 }
-                cell = new PdfPCell(new Phrase(list[i].TourTravels.Count.ToString(), fontForCells));
-                cell.HorizontalAlignment = Element.ALIGN_RIGHT;
-                table.AddCell(cell);
-                cell = new PdfPCell(new Phrase(list[i].TotalSum.ToString(), fontForCells));
-                cell.HorizontalAlignment = Element.ALIGN_RIGHT;
-                table.AddCell(cell);
-                cell = new PdfPCell(new Phrase(list[i].StatusTravel, fontForCells));
-                table.AddCell(cell);
+
             }
             //вставляем итого
             cell = new PdfPCell(new Phrase("Итого:", fontForCellBold))
@@ -171,7 +154,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 Border = 0
             };
             table.AddCell(cell);
-            cell = new PdfPCell(new Phrase(list.Sum(rec => rec.TotalSum).ToString(), fontForCellBold))
+            cell = new PdfPCell(new Phrase(list.Sum(rec => rec.Total).ToString(), fontForCellBold))
             {
                 HorizontalAlignment = Element.ALIGN_RIGHT,
                 Border = 0

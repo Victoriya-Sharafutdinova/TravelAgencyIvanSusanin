@@ -26,6 +26,16 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             return View(service.GetClientTravels(Globals.AuthClient.Id));
         }
 
+        public ActionResult Details(int id)
+        {
+            var order = service.GetElement(id);
+
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+            return View(order);
+        } 
         public ActionResult Reserve()
         {
             return View();
@@ -52,7 +62,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                 ClientId = Globals.AuthClient.Id,
                 TotalCost = travelTours.Sum(rec => rec.Count * tourService.GetElement(rec.TourId).Cost),
                 TourTravels = travelTours
-            });
+            }, true);
             Session.Remove("Travels");
             return RedirectToAction("Index", "Travels");
         }
@@ -174,31 +184,31 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             return tourCount * tour.Cost;
         }
 
-        public ActionResult SetStatus(int id, string status)
-        {
-            try
-            {
-                switch (status)
-                {
-                    case "Processing":
-                        service.TakeTravelInWork(new TravelBindingModel { Id = id });
-                        break;
-                    case "Ready":
-                        service.FinishTravel(new TravelBindingModel { Id = id });
-                        break;
-                    case "Paid":
-                        service.PayTravel(new TravelBindingModel { Id = id });
-                        break;
-                    case "Reservation":
-                        service.Reservation(new TravelBindingModel { Id = id });
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("Error", ex.Message);
-            }
-            return RedirectToAction("Index");
-        }
+        //public ActionResult SetStatus(int id, string status)
+        //{
+        //    try
+        //    {
+        //        switch (status)
+        //        {
+        //            case "Processing":
+        //                service.TakeTravelInWork(new TravelBindingModel { Id = id });
+        //                break;
+        //            case "Ready":
+        //                service.FinishTravel(new TravelBindingModel { Id = id });
+        //                break;
+        //            case "Paid":
+        //                service.PayTravel(new TravelBindingModel { Id = id });
+        //                break;
+        //            case "Reservation":
+        //                service.Reservation(new TravelBindingModel { Id = id });
+        //                break;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ModelState.AddModelError("Error", ex.Message);
+        //    }
+        //    return RedirectToAction("Index");
+        //}
     }
 }

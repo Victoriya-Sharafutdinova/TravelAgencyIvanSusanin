@@ -22,7 +22,7 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
 
         void PayTravel(TravelBindingModel model);
 
-        void Reservation(TravelBindingModel model);
+        void Reservation(TravelBindingModel model, bool type);
 
         TravelViewModel GetElement(int id);
 

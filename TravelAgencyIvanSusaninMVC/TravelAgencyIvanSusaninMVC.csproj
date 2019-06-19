@@ -140,6 +140,7 @@
     <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\ExceptionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\ToursController.cs" />
     <Compile Include="Controllers\TourTravelsController.cs" />
@@ -322,6 +323,7 @@
     <Content Include="Views\Statistics\Index.cshtml" />
     <Content Include="Views\Travels\Reserve.cshtml" />
     <Content Include="Views\Travels\Pay.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
