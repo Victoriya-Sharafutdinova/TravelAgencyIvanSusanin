@@ -1,7 +1,10 @@
 ﻿using GemBox.Spreadsheet;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -18,6 +21,7 @@ namespace TravelAgencyIvanSusaninMVC
         private IReportService reportService;
         protected void Page_Load(object sender, EventArgs e)
         {
+            reportService = Globals.ReportService;
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             FontSettings.FontsBaseDirectory = Server.MapPath("Fonts/");
 
@@ -25,9 +29,9 @@ namespace TravelAgencyIvanSusaninMVC
             {
                 DataTable reserv = new DataTable();
 
-                reserv.Columns.Add("Id", typeof(int));
+                reserv.Columns.Add("Id", typeof(string));
                 reserv.Columns.Add("Название брони", typeof(string));
-                reserv.Columns.Add("Количество", typeof(int));
+                reserv.Columns.Add("Количество", typeof(string));
 
                 Session["reserv"] = reserv;
                 LoadDataTable();
@@ -56,30 +60,30 @@ namespace TravelAgencyIvanSusaninMVC
             (last, reservation) => new { last.TravelId, last.TourReservation.NumberReservations, Reservation = reservation })
             .ToList();
 
+
             var listTravelsReservations = new List<TravelsReservationsViewModel>();
             foreach (var element in list)
             {
-                bool h = false;
+                listTravelsReservations.Add(new TravelsReservationsViewModel
+                {
+                    TravelId = element.TravelId,
+                    Reservations = new List<TourReservationViewModel>()
+                });
+            }
+            foreach (var element in list)
+            {
                 foreach (var travelReservations in listTravelsReservations)
                 {
                     if (travelReservations.TravelId == element.TravelId)
                     {
-                        h = true;
+                        var tourCount = context.TourTravels.FirstOrDefault(x => element.TravelId == x.TravelId).Count;
                         travelReservations.Reservations.Add(new TourReservationViewModel
                         {
                             ReservationName = element.Reservation.Name,
-                            NumberReservations = element.NumberReservations
+                            NumberReservations = element.NumberReservations * tourCount
                         });
                     }
-                }
-                if (!h)
-                {
-                    listTravelsReservations.Add(new TravelsReservationsViewModel
-                    {
-                        TravelId = element.TravelId,
-                        Reservations = new List<TourReservationViewModel>()
-                    });
-                }
+                }            
             }
             return listTravelsReservations;
         }
@@ -95,13 +99,13 @@ namespace TravelAgencyIvanSusaninMVC
                 {
                     people.Rows.Add(new object[]
                     {
-                        elem.TravelId,"", 0
+                        elem.TravelId.ToString(),"", ""
                     });
                     foreach (var listElem in elem.Reservations)
                     {
                         people.Rows.Add(new object[]
                         {
-                            "", listElem.ReservationName, listElem.NumberReservations
+                            "", listElem.ReservationName, listElem.NumberReservations.ToString()
                         });
                     }
                    // people.Rows.Add(new object[] { "Итого", "", elem.TotalAmount });
@@ -121,5 +125,11 @@ namespace TravelAgencyIvanSusaninMVC
             this.GridView1.DataBind();
         }
 
+        protected void Export_Click(object sender, EventArgs e)
+        {
+            int id = Globals.AuthClient.Id;
+            reportService.SaveClientTravels(id);
+            
+        }
     }
 }

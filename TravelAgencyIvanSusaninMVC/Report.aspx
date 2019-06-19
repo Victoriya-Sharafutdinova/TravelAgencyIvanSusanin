@@ -20,6 +20,8 @@
         </asp:GridView>
         <br />
         <br />     
+        <asp:Button ID="Export" runat="server" Text="Сохранить" OnClick="Export_Click" />
+
         <a href="/Travels/Index">Вернуться к путешествиям</a>
 
         <br />
