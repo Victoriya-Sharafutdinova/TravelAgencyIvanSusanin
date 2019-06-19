@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TravelAgencyIvanSusaninDAL.BindingModel
 {
@@ -7,5 +8,7 @@ namespace TravelAgencyIvanSusaninDAL.BindingModel
         public int Id { get; set; }
 
         public DateTime DateCreate { get; set; }
+
+        public List<ReservationRequestBindingModel> RequestReservations { get; set; }
     }
 }

@@ -56,7 +56,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             .ToList();
         }
 
-        public List<ClientTravelsViewModel> GetDetailReguest(ReportBindingModel model)
+        public List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model)
         {
             throw new NotImplementedException();
         }

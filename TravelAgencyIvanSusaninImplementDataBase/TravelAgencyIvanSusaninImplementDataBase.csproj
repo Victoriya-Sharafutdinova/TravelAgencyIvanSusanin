@@ -108,6 +108,7 @@
     <Compile Include="Implementations\StatisticServiceDB.cs" />
     <Compile Include="Implementations\TourServiceDB.cs" />
     <Compile Include="Implementations\TravelServiceDB.cs" />
+    <Compile Include="Mail.cs" />
     <Compile Include="Migrations\201906010022564_somemigration.cs" />
     <Compile Include="Migrations\201906010022564_somemigration.Designer.cs">
       <DependentUpon>201906010022564_somemigration.cs</DependentUpon>
@@ -131,6 +132,10 @@
     <Compile Include="Migrations\201905311914098_SecondMigration.cs" />
     <Compile Include="Migrations\201905311914098_SecondMigration.Designer.cs">
       <DependentUpon>201905311914098_SecondMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906141236073_some6migration.cs" />
+    <Compile Include="Migrations\201906141236073_some6migration.Designer.cs">
+      <DependentUpon>201906141236073_some6migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -173,6 +178,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905311914098_SecondMigration.resx">
       <DependentUpon>201905311914098_SecondMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906141236073_some6migration.resx">
+      <DependentUpon>201906141236073_some6migration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

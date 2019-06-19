@@ -74,6 +74,12 @@
     <Compile Include="FormReport.Designer.cs">
       <DependentUpon>FormReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormReservationRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReservationRequest.Designer.cs">
+      <DependentUpon>FormReservationRequest.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormRequest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +123,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormReport.resx">
       <DependentUpon>FormReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormReservationRequest.resx">
+      <DependentUpon>FormReservationRequest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormRequest.resx">
       <DependentUpon>FormRequest.cs</DependentUpon>

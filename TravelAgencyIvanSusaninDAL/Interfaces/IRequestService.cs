@@ -6,10 +6,6 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
 {
     public interface IRequestService
     {
-        List<RequestViewModel> GetList();
-
-        void CreateRequest(ReservationRequestBindingModel model);
-
-        void Request(RequestBindingModel model);
+        void CreateRequest(RequestBindingModel model, bool type);
     }
 }

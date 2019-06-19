@@ -175,6 +175,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     element.Name = model.Name;
                     element.Description = model.Description;
                     element.Cost = model.Cost;
+                    element.DateCreate = DateTime.Now;
                     context.SaveChanges();
 
                     var compIds = model.TourReservations.Select(rec => rec.ReservationId).Distinct();
