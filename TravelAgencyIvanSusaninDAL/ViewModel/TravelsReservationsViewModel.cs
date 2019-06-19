@@ -10,8 +10,6 @@ namespace TravelAgencyIvanSusaninDAL.ViewModel
     {
         public int TravelId { get; set; }
 
-        public int Total { get; set; }
-
-        public IEnumerable<Tuple<string, int>> Reservations { get; set; }
+        public List<TourReservationViewModel> Reservations { get; set; }
     }
 }

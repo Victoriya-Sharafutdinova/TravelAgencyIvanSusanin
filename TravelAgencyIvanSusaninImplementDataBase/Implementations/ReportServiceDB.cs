@@ -12,6 +12,7 @@ using TravelAgencyIvanSusaninDAL.BindingModel;
 using TravelAgencyIvanSusaninDAL.ViewModel;
 using System.IO;
 using TravelAgencyIvanSusaninDAL.Interfaces;
+using TravelAgencyIvanSusaninModel;
 
 namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 {
@@ -24,45 +25,51 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             this.context = context;
         }
 
-        public List<TravelsReservationsViewModel> GetClientTravels()
+        public List<TravelsReservationsViewModel> GetClientTravels(int id)
         {
-            return context.Travels
-                .ToList()
-                .GroupJoin(
-                context.TourTravels
-                    .Include(r => r.Tour)
-                    .ToList()
-                    .Join(
-                    context.TourReservations.ToList(),
-                travel => travel,
-                travelReservations => travelReservations.Reservation,
-                (travel, travelReservList) => new TravelsReservationsViewModel
+            var list = context.Travels.Where(x => x.ClientId == id)
+            .Join(context.TourTravels,
+            travel => travel.Id,
+            tourTravels => tourTravels.TravelId,
+            (travel, tourTravels) => new { TravelId = travel.Id, tourTravels.TourId })
+            .Join(context.Tours,
+            last => last.TourId,
+            tour => tour.Id,
+            (last, tour) => new { last.TravelId, TourId = tour.Id })
+            .Join(context.TourReservations,
+            last => last.TourId,
+            tourReservation => tourReservation.TourId,
+            (last, tourReservation) => new { last.TravelId, TourReservation = tourReservation })
+            .Join(context.Reservations,
+            last => last.TourReservation.ReservationId,
+            reservation => reservation.Id,
+            (last, reservation) => new { last.TravelId, last.TourReservation.NumberReservations, Reservation = reservation })
+            .ToList();
+
+            var listTravelsReservations = new List<TravelsReservationsViewModel>();
+            foreach (var element in list)
+            {
+                bool h = false;
+                foreach (var travelReservations in listTravelsReservations)
                 {
-                    TravelId = travel.Id,
-                    Total = travelReservList.Sum (r => r.NumberReservations),
-                    Reservations = travelReservList.Select(r =>
-                    new Tuple<string, int>(r.Reservation.Name, r.NumberReservations))
-                }))
-                    .ToList();
-
-
-
-
-            //    return context.Travels.Include(rec => rec.T).Include(rec => rec.TourTravels)
-            //    .Where(rec => rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo)
-            //     .Select(rec => new ClientTravelsViewModel
-            //     {
-            //         ClientName = rec.Client.FIO,
-            //         DateCreateTravel = SqlFunctions.DateName("dd", rec.DateCreate)
-            //            + " " +
-            //             SqlFunctions.DateName("mm", rec.DateCreate) +
-            //            " " +
-            //             SqlFunctions.DateName("yyyy", rec.DateCreate),
-            //         TotalSum = rec.TotalCost,
-            //         StatusTravel = rec.TravelStatus.ToString(),
-            //         TourTravels = 
-            //     })
-            //    .ToList();
+                    if (travelReservations.TravelId == element.TravelId)
+                    {
+                        h = true;
+                        travelReservations.Reservations.Add(new TourReservationViewModel
+                        {
+                            ReservationName = element.Reservation.Name,
+                            NumberReservations = element.NumberReservations
+                        });
+                    }
+                }
+                if (!h)
+                {
+                    listTravelsReservations.Add(new TravelsReservationsViewModel {
+                        TravelId = element.TravelId,
+                        Reservations = new List<TourReservationViewModel>()
+                    });
+                }
+            }
         }
 
         public List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model)
