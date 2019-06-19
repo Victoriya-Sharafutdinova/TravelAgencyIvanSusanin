@@ -20,23 +20,47 @@
             @Html.DisplayFor(modelItem => item.TravelId)
         </td>
     </tr>   
-        foreach (var recerv in item.Reservations)
-        {
-         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => recerv.Item1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => recerv.Item2)
-            </td>
-          </tr>
-        }
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Total)
-            </td>
-        </tr>
-           
+    <tr>
+        <td>
+            <table class="table">
+                <tr>
+                    <th>
+
+
+
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var recerv in item.Reservations)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => recerv.ReservationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => recerv.NumberReservations)
+                    </td>
+                </tr>
+                }
+                </table>
+        </td>
+    </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
      }
 
 </table>

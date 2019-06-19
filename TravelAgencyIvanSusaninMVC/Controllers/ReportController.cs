@@ -14,7 +14,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         // GET: Report
         public ActionResult Index()
         {
-            return View(service.GetClientTravels());
+            return Redirect("/Report.aspx");
         }
     }
 }

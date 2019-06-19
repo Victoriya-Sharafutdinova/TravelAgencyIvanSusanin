@@ -70,6 +70,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     });
                 }
             }
+            return listTravelsReservations;
         }
 
         public List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model)
@@ -79,7 +80,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public void SaveClientTravels(ReportBindingModel model)
         {
-            if (!File.Exists("TIMCYR.TTF"))
+          /*  if (!File.Exists("TIMCYR.TTF"))
             {
                 File.WriteAllBytes("TIMCYR.TTF", Properties.Resources.TIMCYR);
             }
@@ -174,7 +175,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             table.AddCell(cell);
             //вставляем таблицу
             doc.Add(table);
-            doc.Close();
+            doc.Close();*/
         }
 
         public void SaveReservationReguest(ReportBindingModel model)
