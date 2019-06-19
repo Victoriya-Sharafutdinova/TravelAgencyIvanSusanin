@@ -85,17 +85,14 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             return listTravelsReservations;
         }
 
-        public List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SaveClientTravels(int id)
         {
-            if (!File.Exists("B:\\политех\\2 курс 2 семестр\\ТП\\TIMCYR.TTF"))
+            //из ресрусов получаем шрифт для кирилицы
+            if (!File.Exists("C:\\Users\\Public\\Documents\\TIMCYR.TTF"))
             {
-                File.WriteAllBytes("TIMCYR.TTF", Properties.Resources.TIMCYR);
+                File.WriteAllBytes("C:\\Users\\Public\\Documents\\TIMCYR.TTF", Properties.Resources.TIMCYR);
             }
+
             string fileName = "C:\\Users\\Public\\Documents\\file.pdf";
             FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
@@ -103,7 +100,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             PdfWriter writer = PdfWriter.GetInstance(doc, fs);
 
             doc.Open();
-            BaseFont baseFont = BaseFont.CreateFont("TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont baseFont = BaseFont.CreateFont("C:\\Users\\Public\\Documents\\TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             var phraseTitle = new Phrase("Путешствия клиентов",
             new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD));
             iTextSharp.text.Paragraph paragraph = new iTextSharp.text.Paragraph(phraseTitle)
@@ -119,7 +116,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             };
             table.SetTotalWidth(new float[]
             {
-                160, 140, 160, 100, 100, 140
+                160, 140, 160
             });
 
             PdfPCell cell = new PdfPCell();
@@ -160,12 +157,14 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             }
         }
 
-        public void SaveReservationReguest(ReportBindingModel model)
+        public List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model)
         {
             throw new NotImplementedException();
         }
 
-
-
+        public void SaveReservationReguest(ReportBindingModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

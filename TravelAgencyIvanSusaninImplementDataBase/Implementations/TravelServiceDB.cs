@@ -547,10 +547,5 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         {
             return entity.AsQueryable().ElementType.ToString().Split('.')[1];
         }
-
-        public void Reservation(TravelBindingModel model)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
