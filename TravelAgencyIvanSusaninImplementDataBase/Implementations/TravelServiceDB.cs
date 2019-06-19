@@ -319,7 +319,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
                     //}
 
-                    //transaction.Commit();
+                    transaction.Commit();
 
                     //var client = context.Clients.FirstOrDefault(x => x.Id == model.ClientId);
                     
@@ -544,11 +544,6 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         private static string GetNameEntity(IEnumerable entity)
         {
             return entity.AsQueryable().ElementType.ToString().Split('.')[1];
-        }
-
-        public void Reservation(TravelBindingModel model)
-        {
-            throw new NotImplementedException();
         }
     }
 }
