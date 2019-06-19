@@ -60,30 +60,41 @@ namespace TravelAgencyIvanSusaninMVC
             (last, reservation) => new { last.TravelId, last.TourReservation.NumberReservations, Reservation = reservation })
             .ToList();
 
-
             var listTravelsReservations = new List<TravelsReservationsViewModel>();
             foreach (var element in list)
             {
-                listTravelsReservations.Add(new TravelsReservationsViewModel
-                {
-                    TravelId = element.TravelId,
-                    Reservations = new List<TourReservationViewModel>()
-                });
-            }
-            foreach (var element in list)
-            {
+                bool h = false;
                 foreach (var travelReservations in listTravelsReservations)
                 {
                     if (travelReservations.TravelId == element.TravelId)
                     {
-                        var tourCount = context.TourTravels.FirstOrDefault(x => element.TravelId == x.TravelId).Count;
+                        h = true;
                         travelReservations.Reservations.Add(new TourReservationViewModel
                         {
                             ReservationName = element.Reservation.Name,
-                            NumberReservations = element.NumberReservations * tourCount
+                            NumberReservations = element.NumberReservations
                         });
                     }
-                }            
+                }
+                if (!h)
+                {
+                    listTravelsReservations.Add(new TravelsReservationsViewModel
+                    {
+                        TravelId = element.TravelId,
+                        Reservations = new List<TourReservationViewModel>()
+                    });
+                    foreach (var travelReservations in listTravelsReservations)
+                    {
+                        if (travelReservations.TravelId == element.TravelId)
+                        {
+                            travelReservations.Reservations.Add(new TourReservationViewModel
+                            {
+                                ReservationName = element.Reservation.Name,
+                                NumberReservations = element.NumberReservations
+                            });
+                        }
+                    }
+                }
             }
             return listTravelsReservations;
         }
