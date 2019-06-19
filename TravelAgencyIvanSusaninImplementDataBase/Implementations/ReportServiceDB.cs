@@ -64,10 +64,22 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 }
                 if (!h)
                 {
-                    listTravelsReservations.Add(new TravelsReservationsViewModel {
+                    listTravelsReservations.Add(new TravelsReservationsViewModel
+                    {
                         TravelId = element.TravelId,
                         Reservations = new List<TourReservationViewModel>()
                     });
+                    foreach (var travelReservations in listTravelsReservations)
+                    {
+                        if (travelReservations.TravelId == element.TravelId)
+                        {
+                            travelReservations.Reservations.Add(new TourReservationViewModel
+                            {
+                                ReservationName = element.Reservation.Name,
+                                NumberReservations = element.NumberReservations
+                            });
+                        }
+                    }
                 }
             }
             return listTravelsReservations;
