@@ -294,6 +294,8 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
                         if (check >= reserveReservations)
                         {
+
+                            
                             reservations.NumberReserve += reserveReservations;
                         }
                         else
@@ -319,12 +321,12 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
                     //}
 
-                    //transaction.Commit();
+                    transaction.Commit();
 
-                    //var client = context.Clients.FirstOrDefault(x => x.Id == model.ClientId);
-                    
-                    //Mail.SendEmail(client?.Email, "Оповещение по путешествиям",
-                    //    $"Путешествие №{element.Id} от {element.DateCreate.ToShortDateString()} зарезервировано успешно", fName);
+                    var client = context.Clients.FirstOrDefault(x => x.Id == model.ClientId);
+
+                    Mail.SendEmail(client?.Email, "Оповещение по путешествиям",
+                        $"Путешествие №{element.Id} от {element.DateCreate.ToShortDateString()} зарезервировано успешно", null);
                 }
                 catch (Exception)
                 {

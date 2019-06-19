@@ -53,7 +53,9 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                     Id = travel.TourTravels[i].Id,
                     TravelId = travel.TourTravels[i].TravelId,
                     TourId = travel.TourTravels[i].TourId,
-                    Count = travel.TourTravels[i].Count
+                    Count = travel.TourTravels[i].Count,
+                    DateBegin = travel.TourTravels[i].DateBegin,
+                    DateEnd = travel.TourTravels[i].DateEnd
                 });
             }
 
@@ -104,7 +106,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                 var dateEnd1 = travel.TourTravels[i].DateEnd;               
                 var dateBegin2 = DateTime.Parse(Request["DateBegin"]);
                 var dateEnd2 = DateTime.Parse(Request["DateEnd"]);
-                if ((dateBegin2 >= dateBegin1 && dateBegin2 <= dateEnd1) || (dateBegin2 < dateBegin1 && dateBegin1 <= dateEnd2))
+                if ((dateBegin2 >= dateBegin1 && dateBegin2 <= dateEnd1) || (dateBegin2 < dateBegin1 && dateBegin1 <= dateEnd2) || (dateBegin2 >= dateBegin1) )
                 {
                     date = false;
                 }
