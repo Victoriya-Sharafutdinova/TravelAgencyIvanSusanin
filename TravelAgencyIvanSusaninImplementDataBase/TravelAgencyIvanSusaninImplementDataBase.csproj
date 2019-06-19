@@ -108,10 +108,6 @@
     <Compile Include="Implementations\StatisticServiceDB.cs" />
     <Compile Include="Implementations\TourServiceDB.cs" />
     <Compile Include="Implementations\TravelServiceDB.cs" />
-    <Compile Include="Migrations\201905211721228_FirstMigration.cs" />
-    <Compile Include="Migrations\201905211721228_FirstMigration.Designer.cs">
-      <DependentUpon>201905211721228_FirstMigration.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201906010022564_somemigration.cs" />
     <Compile Include="Migrations\201906010022564_somemigration.Designer.cs">
       <DependentUpon>201906010022564_somemigration.cs</DependentUpon>
@@ -131,6 +127,7 @@
     <Compile Include="Migrations\201906131128236_some5migration.cs" />
     <Compile Include="Migrations\201906131128236_some5migration.Designer.cs">
       <DependentUpon>201906131128236_some5migration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201905311914098_SecondMigration.cs" />
     <Compile Include="Migrations\201905311914098_SecondMigration.Designer.cs">
       <DependentUpon>201905311914098_SecondMigration.cs</DependentUpon>
@@ -142,7 +139,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SqlServerTypes\Loader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TravelAgencyIvanSusaninDAL\TravelAgencyIvanSusaninDAL.csproj">
@@ -160,9 +156,6 @@
     <None Include="Resources\TIMCYR.TTF" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905211721228_FirstMigration.resx">
-      <DependentUpon>201905211721228_FirstMigration.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906010022564_somemigration.resx">
       <DependentUpon>201906010022564_somemigration.cs</DependentUpon>
     </EmbeddedResource>
@@ -177,6 +170,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906131128236_some5migration.resx">
       <DependentUpon>201906131128236_some5migration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905311914098_SecondMigration.resx">
       <DependentUpon>201905311914098_SecondMigration.cs</DependentUpon>
     </EmbeddedResource>
@@ -196,21 +190,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="SqlServerTypes\readme.htm" />
-    <Content Include="SqlServerTypes\x64\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

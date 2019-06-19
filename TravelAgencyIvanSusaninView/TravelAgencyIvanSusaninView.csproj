@@ -168,6 +168,10 @@
       <Project>{02a4723a-df51-40cc-9c9a-f1c7ea36c90e}</Project>
       <Name>TravelAgencyIvanSusaninImplementDataBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TravelAgencyIvanSusaninModel\TravelAgencyIvanSusaninModel.csproj">
+      <Project>{74cdfd80-bd0e-4cff-bd2f-d6d21c0ef026}</Project>
+      <Name>TravelAgencyIvanSusaninModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

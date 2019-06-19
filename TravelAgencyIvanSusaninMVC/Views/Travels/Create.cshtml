@@ -20,9 +20,12 @@
             <p>
                 @Html.ActionLink("Добавить тур", "AddTour")
             </p>
-            @if (ViewBag.service.GetPopularTourClient(Globals.AuthClient.Id) != null)
+            @if (ViewBag.service.GetPopularTourClient(Globals.AuthClient.Id).Item1 != null)
             {
-                <p>В последнее время Вы чаще всего заказывали @ViewBag.service.PopularTour(Globals.AuthClient.Id).</p>
+            <p>
+                В последнее время Вы чаще всего заказывали @ViewBag.service.GetPopularTourClientName(Globals.AuthClient.Id)
+                в количестве @ViewBag.Service.GetPopularTourClient(Globals.AuthClient.Id).
+            </p>
             }
             <table class="table">
                 <tr>

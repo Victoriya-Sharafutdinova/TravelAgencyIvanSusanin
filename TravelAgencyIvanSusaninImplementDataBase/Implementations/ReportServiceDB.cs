@@ -12,6 +12,9 @@ using TravelAgencyIvanSusaninDAL.BindingModel;
 using TravelAgencyIvanSusaninDAL.ViewModel;
 using System.IO;
 using TravelAgencyIvanSusaninDAL.Interfaces;
+using System.Net.Mail;
+using System.Configuration;
+using System.Net;
 
 namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 {
@@ -26,18 +29,29 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public List<ClientTravelsViewModel> GetClientTravels(ReportBindingModel model)
         {
-            return context.Travels.Include(rec => rec.Client).Include(rec => rec.TourTravels)
+            return context.Travels.Include(rec => rec.Client)//.Include(rec => rec.TourTravels)
             .Where(rec => rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo)
              .Select(rec => new ClientTravelsViewModel
              {
                  ClientName = rec.Client.FIO,
-                 DateCreateTravel = SqlFunctions.DateName("dd", rec.DateCreate)
-                    + " " +
-                     SqlFunctions.DateName("mm", rec.DateCreate) +
-                    " " +
+                 DateCreateTravel = 
+                     SqlFunctions.DateName("dd", rec.DateCreate) + " " +
+                     SqlFunctions.DateName("mm", rec.DateCreate) + " " +
                      SqlFunctions.DateName("yyyy", rec.DateCreate),
                  TotalSum = rec.TotalCost,
-                 StatusTravel = rec.TravelStatus.ToString()
+                 StatusTravel = rec.TravelStatus.ToString(),
+                 TourTravels = context.TourTravels.Where(recPC => recPC.TravelId == rec.Id)
+                        .Select(recPC => new TourTravelViewModel
+                        {
+                            Id = recPC.Id,
+                            TourId = recPC.TourId,
+                            TravelId = recPC.TravelId,
+                            TourName = recPC.Tour.Name,
+                            Count = recPC.Count,
+                            DateBegin = recPC.DateBegin,
+                            DateEnd = recPC.DateEnd
+                        })
+                        .ToList()
              })
             .ToList();
         }
@@ -49,45 +63,90 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public void SaveClientTravels(ReportBindingModel model)
         {
-            if (!File.Exists("TIMCYR.TTF"))
+            var document = new Document();
+
+            using (var writer = PdfWriter.GetInstance(document, new FileStream(model.FileName, FileMode.Create)))
             {
-                File.WriteAllBytes("TIMCYR.TTF", Properties.Resources.TIMCYR);
+                document.Open();
+
+                PrintHeader("Заказы клиента", document);
+
+                var clientTravels = GetClientTravels(model);
+
+                foreach (var travel in clientTravels)
+                {
+                    PrintTravelInfo(travel, document);
+                }
             }
-            //открываем файл для работы
-            FileStream fs = new FileStream(model.FileName, FileMode.OpenOrCreate,
-           FileAccess.Write);
-            //создаем документ, задаем границы, связываем документ и поток
-            Document doc = new Document();
-            doc.SetMargins(0.5f, 0.5f, 0.5f, 0.5f);
-            PdfWriter writer = PdfWriter.GetInstance(doc, fs);
-            doc.Open();
-            BaseFont baseFont = BaseFont.CreateFont("TIMCYR.TTF", BaseFont.IDENTITY_H,
-           BaseFont.NOT_EMBEDDED);
-            //вставляем заголовок
-            var phraseTitle = new Phrase("Заказы клиентов", new Font(baseFont, 16, Font.BOLD));
+        }
+
+        private void PrintTravelInfo(ClientTravelsViewModel clientTravel, Document document)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void PrintHeader(string text, Document doc)
+        {
+            var phraseTitle = new Phrase(text, new Font(baseFont, 16, Font.BOLD));
             Paragraph paragraph = new Paragraph(phraseTitle)
             {
                 Alignment = Element.ALIGN_CENTER,
                 SpacingAfter = 12
             };
             doc.Add(paragraph);
-            var phrasePeriod = new Phrase("c " + model.DateFrom.Value.ToShortDateString()
-           +
-            " по " + model.DateTo.Value.ToShortDateString(),
-           new Font(baseFont, 14,
-           Font.BOLD));
-            paragraph = new Paragraph(phrasePeriod)
+        }
+
+        public void SaveDetailReguest(ReportBindingModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+       
+
+        public void getClentOrderList(ReportBindingModel model, int clientId)
+
+        {
+            if (!File.Exists("TIMCYR.TTF"))
+            {
+                File.WriteAllBytes("TIMCYR.TTF", Properties.Resources.TIMCYR);
+            }
+            //открываем файл для работы
+            FileStream fs = new FileStream(model.FileName, FileMode.OpenOrCreate, FileAccess.Write);
+            //создаем документ, задаем границы, связываем документ и поток
+            iTextSharp.text.Document doc = new iTextSharp.text.Document();
+            doc.SetMargins(0.5f, 0.5f, 0.5f, 0.5f);
+            PdfWriter writer = PdfWriter.GetInstance(doc, fs);
+            doc.Open();
+            BaseFont baseFont = BaseFont.CreateFont("TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
+            //вставляем заголовок
+            var phraseTitle = new Phrase("Заказы клиента",
+            new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD));
+            iTextSharp.text.Paragraph paragraph = new iTextSharp.text.Paragraph(phraseTitle)
             {
                 Alignment = Element.ALIGN_CENTER,
                 SpacingAfter = 12
             };
             doc.Add(paragraph);
+            var phrasePeriod = new Phrase("c " + model.DateFrom.Value.ToShortDateString() +
+            " по " + model.DateTo.Value.ToShortDateString(),
+            new iTextSharp.text.Font(baseFont, 14, iTextSharp.text.Font.BOLD));
+            paragraph = new iTextSharp.text.Paragraph(phrasePeriod)
+            {
+                Alignment = Element.ALIGN_CENTER,
+                SpacingAfter = 12
+            };
+            doc.Add(paragraph);
+
             //вставляем таблицу, задаем количество столбцов, и ширину колонок
             PdfPTable table = new PdfPTable(6)
             {
                 TotalWidth = 800F
             };
             table.SetTotalWidth(new float[] { 160, 140, 160, 100, 100, 140 });
+
             //вставляем шапку
             PdfPCell cell = new PdfPCell();
             var fontForCellBold = new Font(baseFont, 10, Font.BOLD);
@@ -100,7 +159,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 HorizontalAlignment = Element.ALIGN_CENTER
             });
 
-            table.AddCell(new PdfPCell(new Phrase("Изделие", fontForCellBold))
+            table.AddCell(new PdfPCell(new Phrase("Путешествие", fontForCellBold))
             {
                 HorizontalAlignment = Element.ALIGN_CENTER
             });
@@ -126,9 +185,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 table.AddCell(cell);
                 cell = new PdfPCell(new Phrase(list[i].DateCreateTravel, fontForCells));
                 table.AddCell(cell);
-                foreach (var car in list[i].TourTravels)
+                foreach (var tour in list[i].TourTravels)
                 {
-                    cell = new PdfPCell(new Phrase(car.TourName.ToString(), fontForCells));
+                    cell = new PdfPCell(new Phrase(tour.TourName.ToString(), fontForCells));
                     table.AddCell(cell);
                 }
                 cell = new PdfPCell(new Phrase(list[i].TourTravels.Count.ToString(), fontForCells));
@@ -140,6 +199,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 cell = new PdfPCell(new Phrase(list[i].StatusTravel, fontForCells));
                 table.AddCell(cell);
             }
+
             //вставляем итого
             cell = new PdfPCell(new Phrase("Итого:", fontForCellBold))
             {
@@ -152,21 +212,52 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             {
                 HorizontalAlignment = Element.ALIGN_RIGHT,
                 Border = 0
-            };
+            };       
             table.AddCell(cell);
             cell = new PdfPCell(new Phrase("", fontForCellBold))
             {
                 Border = 0
             };
             table.AddCell(cell);
+
             //вставляем таблицу
             doc.Add(table);
             doc.Close();
+            SendEmail(model.Email, "Оповещение по заказам", "", model.FileName);
         }
 
-        public void SaveDetailReguest(ReportBindingModel model)
+        private void SendEmail(string mailAddress, string subject, string text, string attachmentPath)
         {
-            throw new NotImplementedException();
+            System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage();
+            SmtpClient smtpClient = null;
+            try
+            {
+                m.From = new MailAddress(ConfigurationManager.AppSettings["MailLogin"]);
+                m.To.Add(new MailAddress(mailAddress));
+                m.Subject = subject;
+                m.Body = text;
+                m.SubjectEncoding = System.Text.Encoding.UTF8;
+                m.BodyEncoding = System.Text.Encoding.UTF8;
+                m.Attachments.Add(new Attachment(attachmentPath));
+                smtpClient = new SmtpClient("smtp.gmail.com", 587);
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.EnableSsl = true;
+                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtpClient.Credentials = new NetworkCredential(
+                    ConfigurationManager.AppSettings["MailLogin"],
+                    ConfigurationManager.AppSettings["MailPassword"]
+                    );
+                smtpClient.Send(m);
+            }
+           catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                m = null;
+                smtpClient = null;
+            }
         }
     }
 }

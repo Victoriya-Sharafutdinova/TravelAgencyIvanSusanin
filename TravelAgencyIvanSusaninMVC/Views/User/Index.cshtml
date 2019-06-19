@@ -36,13 +36,13 @@
         </tr>
         <tr>
             <td>
-                @ViewBag.service.HowManyTourTheClient(ViewBag.User.Id)
+                @ViewBag.service.GetClientToursCount(ViewBag.User.Id)
             </td>
             <td>
-                @ViewBag.service.PopularTour(ViewBag.User.Id)
+                @ViewBag.service.GetPopularTourClientName(ViewBag.User.Id) (@ViewBag.service.GetPopularTourClient(ViewBag.User.Id))
             </td>
             <td>
-                @ViewBag.service.AverageCustomerCheck(ViewBag.User.Id)
+                @ViewBag.service.GetAverageCustomerCheck(ViewBag.User.Id)
             </td>
         </tr>
     </table>

@@ -342,6 +342,10 @@
       <Project>{74cdfd80-bd0e-4cff-bd2f-d6d21c0ef026}</Project>
       <Name>TravelAgencyIvanSusaninModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TravelAgencyIvanSusaninView\TravelAgencyIvanSusaninView.csproj">
+      <Project>{df0cf76e-0847-4f2f-a930-781d5f5fc820}</Project>
+      <Name>TravelAgencyIvanSusaninView</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201905121653316_InitialCreate.resx">

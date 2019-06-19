@@ -47,16 +47,36 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public int GetClientToursCount(int clientId)
         {
-            return context.Travels
-                .Where(travel => travel.ClientId == clientId)
-                .Sum(travel => travel.TourTravels.Sum(x => x.Count));
+            int clientTours = context.Travels
+                .Count(travel => travel.ClientId == clientId);
+
+            if (clientTours != 0)
+            {
+                return context.Travels
+                    .Where(travel => travel.ClientId == clientId)
+                    .Sum(travel => travel.TourTravels.Sum(x => x.Count));
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public decimal GetAverageCustomerCheck(int clientId)
         {
-            return context.Travels
-               .Where(travel => travel.ClientId == clientId)
-               .Average(travel => travel.TotalCost);
+            int clientTours = context.Travels
+                .Count(travel => travel.ClientId == clientId);
+
+            if (clientTours != 0)
+            {
+                return context.Travels
+                    .Where(travel => travel.ClientId == clientId)
+                    .Average(travel => travel.TotalCost);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
 

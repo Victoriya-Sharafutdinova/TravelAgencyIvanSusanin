@@ -123,7 +123,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         public ActionResult Exit()
         {
             Globals.AuthClient = null;
-            return RedirectToAction("Auth");
+            return RedirectToAction("Authorization");
         }
     }
 }

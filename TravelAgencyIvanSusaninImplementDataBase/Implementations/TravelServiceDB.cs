@@ -14,6 +14,7 @@ using TravelAgencyIvanSusaninDAL.ViewModel;
 using TravelAgencyIvanSusaninModel;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Collections;
 
 namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 {
@@ -344,14 +345,31 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             }
         }
 
-        public void SaveDataBase()
+        public void SaveDataBaseCLient()
         {
-            var jsonFormatter = new DataContractJsonSerializer(typeof(List<Travel>));
+            SaveEntity(context.Travels.ToList());
+            SaveEntity(context.Clients.ToList());
+            SaveEntity(context.TourTravels.ToList());     
+        }
 
-            using (FileStream fs = new FileStream("db.json", FileMode.OpenOrCreate))
+        public void SaveDataBaseAdmin()
+        {
+        }
+
+        public void SaveEntity(IEnumerable entity)
+        {
+            var jsonFormatter = new DataContractJsonSerializer(entity.GetType());
+
+            using (var fs = new FileStream($"backup/{GetNameEntity(entity)}.json",
+                FileMode.OpenOrCreate))
             {
-                jsonFormatter.WriteObject(fs, context.Travels.ToList());
+                jsonFormatter.WriteObject(fs, entity);
             }
+        }
+
+        private static string GetNameEntity(IEnumerable entity)
+        {
+            return entity.AsQueryable().ElementType.ToString().Split('.')[1];
         }
     }
 }
