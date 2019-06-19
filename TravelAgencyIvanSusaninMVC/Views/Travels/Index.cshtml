@@ -51,6 +51,7 @@
         </td>
         <td>
             @Html.ActionLink("Детали путешествия", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Зарезервировать", "ReservePost", new { id = item.Id }) |
             @if (item.TravelStatus == "Готов")
             {
                 @Html.ActionLink("Оплатить", "Pay", new { id = item.Id })
