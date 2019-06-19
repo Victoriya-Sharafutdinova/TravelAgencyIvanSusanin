@@ -24,7 +24,8 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 Id = rec.Id,
                 Name = rec.Name,
                 Description = rec.Description,
-                Number = rec.Number
+                Number = rec.Number,
+                NumberReserve = rec.NumberReserve
             }).ToList();
             return result;
         }
