@@ -283,25 +283,28 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                         };
 
                         context.TourTravels.Add(travelTour);
-
-                        var tourReservation = context.TourReservations.FirstOrDefault(rec => rec.TourId == travelTour.TourId);
-
-                        var reservations = context.Reservations.FirstOrDefault(rec => rec.Id == tourReservation.ReservationId);
-
-                        var reserveReservations = tourReservation.NumberReservations;
-
-                        var check = reservations.Number - reservations.NumberReserve;
-
-                        if (check >= reserveReservations)
-                        {
-                            reservations.NumberReserve += reserveReservations;
-                        }
-                        else
-                        {
-                            throw new Exception("Недостаточно броней для резервации");
-                        }
-
                         context.SaveChanges();
+
+                        var tourReservations = context.TourReservations.Where(rec => rec.TourId == travelTour.TourId);
+                       
+                        foreach(var tourReservation in tourReservations)
+                        {
+                            var reservation = context.Reservations.FirstOrDefault(rec => rec.Id == tourReservation.ReservationId);
+
+                            var reserveReservations = tourReservation.NumberReservations;
+
+                            var check = reservation.Number - reservation.NumberReserve;
+
+                            if (check >= reserveReservations)
+                            {
+                                reservation.NumberReserve += reserveReservations;
+                                context.SaveChanges();
+                            }
+                            else
+                            {
+                                throw new Exception("Недостаточно броней для резервации");
+                            }
+                        }
                     }
                     //string typeMessage = "";
                     //string fName = "";
