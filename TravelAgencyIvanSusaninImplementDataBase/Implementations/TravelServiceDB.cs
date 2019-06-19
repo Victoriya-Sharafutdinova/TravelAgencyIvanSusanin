@@ -286,22 +286,27 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
                         var tourReservation = context.TourReservations.FirstOrDefault(rec => rec.TourId == travelTour.TourId);
 
-                        var reservations = context.Reservations.FirstOrDefault(rec => rec.Id == tourReservation.ReservationId);
+                        var reservations = context.Reservations.Where(rec => rec.Id == tourReservation.ReservationId);
 
-                        var reserveReservations = tourReservation.NumberReservations;
-
-                        var check = reservations.Number - reservations.NumberReserve;
-
-                        if (check >= reserveReservations)
+                        foreach(var reserv in reservations)
                         {
+                            var reserveReservations = tourReservation.NumberReservations;
 
-                            
-                            reservations.NumberReserve += reserveReservations;
+                            var check = reserv.Number - reserv.NumberReserve;
+
+                            if (check >= reserveReservations)
+                            {
+
+
+                                reserv.NumberReserve += reserveReservations;
+                            }
+                            else
+                            {
+                                throw new Exception("Недостаточно броней для резервации");
+                            }
                         }
-                        else
-                        {
-                            throw new Exception("Недостаточно броней для резервации");
-                        }
+
+                        
 
                         context.SaveChanges();
                     }

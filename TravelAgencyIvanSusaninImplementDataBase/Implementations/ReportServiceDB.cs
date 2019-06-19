@@ -99,8 +99,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             doc.SetMargins(0.5f, 0.5f, 0.5f, 0.5f);
             PdfWriter writer = PdfWriter.GetInstance(doc, fs);
 
-            doc.Open();
+           
             BaseFont baseFont = BaseFont.CreateFont("C:\\Users\\Public\\Documents\\TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            doc.Open();
             var phraseTitle = new Phrase("Путешствия клиентов",
             new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD));
             iTextSharp.text.Paragraph paragraph = new iTextSharp.text.Paragraph(phraseTitle)
@@ -151,10 +152,10 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 }
                 table.AddCell(cell);
                 //вставляем таблицу          
-                doc.Add(table);
+                
+            }doc.Add(table);
 
                 doc.Close();
-            }
         }
 
         public List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model)
