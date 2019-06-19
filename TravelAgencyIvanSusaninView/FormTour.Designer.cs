@@ -49,7 +49,7 @@
             // textBoxName
             // 
             this.textBoxName.Location = new System.Drawing.Point(135, 20);
-            this.textBoxName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxName.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(627, 22);
             this.textBoxName.TabIndex = 0;
@@ -57,7 +57,7 @@
             // textBoxDescription
             // 
             this.textBoxDescription.Location = new System.Drawing.Point(135, 53);
-            this.textBoxDescription.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxDescription.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.Size = new System.Drawing.Size(627, 22);
             this.textBoxDescription.TabIndex = 1;
@@ -65,7 +65,7 @@
             // textBoxCost
             // 
             this.textBoxCost.Location = new System.Drawing.Point(135, 86);
-            this.textBoxCost.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxCost.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxCost.Name = "textBoxCost";
             this.textBoxCost.Size = new System.Drawing.Size(191, 22);
             this.textBoxCost.TabIndex = 2;
@@ -104,15 +104,15 @@
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(8, 23);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(825, 341);
             this.dataGridView1.TabIndex = 6;
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(832, 497);
-            this.buttonSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonSave.Location = new System.Drawing.Point(694, 499);
+            this.buttonSave.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(133, 55);
             this.buttonSave.TabIndex = 7;
@@ -122,8 +122,8 @@
             // 
             // buttonClose
             // 
-            this.buttonClose.Location = new System.Drawing.Point(691, 497);
-            this.buttonClose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonClose.Location = new System.Drawing.Point(835, 499);
+            this.buttonClose.Margin = new System.Windows.Forms.Padding(4);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(133, 55);
             this.buttonClose.TabIndex = 8;
@@ -139,9 +139,9 @@
             this.groupBox1.Controls.Add(this.buttonAdd);
             this.groupBox1.Controls.Add(this.dataGridView1);
             this.groupBox1.Location = new System.Drawing.Point(16, 118);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(949, 372);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
@@ -150,7 +150,7 @@
             // buttonUpdate
             // 
             this.buttonUpdate.Location = new System.Drawing.Point(843, 134);
-            this.buttonUpdate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonUpdate.Margin = new System.Windows.Forms.Padding(4);
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.Size = new System.Drawing.Size(100, 28);
             this.buttonUpdate.TabIndex = 10;
@@ -161,7 +161,7 @@
             // buttonDelete
             // 
             this.buttonDelete.Location = new System.Drawing.Point(843, 97);
-            this.buttonDelete.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(4);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(100, 28);
             this.buttonDelete.TabIndex = 9;
@@ -172,7 +172,7 @@
             // buttonChange
             // 
             this.buttonChange.Location = new System.Drawing.Point(843, 60);
-            this.buttonChange.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonChange.Margin = new System.Windows.Forms.Padding(4);
             this.buttonChange.Name = "buttonChange";
             this.buttonChange.Size = new System.Drawing.Size(100, 28);
             this.buttonChange.TabIndex = 8;
@@ -183,7 +183,7 @@
             // buttonAdd
             // 
             this.buttonAdd.Location = new System.Drawing.Point(841, 23);
-            this.buttonAdd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonAdd.Margin = new System.Windows.Forms.Padding(4);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(100, 28);
             this.buttonAdd.TabIndex = 7;
@@ -205,7 +205,7 @@
             this.Controls.Add(this.textBoxCost);
             this.Controls.Add(this.textBoxDescription);
             this.Controls.Add(this.textBoxName);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormTour";
             this.Text = "FormTour";
             this.Load += new System.EventHandler(this.FormTour_Load);
