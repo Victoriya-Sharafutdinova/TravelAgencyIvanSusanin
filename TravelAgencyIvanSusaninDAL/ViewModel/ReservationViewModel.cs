@@ -15,5 +15,7 @@ namespace TravelAgencyIvanSusaninDAL.ViewModel
         [DisplayName("Общее количество")]
         public int Number { get; set; }
 
+        [DisplayName("Количество зарезервированных")]
+        public int NumberReserve { get; set; }
     }
 }
