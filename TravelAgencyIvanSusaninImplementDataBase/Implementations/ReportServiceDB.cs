@@ -70,6 +70,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     });
                 }
             }
+            return listTravelsReservations;
         }
 
         public List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model)
