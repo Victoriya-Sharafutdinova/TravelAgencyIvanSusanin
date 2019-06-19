@@ -345,7 +345,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             }
         }
 
-        public void SaveDataBaseCLient()
+        public void SaveDataBaseClient()
         {
             SaveEntity(context.Travels.ToList());
             SaveEntity(context.Clients.ToList());
@@ -354,6 +354,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public void SaveDataBaseAdmin()
         {
+            
         }
 
         public void SaveEntity(IEnumerable entity)
