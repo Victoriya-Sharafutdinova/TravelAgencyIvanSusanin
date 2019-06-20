@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace TravelAgencyIvanSusaninDAL.ViewModel
 {
@@ -15,5 +16,7 @@ namespace TravelAgencyIvanSusaninDAL.ViewModel
 
         [DisplayName("Количество броней")]
         public int NumberReservation { get; set; }
+
+        public DateTime DateCreate { get; set; }
     }
 }
