@@ -37,6 +37,7 @@
             this.buttonDelete = new System.Windows.Forms.Button();
             this.buttonChange = new System.Windows.Forms.Button();
             this.buttonTravel = new System.Windows.Forms.Button();
+            this.buttonReport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -138,11 +139,22 @@
             this.buttonTravel.UseVisualStyleBackColor = true;
             this.buttonTravel.Click += new System.EventHandler(this.buttonTravel_Click);
             // 
+            // buttonReport
+            // 
+            this.buttonReport.Location = new System.Drawing.Point(170, 13);
+            this.buttonReport.Name = "buttonReport";
+            this.buttonReport.Size = new System.Drawing.Size(150, 45);
+            this.buttonReport.TabIndex = 6;
+            this.buttonReport.Text = "Сформировать отчет";
+            this.buttonReport.UseVisualStyleBackColor = true;
+            this.buttonReport.Click += new System.EventHandler(this.buttonReport_Click);
+            // 
             // FormTours
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonReport);
             this.Controls.Add(this.buttonTravel);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonRequest);
@@ -168,5 +180,6 @@
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.Button buttonChange;
         private System.Windows.Forms.Button buttonTravel;
+        private System.Windows.Forms.Button buttonReport;
     }
 }

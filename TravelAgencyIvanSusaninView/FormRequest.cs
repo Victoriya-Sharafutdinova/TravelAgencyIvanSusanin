@@ -50,6 +50,7 @@ namespace TravelAgencyIvanSusaninView
                     dataGridView1.Columns[1].Visible = false;
                     dataGridView1.Columns[2].Visible = false;
                     dataGridView1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridView1.Columns[5].Visible = false;
                 }
             }
             catch (Exception ex)

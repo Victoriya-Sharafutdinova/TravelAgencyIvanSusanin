@@ -119,5 +119,14 @@ namespace TravelAgencyIvanSusaninView
                 LoadData();
             }
         }
+
+        private void buttonReport_Click(object sender, EventArgs e)
+        {
+            var form = Container.Resolve<FormReport>();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                LoadData();
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace TravelAgencyIvanSusaninDAL.ViewModel
 {
@@ -18,5 +19,7 @@ namespace TravelAgencyIvanSusaninDAL.ViewModel
 
         [DisplayName("Количество броней")]
         public int NumberReservations { get; set; }
+
+        public List<ReservationRequestViewModel> ReservationRequests { get; set; }
     }
 }

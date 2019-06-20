@@ -10,9 +10,9 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
 {
     public interface IReportService
     {
-        List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model);
+        List<TourRequestViewModel> GetTourRequest(ReportBindingModel model);
 
-        void SaveReservationReguest(ReportBindingModel model);
+        void SaveTourRequest(ReportBindingModel model);
 
         List<TravelsReservationsViewModel> GetClientTravels(int id);
 
