@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TravelAgencyIvanSusaninDAL.BindingModel;
 using TravelAgencyIvanSusaninDAL.Interfaces;
 using TravelAgencyIvanSusaninDAL.ViewModel;
 using Unity;
@@ -57,6 +58,24 @@ namespace TravelAgencyIvanSusaninView
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void buttonInWork_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 1)
+            {
+                service.TakeTravelInWork(new TravelBindingModel { Id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value) });
+                LoadData();
+            }
+        }
+
+        private void buttonReady_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 1)
+            {
+                service.FinishTravel(new TravelBindingModel { Id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value) });
+                LoadData();
+            }
         }
     }
 }

@@ -30,6 +30,8 @@
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.buttonClose = new System.Windows.Forms.Button();
+            this.buttonInWork = new System.Windows.Forms.Button();
+            this.buttonReady = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,11 +54,33 @@
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
+            // buttonInWork
+            // 
+            this.buttonInWork.Location = new System.Drawing.Point(834, 13);
+            this.buttonInWork.Name = "buttonInWork";
+            this.buttonInWork.Size = new System.Drawing.Size(130, 90);
+            this.buttonInWork.TabIndex = 2;
+            this.buttonInWork.Text = "Передать в работу";
+            this.buttonInWork.UseVisualStyleBackColor = true;
+            this.buttonInWork.Click += new System.EventHandler(this.buttonInWork_Click);
+            // 
+            // buttonReady
+            // 
+            this.buttonReady.Location = new System.Drawing.Point(833, 109);
+            this.buttonReady.Name = "buttonReady";
+            this.buttonReady.Size = new System.Drawing.Size(130, 90);
+            this.buttonReady.TabIndex = 3;
+            this.buttonReady.Text = "Готов";
+            this.buttonReady.UseVisualStyleBackColor = true;
+            this.buttonReady.Click += new System.EventHandler(this.buttonReady_Click);
+            // 
             // FormTravels
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(976, 450);
+            this.Controls.Add(this.buttonReady);
+            this.Controls.Add(this.buttonInWork);
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.dataGridView1);
             this.Name = "FormTravels";
@@ -71,5 +95,7 @@
 
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button buttonClose;
+        private System.Windows.Forms.Button buttonInWork;
+        private System.Windows.Forms.Button buttonReady;
     }
 }
