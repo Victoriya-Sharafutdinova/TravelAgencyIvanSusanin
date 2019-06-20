@@ -17,8 +17,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Путешествия", "Index", "Travels", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
+                @if (Globals.AuthClient != null)
+                {
+                    @Html.ActionLink("Путешествия", "Index", "Travels", new { area = "" }, new { @class = "navbar-brand" })
+                }
+                </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @if (Globals.AuthClient != null)

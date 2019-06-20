@@ -6,10 +6,20 @@
 <div>
     <div class="form-group">
         <label>Самый покупаемый тур: </label>
-        <span>@ViewBag.service.GetMostPopularTourName()в количестве @ViewBag.service.GetMostPopularTour()</span>
-    </div>
+        @if (ViewBag.Service.GetMostPopularTourName() != null)
+        {
+            <p>
+                <span>@ViewBag.service.GetMostPopularTourName()в количестве @ViewBag.service.GetMostPopularTour()</span>
+            </p>
+        }
+        </div>
     <div class="form-group">
         <label>Средний чек путешествия: </label>
-        <span>@ViewBag.service.GetAverPrice()</span>
+        @if (ViewBag.service.GetAverPrice() != null)
+        {
+            <p>
+                <span>@ViewBag.service.GetAverPrice()</span>
+            </p>
+        }    
     </div>
 </div>
