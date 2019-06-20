@@ -251,5 +251,14 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 }
             }
         }
+
+        public void SaveDataBaseAdmin()
+        {
+            Backup.SaveEntity(context.Requests.ToList());
+            Backup.SaveEntity(context.ReservationRequests.ToList());
+            Backup.SaveEntity(context.Reservations.ToList());
+            Backup.SaveEntity(context.TourReservations.ToList());
+            Backup.SaveEntity(context.Tours.ToList());
+        }
     }
 }

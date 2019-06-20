@@ -38,6 +38,7 @@
             this.buttonChange = new System.Windows.Forms.Button();
             this.buttonTravel = new System.Windows.Forms.Button();
             this.buttonReport = new System.Windows.Forms.Button();
+            this.buttonBackup = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -149,11 +150,22 @@
             this.buttonReport.UseVisualStyleBackColor = true;
             this.buttonReport.Click += new System.EventHandler(this.buttonReport_Click);
             // 
+            // buttonBackup
+            // 
+            this.buttonBackup.Location = new System.Drawing.Point(12, 13);
+            this.buttonBackup.Name = "buttonBackup";
+            this.buttonBackup.Size = new System.Drawing.Size(88, 45);
+            this.buttonBackup.TabIndex = 7;
+            this.buttonBackup.Text = "Бекап";
+            this.buttonBackup.UseVisualStyleBackColor = true;
+            this.buttonBackup.Click += new System.EventHandler(this.buttonBackup_Click);
+            // 
             // FormTours
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonBackup);
             this.Controls.Add(this.buttonReport);
             this.Controls.Add(this.buttonTravel);
             this.Controls.Add(this.groupBox1);
@@ -181,5 +193,6 @@
         private System.Windows.Forms.Button buttonChange;
         private System.Windows.Forms.Button buttonTravel;
         private System.Windows.Forms.Button buttonReport;
+        private System.Windows.Forms.Button buttonBackup;
     }
 }

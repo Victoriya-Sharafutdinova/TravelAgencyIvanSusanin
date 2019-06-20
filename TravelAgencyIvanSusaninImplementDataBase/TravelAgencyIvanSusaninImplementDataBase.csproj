@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractDbContext.cs" />
+    <Compile Include="Backup.cs" />
     <Compile Include="Implementations\ClientServiceDB.cs" />
     <Compile Include="Implementations\ReportServiceDB.cs" />
     <Compile Include="Implementations\RequestServiceDB.cs" />

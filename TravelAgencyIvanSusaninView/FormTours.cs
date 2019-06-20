@@ -128,5 +128,10 @@ namespace TravelAgencyIvanSusaninView
                 LoadData();
             }
         }
+
+        private void buttonBackup_Click(object sender, EventArgs e)
+        {
+            service.SaveDataBaseAdmin();
+        }
     }
 }

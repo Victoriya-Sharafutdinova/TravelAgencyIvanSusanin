@@ -197,7 +197,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                         throw new Exception("Путешествие не в статусе \"Принят\"");
                     }
 
-                    if (element.TravelStatus == TravelStatus.Принят || element.TravelStatus == TravelStatus.Зарезервирован)
+                    if (element.TravelStatus == TravelStatus.Зарезервирован)
                     {
                         var travelTours = context.TourTravels.Where(rec => rec.TravelId == element.Id);
                         foreach (var travelTour in travelTours)
@@ -298,12 +298,12 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     if (type.Contains("doc"))
                     {
                         ReservWord(id);
-                        fName = "C:\\Users\\ВИКА\\Documents\\file.doc";
+                        fName = Directory.GetCurrentDirectory() + "\\file.doc";
                     }
                     else
                     {
                         ReservExel(id);
-                        fName = "C:\\Users\\ВИКА\\Documents\\file.xls";
+                        fName = Directory.GetCurrentDirectory() + "\\file.xls";
                     }
 
                     transaction.Commit();
@@ -323,9 +323,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         private void ReservWord(int id)
         {
             Console.WriteLine();
-            if (File.Exists("C:\\Users\\ВИКА\\Documents\\file.doc"))
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\file.doc"))
             {
-                File.Delete("C:\\Users\\ВИКА\\Documents\\file.doc");
+                File.Delete(Directory.GetCurrentDirectory() + "\\file.doc");
             }
             var winword = new Microsoft.Office.Interop.Word.Application();
             try
@@ -396,7 +396,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 paragraphFormat.SpaceBefore = 10;
                 range.InsertParagraphAfter();
                 object fileFormat = WdSaveFormat.wdFormatXMLDocument;
-                document.SaveAs("C:\\Users\\ВИКА\\Documents\\file.doc", ref fileFormat, ref missing,
+                document.SaveAs(Directory.GetCurrentDirectory() + "\\file.doc", ref fileFormat, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
@@ -418,12 +418,12 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             var excel = new Microsoft.Office.Interop.Excel.Application();
             try
             {
-                if (File.Exists("C:\\Users\\ВИКА\\Documents\\file.xls"))
+                if (File.Exists(Directory.GetCurrentDirectory() + "\\file.xls"))
                 {
-                    File.Delete("C:\\Users\\ВИКА\\Documents\\file.xls");
+                    File.Delete(Directory.GetCurrentDirectory() + "\\file.xls");
                     excel.SheetsInNewWorkbook = 1;
                     excel.Workbooks.Add(Type.Missing);
-                    excel.Workbooks[1].SaveAs("C:\\Users\\ВИКА\\Documents\\file.xls", XlFileFormat.xlExcel8,
+                    excel.Workbooks[1].SaveAs(Directory.GetCurrentDirectory() + "\\file.xls", XlFileFormat.xlExcel8,
                     Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing,
                     Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 }
@@ -431,7 +431,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 {
                     excel.SheetsInNewWorkbook = 1;
                     excel.Workbooks.Add(Type.Missing);
-                    excel.Workbooks[1].SaveAs("C:\\Users\\ВИКА\\Documents\\file.xls", XlFileFormat.xlExcel8,
+                    excel.Workbooks[1].SaveAs(Directory.GetCurrentDirectory() + "\\file.xls", XlFileFormat.xlExcel8,
                     Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing,
                     Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 }
@@ -508,30 +508,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public void SaveDataBaseClient()
         {
-            SaveEntity(context.Travels.ToList());
-            SaveEntity(context.Clients.ToList());
-            SaveEntity(context.TourTravels.ToList());     
-        }
-
-        public void SaveDataBaseAdmin()
-        {
-            
-        }
-
-        public void SaveEntity(IEnumerable entity)
-        {
-            var jsonFormatter = new DataContractJsonSerializer(entity.GetType());
-
-            using (var fs = new FileStream($"C:/Users/ВИКА/Documents/backup/{GetNameEntity(entity)}.json",
-                FileMode.OpenOrCreate))
-            {
-                jsonFormatter.WriteObject(fs, entity);
-            }
-        }
-
-        private static string GetNameEntity(IEnumerable entity)
-        {
-            return entity.AsQueryable().ElementType.ToString().Split('.')[1];
+            Backup.SaveEntity(context.Travels.ToList());
+            Backup.SaveEntity(context.Clients.ToList());
+            Backup.SaveEntity(context.TourTravels.ToList());     
         }
     }
 }

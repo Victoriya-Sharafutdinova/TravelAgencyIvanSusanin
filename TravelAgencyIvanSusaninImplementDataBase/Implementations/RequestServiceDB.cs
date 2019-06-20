@@ -63,13 +63,13 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     {
                         RequestWord(model);
                         typeMessage = "word";
-                        fName = "C:\\Users\\Public\\Documents\\fileAdmin.doc";
+                        fName = Directory.GetCurrentDirectory() + "\\fileAdmin.doc";
                     }
                     else
                     {
                         RequestExel(model);
                         typeMessage = "xls";
-                        fName = "C:\\Users\\Public\\Documents\\fileAdmin.xls";
+                        fName = Directory.GetCurrentDirectory() + "\\fileAdmin.xls";
                     }
                     Mail.SendEmail( null, "Заявка на брони", "Заявка на брони в формате " + typeMessage, fName);
                     transaction.Commit();
@@ -85,9 +85,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         private void RequestWord(RequestBindingModel model)
         {
             Console.WriteLine();
-            if (File.Exists("C:\\Users\\Public\\Documents\\fileAdmin.doc"))
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\fileAdmin.doc"))
             {
-                File.Delete("C:\\Users\\Public\\Documents\\fileAdmin.doc");
+                File.Delete(Directory.GetCurrentDirectory() + "\\fileAdmin.doc");
             }
             var winword = new Microsoft.Office.Interop.Word.Application();
             try
@@ -155,7 +155,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 range.InsertParagraphAfter();
                 //сохраняем
                 object fileFormat = WdSaveFormat.wdFormatXMLDocument;
-                document.SaveAs("C:\\Users\\Public\\Documents\\fileAdmin.doc", ref fileFormat, ref missing,
+                document.SaveAs(Directory.GetCurrentDirectory() + "\\fileAdmin.doc", ref fileFormat, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
@@ -178,9 +178,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             try
             {
                 //или создаем excel-файл, или открываем существующий
-                if (File.Exists("C:\\Users\\Public\\Documents\\fileAdmin.xls"))
+                if (File.Exists(Directory.GetCurrentDirectory() + "\\fileAdmin.xls"))
                 {
-                    excel.Workbooks.Open("C:\\Users\\Public\\Documents\\fileAdmin.xls", Type.Missing, Type.Missing,
+                    excel.Workbooks.Open(Directory.GetCurrentDirectory() + "\\fileAdmin.xls", Type.Missing, Type.Missing,
                    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, 
                    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 }
@@ -188,7 +188,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 {
                     excel.SheetsInNewWorkbook = 1;
                     excel.Workbooks.Add(Type.Missing);
-                    excel.Workbooks[1].SaveAs("C:\\Users\\Public\\Documents\\fileAdmin.xls", XlFileFormat.xlExcel8,
+                    excel.Workbooks[1].SaveAs(Directory.GetCurrentDirectory() + "\\fileAdmin.xls", XlFileFormat.xlExcel8,
                     Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing, 
                     Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 }
