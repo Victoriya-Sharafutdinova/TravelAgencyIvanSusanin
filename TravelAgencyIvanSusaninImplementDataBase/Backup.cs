@@ -15,7 +15,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase
         {
             var jsonFormatter = new DataContractJsonSerializer(entity.GetType());
 
-            using (var fs = new FileStream($"C:/Users/ВИКА/Documents/backup/{GetNameEntity(entity)}.json", FileMode.OpenOrCreate))
+            using (var fs = new FileStream(Directory.GetCurrentDirectory() + $"/backup/{GetNameEntity(entity)}.json", FileMode.OpenOrCreate))
             {
                 jsonFormatter.WriteObject(fs, entity);
             }

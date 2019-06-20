@@ -131,7 +131,7 @@ namespace TravelAgencyIvanSusaninView
 
         private void buttonBackup_Click(object sender, EventArgs e)
         {
-
+            service.SaveDataBaseAdmin();
         }
     }
 }

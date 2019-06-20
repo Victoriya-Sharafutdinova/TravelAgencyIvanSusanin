@@ -139,7 +139,7 @@ namespace TravelAgencyIvanSusaninMVC
         {
             int id = Globals.AuthClient.Id;
             reportService.SaveClientTravels(id);
-            string fileName = "C:\\Users\\ВИКА\\Documents\\file.pdf";
+            string fileName = Directory.GetCurrentDirectory() + "\\file.pdf";
             var client = context.Clients.FirstOrDefault(x => x.Id == id);
             Mail.SendEmail(client?.Email, "Отчет по путешествиям",
                 $"Путешествия клиента {client.FIO}", fileName);

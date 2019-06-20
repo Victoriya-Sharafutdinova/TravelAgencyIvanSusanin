@@ -87,17 +87,17 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public void SaveClientTravels(int id)
         {
-            if (!File.Exists("C:\\Users\\Public\\Documents\\TIMCYR.TTF"))
+            if (!File.Exists(Directory.GetCurrentDirectory() + "\\TIMCYR.TTF"))
             {
-                File.WriteAllBytes("C:\\Users\\Public\\Documents\\TIMCYR.TTF", Properties.Resources.TIMCYR);
+                File.WriteAllBytes(Directory.GetCurrentDirectory() + "\\TIMCYR.TTF", Properties.Resources.TIMCYR);
             }
 
-            string fileName = "C:\\Users\\ВИКА\\Documents\\file.pdf";
+            string fileName = Directory.GetCurrentDirectory() + "\\file.pdf";
             FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             doc.SetMargins(0.5f, 0.5f, 0.5f, 0.5f);
             PdfWriter writer = PdfWriter.GetInstance(doc, fs);
-            BaseFont baseFont = BaseFont.CreateFont("C:\\Users\\Public\\Documents\\TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont baseFont = BaseFont.CreateFont(Directory.GetCurrentDirectory() + "\\TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             doc.Open();
             var phraseTitle = new Phrase("Путешствия клиентов",
             new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD));
@@ -195,18 +195,18 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         public void SaveTourRequest(ReportBindingModel model)
         {
             //из ресрусов получаем шрифт для кирилицы
-            if (!File.Exists("C:\\Users\\Public\\Documents\\TIMCYR.TTF"))
+            if (!File.Exists(Directory.GetCurrentDirectory() + "\\TIMCYR.TTF"))
             {
-                File.WriteAllBytes("C:\\Users\\Public\\Documents\\TIMCYR.TTF", Properties.Resources.TIMCYR);
+                File.WriteAllBytes(Directory.GetCurrentDirectory() + "\\TIMCYR.TTF", Properties.Resources.TIMCYR);
             }
             //открываем файл для работы
-            FileStream fs = new FileStream("C:\\Users\\Public\\Documents\\fileAdmin.pdf", FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream fs = new FileStream(Directory.GetCurrentDirectory() + "\\fileAdmin.pdf", FileMode.OpenOrCreate, FileAccess.Write);
             //создаем документ, задаем границы, связываем документ и поток
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             doc.SetMargins(0.5f, 0.5f, 0.5f, 0.5f);
             PdfWriter writer = PdfWriter.GetInstance(doc, fs);
             doc.Open();
-            BaseFont baseFont = BaseFont.CreateFont("C:\\Users\\Public\\Documents\\TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont baseFont = BaseFont.CreateFont(Directory.GetCurrentDirectory() + "\\TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             //вставляем заголовок
             var phraseTitle = new Phrase("Туры и заявки с расшифровкой по броням",
             new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD));
@@ -308,7 +308,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             doc.Add(table);
             doc.Close();
 
-            Mail.SendEmail(null, "Отчет","Туры и заявки с расшифровкой по броням", "C:\\Users\\Public\\Documents\\fileAdmin.pdf");
+            Mail.SendEmail(null, "Отчет","Туры и заявки с расшифровкой по броням", Directory.GetCurrentDirectory() + "\\fileAdmin.pdf");
         }
     }
 }

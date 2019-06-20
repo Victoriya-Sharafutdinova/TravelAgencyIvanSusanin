@@ -294,12 +294,12 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     if (type.Contains("doc"))
                     {
                         ReservWord(id);
-                        fName = "C:\\Users\\ВИКА\\Documents\\file.doc";
+                        fName = Directory.GetCurrentDirectory() + "\\file.doc";
                     }
                     else
                     {
                         ReservExel(id);
-                        fName = "C:\\Users\\ВИКА\\Documents\\file.xls";
+                        fName = Directory.GetCurrentDirectory() + "\\file.xls";
                     }
 
                     transaction.Commit();
@@ -319,9 +319,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         private void ReservWord(int id)
         {
             Console.WriteLine();
-            if (File.Exists("C:\\Users\\ВИКА\\Documents\\file.doc"))
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\file.doc"))
             {
-                File.Delete("C:\\Users\\ВИКА\\Documents\\file.doc");
+                File.Delete(Directory.GetCurrentDirectory() + "\\file.doc");
             }
             var winword = new Microsoft.Office.Interop.Word.Application();
             try
@@ -392,7 +392,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 paragraphFormat.SpaceBefore = 10;
                 range.InsertParagraphAfter();
                 object fileFormat = WdSaveFormat.wdFormatXMLDocument;
-                document.SaveAs("C:\\Users\\ВИКА\\Documents\\file.doc", ref fileFormat, ref missing,
+                document.SaveAs(Directory.GetCurrentDirectory() + "\\file.doc", ref fileFormat, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
@@ -414,12 +414,12 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             var excel = new Microsoft.Office.Interop.Excel.Application();
             try
             {
-                if (File.Exists("C:\\Users\\ВИКА\\Documents\\file.xls"))
+                if (File.Exists(Directory.GetCurrentDirectory() + "\\file.xls"))
                 {
-                    File.Delete("C:\\Users\\ВИКА\\Documents\\file.xls");
+                    File.Delete(Directory.GetCurrentDirectory() + "\\file.xls");
                     excel.SheetsInNewWorkbook = 1;
                     excel.Workbooks.Add(Type.Missing);
-                    excel.Workbooks[1].SaveAs("C:\\Users\\ВИКА\\Documents\\file.xls", XlFileFormat.xlExcel8,
+                    excel.Workbooks[1].SaveAs(Directory.GetCurrentDirectory() + "\\file.xls", XlFileFormat.xlExcel8,
                     Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing,
                     Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 }
@@ -427,7 +427,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 {
                     excel.SheetsInNewWorkbook = 1;
                     excel.Workbooks.Add(Type.Missing);
-                    excel.Workbooks[1].SaveAs("C:\\Users\\ВИКА\\Documents\\file.xls", XlFileFormat.xlExcel8,
+                    excel.Workbooks[1].SaveAs(Directory.GetCurrentDirectory() + "\\file.xls", XlFileFormat.xlExcel8,
                     Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing,
                     Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 }
