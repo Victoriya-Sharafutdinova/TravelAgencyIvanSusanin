@@ -20,29 +20,12 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         private readonly ITravelService service = Globals.TravelService;
         private readonly ITourService tourService = Globals.TourService;
         private readonly IStatisticService statistic = Globals.StatisticService;
-        private string type;
-        private string typeName;
         List<SelectListItem> types = new List<SelectListItem>();
 
         public ActionResult Index()
         {
-            
-            //types.Add(new SelectListItem{ Text = "doc", Value = "0" });
-            //types.Add(new SelectListItem { Text = "xls", Value = "0" });
-            //ViewData["Types"] = types;
-
-            //var type = new SelectList(types, "Type");
-            //ViewBag.Types = type;
             return View(service.GetClientTravels(Globals.AuthClient.Id));
         }
-
-        //[HttpPost]
-        //public ActionResult Index(SelectListItem item)
-        //{
-        //    type = Request.Form["Types"];
-        //    //TODO:
-        //    return RedirectToAction("Index");
-        //}
 
         public ActionResult Details(int id)
         {
@@ -55,12 +38,6 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             return View(order);
         } 
 
-        //public ActionResult Reserve()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
         public ActionResult ReserveDoc(int id)
         {
             var travels = (TravelViewModel)Session["Travels"];
@@ -81,46 +58,31 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             }
            
             service.Reservation(travel.Id, "doc");
-            //service.Reservation(new TravelBindingModel
-            //{
-            //    ClientId = Globals.AuthClient.Id,
-            //    TotalCost = travelTours.Sum(rec => rec.Count * tourService.GetElement(rec.TourId).Cost),
-            //    TourTravels = travelTours
-            //}, true);
             Session.Remove("Travels");
             return RedirectToAction("Index", "Travels");
         }
 
-        //public ActionResult ReserveXls(int id)
-        //{
-        //    var travels = (TravelViewModel)Session["Travels"];
-
-        //    var travel = service.GetElement(id);
-        //    var travelTours = new List<TourTravelBindingModel>();
-        //    for (int i = 0; i < travel.TourTravels.Count; ++i)
-        //    {
-        //        travelTours.Add(new TourTravelBindingModel
-        //        {
-        //            Id = travel.TourTravels[i].Id,
-        //            TravelId = travel.TourTravels[i].TravelId,
-        //            TourId = travel.TourTravels[i].TourId,
-        //            Count = travel.TourTravels[i].Count,
-        //            DateBegin = travel.TourTravels[i].DateBegin,
-        //            DateEnd = travel.TourTravels[i].DateEnd
-        //        });
-        //    }
-
-            
-        //    service.Reservation(travel.Id, "xls");
-        //    //service.Reservation(new TravelBindingModel
-        //    //{
-        //    //    ClientId = Globals.AuthClient.Id,
-        //    //    TotalCost = travelTours.Sum(rec => rec.Count * tourService.GetElement(rec.TourId).Cost),
-        //    //    TourTravels = travelTours
-        //    //}, true);
-        //    Session.Remove("Travels");
-        //    return RedirectToAction("Index", "Travels");
-        //}
+        public ActionResult ReserveXls(int id)
+        {
+            var travels = (TravelViewModel)Session["Travels"];
+            var travel = service.GetElement(id);
+            var travelTours = new List<TourTravelBindingModel>();
+            for (int i = 0; i < travel.TourTravels.Count; ++i)
+            {
+                travelTours.Add(new TourTravelBindingModel
+                {
+                    Id = travel.TourTravels[i].Id,
+                    TravelId = travel.TourTravels[i].TravelId,
+                    TourId = travel.TourTravels[i].TourId,
+                    Count = travel.TourTravels[i].Count,
+                    DateBegin = travel.TourTravels[i].DateBegin,
+                    DateEnd = travel.TourTravels[i].DateEnd
+                });
+            }
+            service.Reservation(travel.Id, "xls");
+            Session.Remove("Travels");
+            return RedirectToAction("Index", "Travels");
+        }
 
         public ActionResult Pay(int id)
         {
@@ -148,26 +110,37 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddTourPost()
         {
 
             var travel = (TravelViewModel)Session["Travels"];
             bool date = true;
+            var dateBegin2 = DateTime.Parse(Request["DateBegin"]);
+            var dateEnd2 = DateTime.Parse(Request["DateEnd"]);
             for (int i = 0; i < travel.TourTravels.Count; ++i)
             {
                 var dateBegin1 = travel.TourTravels[i].DateBegin;
                 var dateEnd1 = travel.TourTravels[i].DateEnd;               
-                var dateBegin2 = DateTime.Parse(Request["DateBegin"]);
-                var dateEnd2 = DateTime.Parse(Request["DateEnd"]);
-                if ((dateBegin2 >= dateBegin1 && dateBegin2 <= dateEnd1) || (dateBegin2 < dateBegin1 && dateBegin1 <= dateEnd2) || (dateBegin2 >= dateEnd2 ))
+               
+                if ((dateBegin2 >= dateBegin1 && dateBegin2 <= dateEnd1) || (dateBegin2 < dateBegin1 && dateBegin1 <= dateEnd2) )
                 {
                     date = false;
+                    ModelState.AddModelError("Count", "Некорректная дата");
+                    ModelState.AddModelError("DateBegin", "Некорректная дата");
+                    ModelState.AddModelError("DateEnd", "Некорректная дата");
                 }
                 else
                 {
                     date = true;
-                }
-                
+                }                
+            }
+            if ((dateBegin2 > dateEnd2) || (dateBegin2 < DateTime.Now) || (dateEnd2 < DateTime.Now))
+            {
+                date = false;
+                ModelState.AddModelError("Count", "Некорректная дата");
+                ModelState.AddModelError("DateBegin", "Некорректная дата");
+                ModelState.AddModelError("DateEnd", "Некорректная дата");
             }
             if (date)
             {
@@ -183,11 +156,9 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                 Session["Travels"] = travel;
                 return RedirectToAction("Create");
             }
-            else
-            {
-                ModelState.AddModelError("DateBegin", "Некорректная дата");
-                ModelState.AddModelError("DateEnd", "Некорректная дата");
-            }
+            ModelState.AddModelError("Count", "Некорректная дата");
+            ModelState.AddModelError("DateBegin", "Некорректная дата");
+            ModelState.AddModelError("DateEnd", "Некорректная дата");
             return RedirectToAction("AddTour");
         }
 

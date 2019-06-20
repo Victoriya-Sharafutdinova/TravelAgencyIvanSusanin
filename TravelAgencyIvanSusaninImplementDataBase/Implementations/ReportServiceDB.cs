@@ -87,19 +87,16 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public void SaveClientTravels(int id)
         {
-            //из ресрусов получаем шрифт для кирилицы
             if (!File.Exists("C:\\Users\\Public\\Documents\\TIMCYR.TTF"))
             {
                 File.WriteAllBytes("C:\\Users\\Public\\Documents\\TIMCYR.TTF", Properties.Resources.TIMCYR);
             }
 
-            string fileName = "C:\\Users\\Public\\Documents\\file.pdf";
+            string fileName = "C:\\Users\\ВИКА\\Documents\\file.pdf";
             FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             doc.SetMargins(0.5f, 0.5f, 0.5f, 0.5f);
             PdfWriter writer = PdfWriter.GetInstance(doc, fs);
-
-           
             BaseFont baseFont = BaseFont.CreateFont("C:\\Users\\Public\\Documents\\TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             doc.Open();
             var phraseTitle = new Phrase("Путешствия клиентов",
@@ -110,7 +107,6 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 SpacingAfter = 12
             };
             doc.Add(paragraph);
-
             PdfPTable table = new PdfPTable(3)
             {
                 TotalWidth = 800F
@@ -119,7 +115,6 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             {
                 160, 140, 160
             });
-
             PdfPCell cell = new PdfPCell();
             var fontForCellBold = new iTextSharp.text.Font(baseFont, 10, iTextSharp.text.Font.BOLD);
             table.AddCell(new PdfPCell(new Phrase("Id путешествия", fontForCellBold))
@@ -134,7 +129,6 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             {
                 HorizontalAlignment = Element.ALIGN_CENTER
             });
-
             var list = GetClientTravels(id);
             var fontForCells = new Font(baseFont, 10);
             for (int i = 0; i < list.Count; i++)
@@ -151,11 +145,10 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     table.AddCell(cell);
                 }
                 table.AddCell(cell);
-                //вставляем таблицу          
-                
-            }doc.Add(table);
-
-                doc.Close();
+                table.AddCell(cell);
+            }
+            doc.Add(table);
+            doc.Close();
         }
 
         public List<ClientTravelsViewModel> GetReservationReguest(ReportBindingModel model)

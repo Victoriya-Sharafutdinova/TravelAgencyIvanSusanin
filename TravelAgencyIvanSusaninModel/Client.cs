@@ -5,19 +5,25 @@ using System.Runtime.Serialization;
 
 namespace TravelAgencyIvanSusaninModel
 {
+    [DataContract]
     public class Client
     {
+        [DataMember]
         public int Id { get; set; }
 
+        [DataMember]
         [Required]
         public string FIO { get; set; }
 
+        [DataMember]
         [Required]
         public string Email { get; set; }
 
+        [DataMember]
         [Required]
         public string Login { get; set; }
 
+        [DataMember]
         [Required]
         public string Password { get; set; }
 

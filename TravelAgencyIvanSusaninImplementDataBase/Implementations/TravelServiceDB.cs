@@ -31,7 +31,6 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             this.context = context;
         }
 
-
         public TravelViewModel GetElement(int id)
         {
             var element = context.Travels.FirstOrDefault(rec => rec.Id == id);
@@ -261,22 +260,6 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     var element = context.TourTravels.Where(x => x.TravelId == id);
                     var travel = context.Travels.FirstOrDefault(x => x.Id == id);
                     travel.TravelStatus = TravelStatus.Зарезервирован;
-                    //var element = new Travel
-                    //{
-                    //    ClientId = model.ClientId,
-                    //    DateCreate = DateTime.Now,
-                    //    TotalCost = model.TotalCost,
-                    //    TravelStatus = TravelStatus.Зарезервирован,
-                    //};
-
-                    //context.Travels.Add(element);
-                    //context.SaveChanges();
-
-                    //var groupTours = element.TourTravels
-                    //    .GroupBy(rec => rec.TourId)
-                    //    .Select(rec => new { TourId = rec.Key, Count = rec.Sum(r => r.Count) });
-
-
 
                     foreach (var groupTour in element)
                     {
@@ -290,20 +273,12 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                             DateReservation = DateTime.Now
 
                         };
-
-                        //context.TourTravels.Add(travelTour);
-                        //context.SaveChanges();
-
-                        var tourReservations = context.TourReservations.Where(rec => rec.TourId == travelTour.TourId);
-                       
+                        var tourReservations = context.TourReservations.Where(rec => rec.TourId == travelTour.TourId);                       
                         foreach(var tourReservation in tourReservations)
                         {
                             var reservation = context.Reservations.FirstOrDefault(rec => rec.Id == tourReservation.ReservationId);
-
                             var reserveReservations = tourReservation.NumberReservations;
-
                             var check = reservation.Number - reservation.NumberReserve;
-
                             if (check >= reserveReservations)
                             {
                                 reservation.NumberReserve += reserveReservations;
@@ -315,27 +290,22 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                             }
                         }
                     }
-                    string typeMessage = "";
                     string fName = "";
-                    
+                    if (type.Contains("doc"))
+                    {
                         ReservWord(id);
-                        typeMessage = "word";
-                        fName = "C:\\Users\\Public\\Documents\\file.doc";
-                    
-                    //else
-                    //{
-                    //    ReservExel(model);
-                    //    typeMessage = "xls";
-                    //    fName = "C:\\Users\\Public\\Documents\\file.xls";
-
-                    //}
+                        fName = "C:\\Users\\ВИКА\\Documents\\file.doc";
+                    }
+                    else
+                    {
+                        ReservExel(id);
+                        fName = "C:\\Users\\ВИКА\\Documents\\file.xls";
+                    }
 
                     transaction.Commit();
-
                     var client = context.Clients.FirstOrDefault(x => x.Id == travel.ClientId);
-
                     Mail.SendEmail(client?.Email, "Оповещение по путешествиям",
-                        $"Путешествие №{travel.Id} от {travel.DateCreate.ToShortDateString()} зарезервировано успешно", null);
+                        $"Путешествие №{travel.Id} от {travel.DateCreate.ToShortDateString()} зарезервировано успешно", fName);
                 }
                 catch (Exception)
                 {
@@ -349,36 +319,28 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         private void ReservWord(int id)
         {
             Console.WriteLine();
-            if (File.Exists("C:\\Users\\Public\\Documents\\file.doc"))
+            if (File.Exists("C:\\Users\\ВИКА\\Documents\\file.doc"))
             {
-                File.Delete("C:\\Users\\Public\\Documents\\file.doc");
+                File.Delete("C:\\Users\\ВИКА\\Documents\\file.doc");
             }
             var winword = new Microsoft.Office.Interop.Word.Application();
             try
             {
                 object missing = System.Reflection.Missing.Value;
-                //создаем документ
                 Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
-                //получаем ссылку на параграф
                 var paragraph = document.Paragraphs.Add(missing);
                 var range = paragraph.Range;
-                //задаем текст
                 range.Text = "Резервирование броней по путешествию №" + id;
-                //задаем настройки шрифта
                 var font = range.Font;
                 font.Size = 16;
                 font.Name = "Times New Roman";
                 font.Bold = 1;
-                //задаем настройки абзаца
                 var paragraphFormat = range.ParagraphFormat;
                 paragraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
                 paragraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
                 paragraphFormat.SpaceAfter = 10;
                 paragraphFormat.SpaceBefore = 0;
-                //добавляем абзац в документ
                 range.InsertParagraphAfter();
-
-                //var travelReservations = model.T;
                 var countTours = context.TourTravels.Where(x => x.TravelId == id);
                 int sum = 0;
                 foreach (var tour in countTours)
@@ -386,18 +348,11 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     var countReserv = context.TourReservations.Where(x => x.TourId == tour.TourId);
                     foreach (var reserv in countReserv)
                     {
-                        sum++;
-
+                        sum++;                    
                     }
                 }
-
-                    //создаем таблицу
-                    var paragraphTable = document.Paragraphs.Add(Type.Missing);
+                var paragraphTable = document.Paragraphs.Add(Type.Missing);
                 var rangeTable = paragraphTable.Range;
-
-               
-                
-
                 var table = document.Tables.Add(rangeTable, sum, 2, ref missing, ref missing);
                 font = table.Range.Font;
                 font.Size = 14;
@@ -406,7 +361,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 paragraphTableFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
                 paragraphTableFormat.SpaceAfter = 0;
                 paragraphTableFormat.SpaceBefore = 0;
-                int j = 0;
+                int p=0;
                 foreach (var tour in countTours)
                 {
                     var reservations = context.TourReservations.Where(x => x.TourId == tour.TourId).Select(rec => new TourReservationViewModel
@@ -414,16 +369,14 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                         ReservationName = rec.Reservation.Name,
                         NumberReservations = rec.NumberReservations * tour.Count
                     }) 
-                    .ToList();
-                    for (int i = 0; i < reservations.Count; ++i)
-                    {
-                        table.Cell(i + 1, 1).Range.Text = reservations[i].ReservationName;
-                        table.Cell(i + 1, 2).Range.Text = reservations[i].NumberReservations.ToString();
-                       
-                    }
+                    .ToList();                   
+                        for( int j=p; j< reservations.Count+p; j++)
+                        {
+                            table.Cell(j + 1, 1).Range.Text = reservations[j-p].ReservationName;
+                            table.Cell(j + 1, 2).Range.Text = reservations[j-p].NumberReservations.ToString();
+                        }
+                        p += reservations.Count;                      
                 }
-                
-                //задаем границы таблицы
                 table.Borders.InsideLineStyle = WdLineStyle.wdLineStyleInset;
                 table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleSingle;
                 paragraph = document.Paragraphs.Add(missing);
@@ -438,9 +391,8 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 paragraphFormat.SpaceAfter = 10;
                 paragraphFormat.SpaceBefore = 10;
                 range.InsertParagraphAfter();
-                //сохраняем
                 object fileFormat = WdSaveFormat.wdFormatXMLDocument;
-                document.SaveAs("C:\\Users\\Public\\Documents\\file.doc", ref fileFormat, ref missing,
+                document.SaveAs("C:\\Users\\ВИКА\\Documents\\file.doc", ref fileFormat, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
@@ -457,100 +409,98 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             }
         }
 
-        //private void ReservExel(TravelBindingModel model)
-        //{
-        //    var excel = new Microsoft.Office.Interop.Excel.Application();
-        //    try
-        //    {
-        //        //или создаем excel-файл, или открываем существующий
-        //        if (File.Exists("C:\\Users\\Public\\Documents\\file.xls"))
-        //        {
-        //            excel.Workbooks.Open("C:\\Users\\Public\\Documents\\file.xls", Type.Missing, Type.Missing,
-        //           Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-        //           Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-        //        }
-        //        else
-        //        {
-        //            excel.SheetsInNewWorkbook = 1;
-        //            excel.Workbooks.Add(Type.Missing);
-        //            excel.Workbooks[1].SaveAs("C:\\Users\\Public\\Documents\\file.xls", XlFileFormat.xlExcel8,
-        //            Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing,
-        //            Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-        //        }
-        //        Sheets excelsheets = excel.Workbooks[1].Worksheets;
-        //        //Получаем ссылку на лист
-        //        var excelworksheet = (Worksheet)excelsheets.get_Item(1);
-        //        //очищаем ячейки
-        //        excelworksheet.Cells.Clear();
-        //        //настройки страницы
-        //        excelworksheet.PageSetup.Orientation = XlPageOrientation.xlLandscape;
-        //        excelworksheet.PageSetup.CenterHorizontally = true;
-        //        excelworksheet.PageSetup.CenterVertically = true;
-        //        //получаем ссылку на первые 3 ячейки
-        //        Microsoft.Office.Interop.Excel.Range excelcells = excelworksheet.get_Range("A1", "B1");
-        //        //объединяем их
-        //        excelcells.Merge(Type.Missing);
-        //        //задаем текст, настройки шрифта и ячейки
-        //        excelcells.Font.Bold = true;
-        //        excelcells.Value2 = "Заявка на брони";
-        //        excelcells.RowHeight = 25;
-        //        excelcells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
-        //        excelcells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-        //        excelcells.Font.Name = "Times New Roman";
-        //        excelcells.Font.Size = 14;
-        //        excelcells = excelworksheet.get_Range("A2", "B2");
-        //        excelcells.Merge(Type.Missing);
-        //        excelcells.Value2 = "Дата:" + model.DateCreate.ToShortDateString();
-        //        excelcells.RowHeight = 20;
-        //        excelcells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
-        //        excelcells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-        //        excelcells.Font.Name = "Times New Roman";
-        //        excelcells.Font.Size = 12;
-
-        //        var reservations = context.Reservations.Select(rec => new ReservationViewModel
-        //        {
-        //            Id = rec.Id,
-        //            Name = rec.Name,
-        //            Description = rec.Description,
-        //            Number = rec.Number
-        //        }).ToList();
-        //        var travelReservations = model.RequestReservations;
-
-        //        excelcells = excelworksheet.get_Range("A3", "A3");
-        //        //обводим границы
-        //        //получаем ячейки для выбеления рамки под таблицу
-        //        var excelBorder = excelworksheet.get_Range(excelcells, excelcells.get_Offset(travelReservations.Count() - 1, 1));
-        //        excelBorder.Borders.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-        //        excelBorder.Borders.Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThin;
-        //        excelBorder.HorizontalAlignment = Constants.xlCenter;
-        //        excelBorder.VerticalAlignment = Constants.xlCenter;
-        //        excelBorder.BorderAround(Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous,
-        //        Microsoft.Office.Interop.Excel.XlBorderWeight.xlMedium,
-        //        Microsoft.Office.Interop.Excel.XlColorIndex.xlColorIndexAutomatic, 1);
-        //        foreach (var travelReservation in travelReservations)
-        //        {
-        //            excelcells.Value2 = reservations.FirstOrDefault(rec => rec.Id == travelReservation.ReservationId).Name;
-        //            excelcells.ColumnWidth = 20;
-        //            excelcells.get_Offset(0, 1).Value2 = requestReservation.NumberReservation;
-        //            excelcells = excelcells.get_Offset(1, 0);
-        //        }
-        //        //сохраняем
-        //        excel.Workbooks[1].Save();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        //закрываем
-        //        excel.Quit();
-        //    }
-        //}
-
-
-
-
+        private void ReservExel(int id)
+        {
+            var excel = new Microsoft.Office.Interop.Excel.Application();
+            try
+            {
+                if (File.Exists("C:\\Users\\ВИКА\\Documents\\file.xls"))
+                {
+                    File.Delete("C:\\Users\\ВИКА\\Documents\\file.xls");
+                    excel.SheetsInNewWorkbook = 1;
+                    excel.Workbooks.Add(Type.Missing);
+                    excel.Workbooks[1].SaveAs("C:\\Users\\ВИКА\\Documents\\file.xls", XlFileFormat.xlExcel8,
+                    Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                }
+                else
+                {
+                    excel.SheetsInNewWorkbook = 1;
+                    excel.Workbooks.Add(Type.Missing);
+                    excel.Workbooks[1].SaveAs("C:\\Users\\ВИКА\\Documents\\file.xls", XlFileFormat.xlExcel8,
+                    Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                }
+                Sheets excelsheets = excel.Workbooks[1].Worksheets;
+                var excelworksheet = (Worksheet)excelsheets.get_Item(1);
+                excelworksheet.Cells.Clear();
+                excelworksheet.PageSetup.Orientation = XlPageOrientation.xlLandscape;
+                excelworksheet.PageSetup.CenterHorizontally = true;
+                excelworksheet.PageSetup.CenterVertically = true;
+                Microsoft.Office.Interop.Excel.Range excelcells = excelworksheet.get_Range("A1", "B1");
+                excelcells.Merge(Type.Missing);
+                excelcells.Font.Bold = true;
+                excelcells.Value2 = "Резервирование броней по путешествию №" + id; ;
+                excelcells.RowHeight = 25;
+                excelcells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                excelcells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                excelcells.Font.Name = "Times New Roman";
+                excelcells.Font.Size = 14;
+                excelcells = excelworksheet.get_Range("A2", "B2");
+                excelcells.Merge(Type.Missing);                
+                excelcells.RowHeight = 20;
+                excelcells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                excelcells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                excelcells.Font.Name = "Times New Roman";
+                excelcells.Font.Size = 12;
+                var countTours = context.TourTravels.Where(x => x.TravelId == id);
+                int sum = 0;
+                foreach (var tour in countTours)
+                {
+                    var countReserv = context.TourReservations.Where(x => x.TourId == tour.TourId);
+                    foreach (var reserv in countReserv)
+                    {
+                        sum++;
+                    }
+                }
+                excelcells = excelworksheet.get_Range("A3", "A3");               
+                var excelBorder = excelworksheet.get_Range(excelcells, excelcells.get_Offset(sum - 1, 1));
+                excelBorder.Borders.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
+                excelBorder.Borders.Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThin;
+                excelBorder.HorizontalAlignment = Constants.xlCenter;
+                excelBorder.VerticalAlignment = Constants.xlCenter;
+                excelBorder.BorderAround(Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous,
+                Microsoft.Office.Interop.Excel.XlBorderWeight.xlMedium,
+                Microsoft.Office.Interop.Excel.XlColorIndex.xlColorIndexAutomatic, 1);
+                int p = 0;
+                foreach (var tour in countTours)
+                {
+                    var reservations = context.TourReservations.Where(x => x.TourId == tour.TourId).Select(rec => new TourReservationViewModel
+                    {
+                        ReservationName = rec.Reservation.Name,
+                        NumberReservations = rec.NumberReservations * tour.Count
+                    })
+                    .ToList();
+                    for (int j = p; j < reservations.Count + p; j++)
+                    {
+                        excelcells.Value2 = reservations[j - p].ReservationName;
+                        excelcells.ColumnWidth = 20;
+                        excelcells.get_Offset(0, 1).Value2 = reservations[j - p].NumberReservations.ToString();
+                        excelcells = excelcells.get_Offset(1, 0);
+                    }
+                    p += reservations.Count;
+                }             
+                excel.Workbooks[1].Save();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                excel.Quit();
+            }
+        }
 
         public void SaveDataBaseClient()
         {
@@ -568,7 +518,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         {
             var jsonFormatter = new DataContractJsonSerializer(entity.GetType());
 
-            using (var fs = new FileStream($"backup/{GetNameEntity(entity)}.json",
+            using (var fs = new FileStream($"C:/Users/ВИКА/Documents/backup/{GetNameEntity(entity)}.json",
                 FileMode.OpenOrCreate))
             {
                 jsonFormatter.WriteObject(fs, entity);

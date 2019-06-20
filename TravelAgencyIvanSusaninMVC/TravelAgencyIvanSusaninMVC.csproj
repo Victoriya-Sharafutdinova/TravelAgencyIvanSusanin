@@ -343,7 +343,6 @@
     <Content Include="Views\Statistics\Index.cshtml" />
     <Content Include="Views\Travels\Reserve.cshtml" />
     <Content Include="Views\Travels\Pay.cshtml" />
-    <Content Include="Views\Report\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

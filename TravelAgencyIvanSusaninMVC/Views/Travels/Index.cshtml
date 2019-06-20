@@ -57,10 +57,8 @@
                 {
 
                     @Html.ActionLink("Зарезервировать в doc", "ReserveDoc", new { id = item.Id })
-                    @Html.BeginForm("ReserveDoc", "Travels", FormMethod.Post)
                     
-                    @*@Html.ActionLink("Зарезервировать в xls", "Reserve", new { id = item.Id })
-                    @Html.BeginForm("ReserveXls", "Travels", FormMethod.Post)*@
+                    @Html.ActionLink("Зарезервировать в xls", "ReserveXls", new { id = item.Id })
                 }
 
                 @if (item.TravelStatus == "Готов")
