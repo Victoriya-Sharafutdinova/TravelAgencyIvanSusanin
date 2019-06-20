@@ -17,7 +17,7 @@
             Номер путешествия
         </th>
         <th>
-           Стоимость путешествия
+            Стоимость путешествия
         </th>
         <th>
             Статус путешествия
@@ -33,31 +33,49 @@
 
     @foreach (var item in Model)
     {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TotalCost)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TravelStatus)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateCreate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateImplement)
-        </td>
-        <td>
-            @Html.ActionLink("Детали путешествия", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Зарезервировать", "ReservePost", new { id = item.Id }) |
-            @if (item.TravelStatus == "Готов")
-            {
-                @Html.ActionLink("Оплатить", "Pay", new { id = item.Id })
-            }
-        </td>
-    </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TravelStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateImplement)
+            </td>
+            <td>
+                @Html.ActionLink("Детали путешествия", "Details", new { id = item.Id }) |
+                @if (item.TravelStatus == "Принят")
+                {
+
+                    @Html.ActionLink("Зарезервировать", "Reserve", new { id = item.Id })
+                    @Html.BeginForm("Reserve", "Travels", FormMethod.Post)
+
+
+                }
+
+                @if (item.TravelStatus == "Готов")
+                {
+
+                    @Html.ActionLink("Оплатить", "Pay", new { id = item.Id })
+                }
+            </td>
+
+        </tr>
     }
 
 </table>
+<div class="form-group">
+
+    <div class="col-md-10">
+
+        @Html.DropDownList("Type", ViewBag.Type as SelectList)
+
+    </div>
+</div>

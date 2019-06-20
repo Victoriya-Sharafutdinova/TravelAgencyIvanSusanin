@@ -54,7 +54,10 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                             TravelId = recOC.TravelId,
                             TourId = recOC.TourId,
                             TourName = recOC.Tour.Name,
-                            Count = recOC.Count
+                            Count = recOC.Count,
+                            DateEnd = recOC.DateEnd, 
+                            DateBegin = recOC.DateBegin,
+                            DateReservation = recOC.DateReservation
                         })
                         .ToList()
                 };
@@ -77,21 +80,19 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     };
                     context.Travels.Add(element);
                     context.SaveChanges();
+
                     var groupTours = model.TourTravels
-                    .GroupBy(rec => rec.TourId)
-                    .Select(rec => new
-                    {
-                        TourId = rec.Key,
-                        Count = rec.Sum(r => r.Count), 
-                        
-                    });
-                    foreach (var groupTour in groupTours)
+                        .GroupBy(rec => rec.TourId)
+                        .Select(rec => new { TourId = rec.Key, Count = rec.Sum(r => r.Count) });
+                    foreach (var groupTour in model.TourTravels)
                     {
                         context.TourTravels.Add(new TourTravel
                         {
                             TravelId = element.Id,
                             TourId = groupTour.TourId,
                             Count = groupTour.Count,
+                            DateBegin = groupTour.DateBegin,
+                            DateEnd = groupTour.DateEnd
                         });
                         context.SaveChanges();
                     }
@@ -251,39 +252,44 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             }
         }
 
-        public void Reservation (TravelBindingModel model, bool type)
+        public void Reservation (int id, string type)
         {
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
                 {
-                    var element = new Travel
-                    {
-                        ClientId = model.ClientId,
-                        DateCreate = DateTime.Now,
-                        TotalCost = model.TotalCost,
-                        TravelStatus = TravelStatus.Зарезервирован,
-                    };
+                    var element = context.TourTravels.Where(x => x.TravelId == id);
+                    var travel = context.Travels.FirstOrDefault(x => x.Id == id);
+                    travel.TravelStatus = TravelStatus.Зарезервирован;
+                    //var element = new Travel
+                    //{
+                    //    ClientId = model.ClientId,
+                    //    DateCreate = DateTime.Now,
+                    //    TotalCost = model.TotalCost,
+                    //    TravelStatus = TravelStatus.Зарезервирован,
+                    //};
 
-                    context.Travels.Add(element);
-                    context.SaveChanges();
+                    //context.Travels.Add(element);
+                    //context.SaveChanges();
 
-                    var groupTours = model.TourTravels
-                        .GroupBy(rec => rec.TourId)
-                        .Select(rec => new { TourId = rec.Key, Count = rec.Sum(r => r.Count) });
+                    //var groupTours = element.TourTravels
+                    //    .GroupBy(rec => rec.TourId)
+                    //    .Select(rec => new { TourId = rec.Key, Count = rec.Sum(r => r.Count) });
 
-                    foreach (var groupTour in groupTours)
+
+
+                    foreach (var groupTour in element)
                     {
                         var travelTour = new TourTravel
                         {
-                            TravelId = element.Id,
+                            TravelId = groupTour.TravelId,
                             TourId = groupTour.TourId,
                             Count = groupTour.Count
 
                         };
 
-                        context.TourTravels.Add(travelTour);
-                        context.SaveChanges();
+                        //context.TourTravels.Add(travelTour);
+                        //context.SaveChanges();
 
                         var tourReservations = context.TourReservations.Where(rec => rec.TourId == travelTour.TourId);
                        
@@ -306,14 +312,14 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                             }
                         }
                     }
-                    //string typeMessage = "";
-                    //string fName = "";
-                    //if (type)
-                    //{
-                    //    ReservWord(model);
-                    //    typeMessage = "word";
-                    //    fName = "C:\\Users\\Public\\Documents\\file.doc";
-                    //}
+                    string typeMessage = "";
+                    string fName = "";
+                    if (type.Contains("doc"))
+                    {
+                        ReservWord(id);
+                        typeMessage = "word";
+                        fName = "C:\\Users\\Public\\Documents\\file.doc";
+                    }
                     //else
                     //{
                     //    ReservExel(model);
@@ -324,10 +330,10 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
                     transaction.Commit();
 
-                    var client = context.Clients.FirstOrDefault(x => x.Id == model.ClientId);
+                    var client = context.Clients.FirstOrDefault(x => x.Id == travel.Id);
 
                     Mail.SendEmail(client?.Email, "Оповещение по путешествиям",
-                        $"Путешествие №{element.Id} от {element.DateCreate.ToShortDateString()} зарезервировано успешно", null);
+                        $"Путешествие №{travel.Id} от {travel.DateCreate.ToShortDateString()} зарезервировано успешно", null);
                 }
                 catch (Exception)
                 {
@@ -338,93 +344,105 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             
         }
 
-        //private void ReservWord(TravelBindingModel model)
-        //{
-        //    Console.WriteLine();
-        //    if (File.Exists("C:\\Users\\Public\\Documents\\file.doc"))
-        //    {
-        //        File.Delete("C:\\Users\\Public\\Documents\\file.doc");
-        //    }
-        //    var winword = new Microsoft.Office.Interop.Word.Application();
-        //    try
-        //    {
-        //        object missing = System.Reflection.Missing.Value;
-        //        //создаем документ
-        //        Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
-        //        //получаем ссылку на параграф
-        //        var paragraph = document.Paragraphs.Add(missing);
-        //        var range = paragraph.Range;
-        //        //задаем текст
-        //        range.Text = "Резервирование броней по путешествию №" + model.Id;
-        //        //задаем настройки шрифта
-        //        var font = range.Font;
-        //        font.Size = 16;
-        //        font.Name = "Times New Roman";
-        //        font.Bold = 1;
-        //        //задаем настройки абзаца
-        //        var paragraphFormat = range.ParagraphFormat;
-        //        paragraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-        //        paragraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
-        //        paragraphFormat.SpaceAfter = 10;
-        //        paragraphFormat.SpaceBefore = 0;
-        //        //добавляем абзац в документ
-        //        range.InsertParagraphAfter();
+        private void ReservWord(int id)
+        {
+            Console.WriteLine();
+            if (File.Exists("C:\\Users\\Public\\Documents\\file.doc"))
+            {
+                File.Delete("C:\\Users\\Public\\Documents\\file.doc");
+            }
+            var winword = new Microsoft.Office.Interop.Word.Application();
+            try
+            {
+                object missing = System.Reflection.Missing.Value;
+                //создаем документ
+                Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
+                //получаем ссылку на параграф
+                var paragraph = document.Paragraphs.Add(missing);
+                var range = paragraph.Range;
+                //задаем текст
+                range.Text = "Резервирование броней по путешествию №" + id;
+                //задаем настройки шрифта
+                var font = range.Font;
+                font.Size = 16;
+                font.Name = "Times New Roman";
+                font.Bold = 1;
+                //задаем настройки абзаца
+                var paragraphFormat = range.ParagraphFormat;
+                paragraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                paragraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
+                paragraphFormat.SpaceAfter = 10;
+                paragraphFormat.SpaceBefore = 0;
+                //добавляем абзац в документ
+                range.InsertParagraphAfter();
 
-        //        //var travelReservations = model.T;
-        //        var reservations = context.TourReservations.Select(rec => new TourReservationViewModel
-        //        {
-        //            ReservationName = rec.Reservation.Name,
-        //            NumberReservations = rec.NumberReservations * model.Count
-        //        }).ToList();
-        //        //создаем таблицу
-        //        var paragraphTable = document.Paragraphs.Add(Type.Missing);
-        //        var rangeTable = paragraphTable.Range;
-        //        var table = document.Tables.Add(rangeTable, model.Count * context.TourReservations., 2, ref missing, ref missing);
-        //        font = table.Range.Font;
-        //        font.Size = 14;
-        //        font.Name = "Times New Roman";
-        //        var paragraphTableFormat = table.Range.ParagraphFormat;
-        //        paragraphTableFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
-        //        paragraphTableFormat.SpaceAfter = 0;
-        //        paragraphTableFormat.SpaceBefore = 0;
-        //        for (int i = 0; i < travelReservations.Count; ++i)
-        //        {
-        //            table.Cell(i + 1, 1).Range.Text = reservations.FirstOrDefault(rec => rec.Id == travelReservations[i].ReservationId).Name;
-        //            table.Cell(i + 1, 2).Range.Text = travelReservations[i].NumberReservation.ToString();
-        //        }
-        //        //задаем границы таблицы
-        //        table.Borders.InsideLineStyle = WdLineStyle.wdLineStyleInset;
-        //        table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleSingle;
-        //        paragraph = document.Paragraphs.Add(missing);
-        //        range = paragraph.Range;
-        //        range.Text = "Дата: " + model.DateCreate.ToLongDateString();
-        //        font = range.Font;
-        //        font.Size = 12;
-        //        font.Name = "Times New Roman";
-        //        paragraphFormat = range.ParagraphFormat;
-        //        paragraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
-        //        paragraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
-        //        paragraphFormat.SpaceAfter = 10;
-        //        paragraphFormat.SpaceBefore = 10;
-        //        range.InsertParagraphAfter();
-        //        //сохраняем
-        //        object fileFormat = WdSaveFormat.wdFormatXMLDocument;
-        //        document.SaveAs("C:\\Users\\Public\\Documents\\file.doc", ref fileFormat, ref missing,
-        //        ref missing, ref missing, ref missing, ref missing,
-        //        ref missing, ref missing, ref missing, ref missing,
-        //        ref missing, ref missing, ref missing, ref missing,
-        //        ref missing);
-        //        document.Close(ref missing, ref missing, ref missing);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        winword.Quit();
-        //    }
-        //}
+                //var travelReservations = model.T;
+                var countTours = context.TourTravels.Where(x => x.TravelId == id);
+                int sum = 0;
+                foreach (var tour in countTours)
+                {
+                    sum += tour.Count * context.TourReservations.FirstOrDefault(x => x.TourId == tour.TourId).NumberReservations;   
+                }
+                    var reservations = context.TourReservations.Select(rec => new TourReservationViewModel
+                    {                        
+                        ReservationName = rec.Reservation.Name,
+                        NumberReservations = rec.NumberReservations
+                    }).ToList();
+               
+                
+                //создаем таблицу
+                var paragraphTable = document.Paragraphs.Add(Type.Missing);
+                var rangeTable = paragraphTable.Range;
+
+               
+                
+
+                var table = document.Tables.Add(rangeTable, sum, 2, ref missing, ref missing);
+                font = table.Range.Font;
+                font.Size = 14;
+                font.Name = "Times New Roman";
+                var paragraphTableFormat = table.Range.ParagraphFormat;
+                paragraphTableFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
+                paragraphTableFormat.SpaceAfter = 0;
+                paragraphTableFormat.SpaceBefore = 0;
+                for (int i = 0; i < reservations.Count; ++i)
+                {
+                    table.Cell(i + 1, 1).Range.Text = reservations[i].ReservationName;
+                    table.Cell(i + 1, 2).Range.Text = reservations[i].NumberReservations.ToString();
+                }
+                //задаем границы таблицы
+                table.Borders.InsideLineStyle = WdLineStyle.wdLineStyleInset;
+                table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleSingle;
+                paragraph = document.Paragraphs.Add(missing);
+                range = paragraph.Range;
+                
+                font = range.Font;
+                font.Size = 12;
+                font.Name = "Times New Roman";
+                paragraphFormat = range.ParagraphFormat;
+                paragraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
+                paragraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
+                paragraphFormat.SpaceAfter = 10;
+                paragraphFormat.SpaceBefore = 10;
+                range.InsertParagraphAfter();
+                //сохраняем
+                object fileFormat = WdSaveFormat.wdFormatXMLDocument;
+                document.SaveAs("C:\\Users\\Public\\Documents\\file.doc", ref fileFormat, ref missing,
+                ref missing, ref missing, ref missing, ref missing,
+                ref missing, ref missing, ref missing, ref missing,
+                ref missing, ref missing, ref missing, ref missing,
+                ref missing);
+                document.Close(ref missing, ref missing, ref missing);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                winword.Quit();
+            }
+        }
 
         //private void ReservExel(TravelBindingModel model)
         //{
@@ -519,7 +537,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
 
 
-       
+
 
         public void SaveDataBaseClient()
         {

@@ -23,6 +23,9 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
 
         public ActionResult Index()
         {
+            List<string> types = new List<string> { "doc", "xls" };
+            var type = new SelectList(types, "Type");
+            ViewBag.Travels = type;
             return View(service.GetClientTravels(Globals.AuthClient.Id));
         }
 
@@ -36,15 +39,18 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             }
             return View(order);
         } 
-        public ActionResult Reserve()
-        {
-            return View();
-        }
 
-        [HttpPost]
-        public ActionResult ReservePost()
+        //public ActionResult Reserve()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        public ActionResult Reserve(int id)
         {
-            var travel = (TravelViewModel)Session["Travels"];
+            var travels = (TravelViewModel)Session["Travels"];
+
+            var travel = service.GetElement(id);
             var travelTours = new List<TourTravelBindingModel>();
             for (int i = 0; i < travel.TourTravels.Count; ++i)
             {
@@ -58,13 +64,14 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                     DateEnd = travel.TourTravels[i].DateEnd
                 });
             }
-
-            service.Reservation(new TravelBindingModel
-            {
-                ClientId = Globals.AuthClient.Id,
-                TotalCost = travelTours.Sum(rec => rec.Count * tourService.GetElement(rec.TourId).Cost),
-                TourTravels = travelTours
-            }, true);
+            var type = Request["Type"];
+            service.Reservation(travel.Id, type);
+            //service.Reservation(new TravelBindingModel
+            //{
+            //    ClientId = Globals.AuthClient.Id,
+            //    TotalCost = travelTours.Sum(rec => rec.Count * tourService.GetElement(rec.TourId).Cost),
+            //    TourTravels = travelTours
+            //}, true);
             Session.Remove("Travels");
             return RedirectToAction("Index", "Travels");
         }
@@ -214,3 +221,4 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         //}
     }
 }
+
