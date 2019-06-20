@@ -15,6 +15,11 @@ namespace TravelAgencyIvanSusaninImplementDataBase
         {
             var jsonFormatter = new DataContractJsonSerializer(entity.GetType());
 
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "/backup"))
+            {
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/backup");
+            }
+
             using (var fs = new FileStream(Directory.GetCurrentDirectory() + $"/backup/{GetNameEntity(entity)}.json", FileMode.OpenOrCreate))
             {
                 jsonFormatter.WriteObject(fs, entity);
