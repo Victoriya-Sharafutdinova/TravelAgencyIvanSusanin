@@ -22,10 +22,10 @@
             </p>
             @if (ViewBag.Service.GetPopularTourClientName(Globals.AuthClient.Id) != null)
             {
-            <p>
-                В последнее время Вы чаще всего заказывали @ViewBag.service.GetPopularTourClientName(Globals.AuthClient.Id)
-                в количестве @ViewBag.Service.GetPopularTourClient(Globals.AuthClient.Id).
-            </p>
+                <p>
+                    В последнее время Вы чаще всего заказывали @ViewBag.service.GetPopularTourClientName(Globals.AuthClient.Id)
+                    в количестве @ViewBag.Service.GetPopularTourClient(Globals.AuthClient.Id).
+                </p>
             }
             <table class="table">
                 <tr>
@@ -64,18 +64,21 @@
             </table>
         </div>
 
-        
+
     </div>
 }
-
-@using (Html.BeginForm("CreateTravelPost", "Travels", FormMethod.Post))
+@if ( Model != null)
 {
+   using (Html.BeginForm("CreateTravelPost", "Travels", FormMethod.Post))
+    {
     <div class="form-group">
         <div class="col-lg-push-9">
             <input type="submit" value="Создать" class="btn btn-default" />
         </div>
     </div>
+    }
 }
+
 <div>
     @Html.ActionLink("Вернуться к списку путешествий", "Index")
 </div>
