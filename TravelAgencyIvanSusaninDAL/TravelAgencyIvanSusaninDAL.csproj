@@ -70,6 +70,7 @@
     <Compile Include="ViewModel\RequestViewModel.cs" />
     <Compile Include="ViewModel\ReservationRequestViewModel.cs" />
     <Compile Include="ViewModel\ReservationViewModel.cs" />
+    <Compile Include="ViewModel\TourRequestReportViewModel.cs" />
     <Compile Include="ViewModel\TourRequestViewModel.cs" />
     <Compile Include="ViewModel\TourReservationViewModel.cs" />
     <Compile Include="ViewModel\TourTravelViewModel.cs" />

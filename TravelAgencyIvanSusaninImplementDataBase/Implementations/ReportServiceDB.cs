@@ -186,7 +186,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 }).ToList();
             for (int i = 0; i < list.Count; i++)
             {
-                for (int j = 1; j < list.Count; j++)
+                for (int j = i + 1; j < list.Count; j++)
                 {
                     if (list[i].Id == list[j].Id)
                     {
