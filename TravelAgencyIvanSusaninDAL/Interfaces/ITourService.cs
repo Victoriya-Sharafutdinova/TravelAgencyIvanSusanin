@@ -18,5 +18,6 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
 
         List<TourViewModel> GetFilteredList();
 
+        void SaveDataBaseAdmin();
     }
 }

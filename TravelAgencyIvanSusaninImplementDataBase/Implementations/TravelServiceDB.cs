@@ -504,30 +504,9 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         public void SaveDataBaseClient()
         {
-            SaveEntity(context.Travels.ToList());
-            SaveEntity(context.Clients.ToList());
-            SaveEntity(context.TourTravels.ToList());     
-        }
-
-        public void SaveDataBaseAdmin()
-        {
-            
-        }
-
-        public void SaveEntity(IEnumerable entity)
-        {
-            var jsonFormatter = new DataContractJsonSerializer(entity.GetType());
-
-            using (var fs = new FileStream($"C:/Users/ВИКА/Documents/backup/{GetNameEntity(entity)}.json",
-                FileMode.OpenOrCreate))
-            {
-                jsonFormatter.WriteObject(fs, entity);
-            }
-        }
-
-        private static string GetNameEntity(IEnumerable entity)
-        {
-            return entity.AsQueryable().ElementType.ToString().Split('.')[1];
+            Backup.SaveEntity(context.Travels.ToList());
+            Backup.SaveEntity(context.Clients.ToList());
+            Backup.SaveEntity(context.TourTravels.ToList());     
         }
     }
 }

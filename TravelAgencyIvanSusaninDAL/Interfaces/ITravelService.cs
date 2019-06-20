@@ -27,7 +27,5 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
         TravelViewModel GetElement(int id);
 
         void SaveDataBaseClient();
-
-        void SaveDataBaseAdmin();
     }
 }
