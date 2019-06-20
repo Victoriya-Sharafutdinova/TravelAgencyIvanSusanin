@@ -175,6 +175,10 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             }
             element.TravelStatus = TravelStatus.Оплачен;
             context.SaveChanges();
+            var client = context.Clients.FirstOrDefault(x => x.Id == model.ClientId);
+
+            Mail.SendEmail(client?.Email, "Оповещение по путешествиям",
+                        $"Путешествие №{element.Id} от {element.DateCreate.ToShortDateString()} успешно оплачено", null);
         }
 
         public void TakeTravelInWork(TravelBindingModel model)
