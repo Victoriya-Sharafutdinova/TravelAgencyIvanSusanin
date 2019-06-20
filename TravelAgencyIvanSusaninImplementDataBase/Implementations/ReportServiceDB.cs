@@ -312,10 +312,10 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     firstLine = false;
                 }
             }
-            
-            //вставляем таблицу
             doc.Add(table);
             doc.Close();
+
+            Mail.SendEmail(null, "Отчет","Туры и заявки с расшифровкой по броням", "C:\\Users\\Public\\Documents\\fileAdmin.pdf");
         }
     }
 }
