@@ -7,11 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Unity;
 
 namespace TravelAgencyIvanSusaninView
 {
     public partial class FormAuth : Form
     {
+        [Dependency]
+        public new IUnityContainer Container { get; set; }
+
         public string password = "123";
 
         public FormAuth()
@@ -23,7 +27,8 @@ namespace TravelAgencyIvanSusaninView
         {
             if (textBox.Text == password)
             {
-                //var formTours = new FormTours();
+                DialogResult = DialogResult.OK;
+                Close();
             }
         }
     }

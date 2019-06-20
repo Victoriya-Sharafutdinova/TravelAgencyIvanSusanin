@@ -23,7 +23,15 @@ namespace TravelAgencyIvanSusaninView
 
         private void FormTours_Load(object sender, EventArgs e)
         {
-            LoadData();
+            var form = Container.Resolve<FormAuth>();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                LoadData();
+            }
+            else
+            {
+                Close();
+            }
         }
 
         private void LoadData()
