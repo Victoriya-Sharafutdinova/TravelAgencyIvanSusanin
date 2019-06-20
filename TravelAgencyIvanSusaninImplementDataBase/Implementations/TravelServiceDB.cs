@@ -193,7 +193,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                         throw new Exception("Путешествие не в статусе \"Принят\"");
                     }
 
-                    if (element.TravelStatus == TravelStatus.Принят || element.TravelStatus == TravelStatus.Зарезервирован)
+                    if (element.TravelStatus == TravelStatus.Зарезервирован)
                     {
                         var travelTours = context.TourTravels.Where(rec => rec.TravelId == element.Id);
                         foreach (var travelTour in travelTours)
