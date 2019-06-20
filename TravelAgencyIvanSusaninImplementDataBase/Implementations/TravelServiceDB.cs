@@ -284,7 +284,10 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                         {
                             TravelId = groupTour.TravelId,
                             TourId = groupTour.TourId,
-                            Count = groupTour.Count
+                            Count = groupTour.Count,
+                            DateBegin = groupTour.DateBegin,
+                            DateEnd = groupTour.DateEnd,
+                            DateReservation = DateTime.Now
 
                         };
 
@@ -314,12 +317,11 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     }
                     string typeMessage = "";
                     string fName = "";
-                    if (type.Contains("doc"))
-                    {
+                    
                         ReservWord(id);
                         typeMessage = "word";
                         fName = "C:\\Users\\Public\\Documents\\file.doc";
-                    }
+                    
                     //else
                     //{
                     //    ReservExel(model);
@@ -330,7 +332,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
                     transaction.Commit();
 
-                    var client = context.Clients.FirstOrDefault(x => x.Id == travel.Id);
+                    var client = context.Clients.FirstOrDefault(x => x.Id == travel.ClientId);
 
                     Mail.SendEmail(client?.Email, "Оповещение по путешествиям",
                         $"Путешествие №{travel.Id} от {travel.DateCreate.ToShortDateString()} зарезервировано успешно", null);
@@ -381,17 +383,16 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 int sum = 0;
                 foreach (var tour in countTours)
                 {
-                    sum += tour.Count * context.TourReservations.FirstOrDefault(x => x.TourId == tour.TourId).NumberReservations;   
+                    var countReserv = context.TourReservations.Where(x => x.TourId == tour.TourId);
+                    foreach (var reserv in countReserv)
+                    {
+                        sum++;
+
+                    }
                 }
-                    var reservations = context.TourReservations.Select(rec => new TourReservationViewModel
-                    {                        
-                        ReservationName = rec.Reservation.Name,
-                        NumberReservations = rec.NumberReservations
-                    }).ToList();
-               
-                
-                //создаем таблицу
-                var paragraphTable = document.Paragraphs.Add(Type.Missing);
+
+                    //создаем таблицу
+                    var paragraphTable = document.Paragraphs.Add(Type.Missing);
                 var rangeTable = paragraphTable.Range;
 
                
@@ -405,11 +406,23 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 paragraphTableFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
                 paragraphTableFormat.SpaceAfter = 0;
                 paragraphTableFormat.SpaceBefore = 0;
-                for (int i = 0; i < reservations.Count; ++i)
+                int j = 0;
+                foreach (var tour in countTours)
                 {
-                    table.Cell(i + 1, 1).Range.Text = reservations[i].ReservationName;
-                    table.Cell(i + 1, 2).Range.Text = reservations[i].NumberReservations.ToString();
+                    var reservations = context.TourReservations.Where(x => x.TourId == tour.TourId).Select(rec => new TourReservationViewModel
+                    {
+                        ReservationName = rec.Reservation.Name,
+                        NumberReservations = rec.NumberReservations * tour.Count
+                    }) 
+                    .ToList();
+                    for (int i = 0; i < reservations.Count; ++i)
+                    {
+                        table.Cell(i + 1, 1).Range.Text = reservations[i].ReservationName;
+                        table.Cell(i + 1, 2).Range.Text = reservations[i].NumberReservations.ToString();
+                       
+                    }
                 }
+                
                 //задаем границы таблицы
                 table.Borders.InsideLineStyle = WdLineStyle.wdLineStyleInset;
                 table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleSingle;

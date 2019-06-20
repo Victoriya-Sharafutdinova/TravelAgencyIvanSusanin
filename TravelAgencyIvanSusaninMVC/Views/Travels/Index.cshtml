@@ -2,6 +2,8 @@
 @model IEnumerable<TravelAgencyIvanSusaninDAL.ViewModel.TravelViewModel>
 
 @{
+    /**/
+
     ViewBag.Title = "Список путешествий";
 }
 
@@ -54,10 +56,11 @@
                 @if (item.TravelStatus == "Принят")
                 {
 
-                    @Html.ActionLink("Зарезервировать", "Reserve", new { id = item.Id })
-                    @Html.BeginForm("Reserve", "Travels", FormMethod.Post)
-
-
+                    @Html.ActionLink("Зарезервировать в doc", "ReserveDoc", new { id = item.Id })
+                    @Html.BeginForm("ReserveDoc", "Travels", FormMethod.Post)
+                    
+                    @*@Html.ActionLink("Зарезервировать в xls", "Reserve", new { id = item.Id })
+                    @Html.BeginForm("ReserveXls", "Travels", FormMethod.Post)*@
                 }
 
                 @if (item.TravelStatus == "Готов")
@@ -71,11 +74,9 @@
     }
 
 </table>
-<div class="form-group">
+@*@using (Html.BeginForm())
+{
 
-    <div class="col-md-10">
-
-        @Html.DropDownList("Type", ViewBag.Type as SelectList)
-
-    </div>
-</div>
+    @Html.DropDownList("Types", ViewData["Types"] as SelectList, "--Select Item--")
+    <input type="submit" name="submit" value="Submit" />
+}*@

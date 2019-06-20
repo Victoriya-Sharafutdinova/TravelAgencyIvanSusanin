@@ -20,14 +20,29 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         private readonly ITravelService service = Globals.TravelService;
         private readonly ITourService tourService = Globals.TourService;
         private readonly IStatisticService statistic = Globals.StatisticService;
+        private string type;
+        private string typeName;
+        List<SelectListItem> types = new List<SelectListItem>();
 
         public ActionResult Index()
         {
-            List<string> types = new List<string> { "doc", "xls" };
-            var type = new SelectList(types, "Type");
-            ViewBag.Travels = type;
+            
+            //types.Add(new SelectListItem{ Text = "doc", Value = "0" });
+            //types.Add(new SelectListItem { Text = "xls", Value = "0" });
+            //ViewData["Types"] = types;
+
+            //var type = new SelectList(types, "Type");
+            //ViewBag.Types = type;
             return View(service.GetClientTravels(Globals.AuthClient.Id));
         }
+
+        //[HttpPost]
+        //public ActionResult Index(SelectListItem item)
+        //{
+        //    type = Request.Form["Types"];
+        //    //TODO:
+        //    return RedirectToAction("Index");
+        //}
 
         public ActionResult Details(int id)
         {
@@ -46,7 +61,7 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
         //}
 
         //[HttpPost]
-        public ActionResult Reserve(int id)
+        public ActionResult ReserveDoc(int id)
         {
             var travels = (TravelViewModel)Session["Travels"];
 
@@ -64,8 +79,8 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
                     DateEnd = travel.TourTravels[i].DateEnd
                 });
             }
-            var type = Request["Type"];
-            service.Reservation(travel.Id, type);
+           
+            service.Reservation(travel.Id, "doc");
             //service.Reservation(new TravelBindingModel
             //{
             //    ClientId = Globals.AuthClient.Id,
@@ -75,6 +90,37 @@ namespace TravelAgencyIvanSusaninMVC.Controllers
             Session.Remove("Travels");
             return RedirectToAction("Index", "Travels");
         }
+
+        //public ActionResult ReserveXls(int id)
+        //{
+        //    var travels = (TravelViewModel)Session["Travels"];
+
+        //    var travel = service.GetElement(id);
+        //    var travelTours = new List<TourTravelBindingModel>();
+        //    for (int i = 0; i < travel.TourTravels.Count; ++i)
+        //    {
+        //        travelTours.Add(new TourTravelBindingModel
+        //        {
+        //            Id = travel.TourTravels[i].Id,
+        //            TravelId = travel.TourTravels[i].TravelId,
+        //            TourId = travel.TourTravels[i].TourId,
+        //            Count = travel.TourTravels[i].Count,
+        //            DateBegin = travel.TourTravels[i].DateBegin,
+        //            DateEnd = travel.TourTravels[i].DateEnd
+        //        });
+        //    }
+
+            
+        //    service.Reservation(travel.Id, "xls");
+        //    //service.Reservation(new TravelBindingModel
+        //    //{
+        //    //    ClientId = Globals.AuthClient.Id,
+        //    //    TotalCost = travelTours.Sum(rec => rec.Count * tourService.GetElement(rec.TourId).Cost),
+        //    //    TourTravels = travelTours
+        //    //}, true);
+        //    Session.Remove("Travels");
+        //    return RedirectToAction("Index", "Travels");
+        //}
 
         public ActionResult Pay(int id)
         {
