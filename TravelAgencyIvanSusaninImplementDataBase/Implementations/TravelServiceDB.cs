@@ -17,8 +17,8 @@ using System.IO;
 using System.Collections;
 using iTextSharp.text;
 using Microsoft.Office.Interop.Word;
-using Document = Microsoft.Office.Interop.Word.Document;
 using Microsoft.Office.Interop.Excel;
+using System.Runtime.InteropServices;
 
 namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 {
@@ -322,7 +322,6 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
 
         private void ReservWord(int id)
         {
-            Console.WriteLine();
             if (File.Exists(Directory.GetCurrentDirectory() + "\\file.doc"))
             {
                 File.Delete(Directory.GetCurrentDirectory() + "\\file.doc");
@@ -331,7 +330,7 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
             try
             {
                 object missing = System.Reflection.Missing.Value;
-                Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
+                Microsoft.Office.Interop.Word.Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
                 var paragraph = document.Paragraphs.Add(missing);
                 var range = paragraph.Range;
                 range.Text = "Резервирование броней по путешествию №" + id;
@@ -396,15 +395,16 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                 paragraphFormat.SpaceBefore = 10;
                 range.InsertParagraphAfter();
                 object fileFormat = WdSaveFormat.wdFormatXMLDocument;
-                document.SaveAs(Directory.GetCurrentDirectory() + "\\file.doc", ref fileFormat, ref missing,
+                document.SaveAs(Directory.GetCurrentDirectory() + "\\fileClient.doc", ref fileFormat, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing);
                 document.Close(ref missing, ref missing, ref missing);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 throw;
             }
             finally
@@ -495,6 +495,8 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
                     p += reservations.Count;
                 }             
                 excel.Workbooks[1].Save();
+                excel.Workbooks[1].Close();
+                Marshal.FinalReleaseComObject(excel);
             }
             catch (Exception)
             {

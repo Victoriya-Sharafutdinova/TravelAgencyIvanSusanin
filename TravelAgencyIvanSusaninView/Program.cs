@@ -30,6 +30,7 @@ namespace TravelAgencyIvanSusaninView
             currentContainer.RegisterType<IRequestService, RequestServiceDB>(new HierarchicalLifetimeManager());
             currentContainer.RegisterType<ITravelService, TravelServiceDB>(new HierarchicalLifetimeManager());
             currentContainer.RegisterType<IReportService, ReportServiceDB>(new HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IStatisticService, StatisticServiceDB>(new HierarchicalLifetimeManager());
             return currentContainer;
         }
     }

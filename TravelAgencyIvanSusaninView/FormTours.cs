@@ -133,5 +133,14 @@ namespace TravelAgencyIvanSusaninView
         {
             service.SaveDataBaseAdmin();
         }
+
+        private void buttonStatistic_Click(object sender, EventArgs e)
+        {
+            var form = Container.Resolve<FormStatistic>();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                LoadData();
+            }
+        }
     }
 }

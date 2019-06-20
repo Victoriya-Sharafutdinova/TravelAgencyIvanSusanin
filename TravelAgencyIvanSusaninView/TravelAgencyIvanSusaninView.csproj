@@ -98,6 +98,12 @@
     <Compile Include="FormReservations.Designer.cs">
       <DependentUpon>FormReservations.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormStatistic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStatistic.Designer.cs">
+      <DependentUpon>FormStatistic.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormTour.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormReservations.resx">
       <DependentUpon>FormReservations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStatistic.resx">
+      <DependentUpon>FormStatistic.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormTour.resx">
       <DependentUpon>FormTour.cs</DependentUpon>

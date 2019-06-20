@@ -21,5 +21,14 @@ namespace TravelAgencyIvanSusaninDAL.Interfaces
         int GetPopularTourClient(int clientId);
 
         decimal GetAverPrice();
+
+
+        string GetMostPopularReservation();
+
+        string GetLessPopularReservation();
+
+        double GetAverageReservationRequestsNumber();
+
+        double GetAverageTourCost();
     }
 }

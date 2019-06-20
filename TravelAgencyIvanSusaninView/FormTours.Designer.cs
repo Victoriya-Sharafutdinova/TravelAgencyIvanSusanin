@@ -39,6 +39,7 @@
             this.buttonTravel = new System.Windows.Forms.Button();
             this.buttonReport = new System.Windows.Forms.Button();
             this.buttonBackup = new System.Windows.Forms.Button();
+            this.buttonStatistic = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -56,10 +57,10 @@
             // 
             // buttonReservation
             // 
-            this.buttonReservation.Location = new System.Drawing.Point(482, 13);
+            this.buttonReservation.Location = new System.Drawing.Point(522, 11);
             this.buttonReservation.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonReservation.Name = "buttonReservation";
-            this.buttonReservation.Size = new System.Drawing.Size(150, 45);
+            this.buttonReservation.Size = new System.Drawing.Size(130, 45);
             this.buttonReservation.TabIndex = 1;
             this.buttonReservation.Text = "Список броней";
             this.buttonReservation.UseVisualStyleBackColor = true;
@@ -67,10 +68,10 @@
             // 
             // buttonRequest
             // 
-            this.buttonRequest.Location = new System.Drawing.Point(326, 13);
+            this.buttonRequest.Location = new System.Drawing.Point(386, 11);
             this.buttonRequest.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonRequest.Name = "buttonRequest";
-            this.buttonRequest.Size = new System.Drawing.Size(150, 45);
+            this.buttonRequest.Size = new System.Drawing.Size(130, 45);
             this.buttonRequest.TabIndex = 2;
             this.buttonRequest.Text = "Сформировать заявку";
             this.buttonRequest.UseVisualStyleBackColor = true;
@@ -132,9 +133,9 @@
             // 
             // buttonTravel
             // 
-            this.buttonTravel.Location = new System.Drawing.Point(638, 13);
+            this.buttonTravel.Location = new System.Drawing.Point(658, 12);
             this.buttonTravel.Name = "buttonTravel";
-            this.buttonTravel.Size = new System.Drawing.Size(150, 45);
+            this.buttonTravel.Size = new System.Drawing.Size(130, 45);
             this.buttonTravel.TabIndex = 5;
             this.buttonTravel.Text = "Список путешествий";
             this.buttonTravel.UseVisualStyleBackColor = true;
@@ -142,9 +143,9 @@
             // 
             // buttonReport
             // 
-            this.buttonReport.Location = new System.Drawing.Point(170, 13);
+            this.buttonReport.Location = new System.Drawing.Point(250, 11);
             this.buttonReport.Name = "buttonReport";
-            this.buttonReport.Size = new System.Drawing.Size(150, 45);
+            this.buttonReport.Size = new System.Drawing.Size(130, 45);
             this.buttonReport.TabIndex = 6;
             this.buttonReport.Text = "Сформировать отчет";
             this.buttonReport.UseVisualStyleBackColor = true;
@@ -160,11 +161,22 @@
             this.buttonBackup.UseVisualStyleBackColor = true;
             this.buttonBackup.Click += new System.EventHandler(this.buttonBackup_Click);
             // 
+            // buttonStatistic
+            // 
+            this.buttonStatistic.Location = new System.Drawing.Point(106, 13);
+            this.buttonStatistic.Name = "buttonStatistic";
+            this.buttonStatistic.Size = new System.Drawing.Size(112, 45);
+            this.buttonStatistic.TabIndex = 8;
+            this.buttonStatistic.Text = "Статистика";
+            this.buttonStatistic.UseVisualStyleBackColor = true;
+            this.buttonStatistic.Click += new System.EventHandler(this.buttonStatistic_Click);
+            // 
             // FormTours
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonStatistic);
             this.Controls.Add(this.buttonBackup);
             this.Controls.Add(this.buttonReport);
             this.Controls.Add(this.buttonTravel);
@@ -194,5 +206,6 @@
         private System.Windows.Forms.Button buttonTravel;
         private System.Windows.Forms.Button buttonReport;
         private System.Windows.Forms.Button buttonBackup;
+        private System.Windows.Forms.Button buttonStatistic;
     }
 }

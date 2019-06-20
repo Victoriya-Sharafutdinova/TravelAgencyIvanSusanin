@@ -131,5 +131,52 @@ namespace TravelAgencyIvanSusaninImplementDataBase.Implementations
         {
             return context.Travels.Average(travel => travel.TotalCost);
         }
+
+
+        public string GetMostPopularReservation()
+        {
+            var most = context.TourReservations
+                .GroupBy(rec => rec.ReservationId)
+                .Select(rec => new { Id = rec.Key, Total = rec.Sum(x => x.NumberReservations) })
+                .OrderByDescending(rec => rec.Total)
+                .FirstOrDefault();
+
+            if (most != null)
+            {
+                return context.Reservations.FirstOrDefault(rec => rec.Id == most.Id)?.Name;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public string GetLessPopularReservation()
+        {
+            var most = context.TourReservations
+                .GroupBy(rec => rec.ReservationId)
+                .Select(rec => new { Id = rec.Key, Total = rec.Sum(x => x.NumberReservations) })
+                .OrderBy(rec => rec.Total)
+                .FirstOrDefault();
+
+            if (most != null)
+            {
+                return context.Reservations.FirstOrDefault(rec => rec.Id == most.Id)?.Name;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public double GetAverageReservationRequestsNumber()
+        {
+            return context.ReservationRequests.Average(x => x.NumberReservation);
+        }
+
+        public double GetAverageTourCost()
+        {
+            return context.Tours.Average(x => x.Cost);
+        }
     }
 }
